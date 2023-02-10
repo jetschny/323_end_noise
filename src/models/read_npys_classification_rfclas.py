@@ -27,7 +27,7 @@ from sklearn.ensemble import RandomForestClassifier
 plt.close('all')
 plot_switch=True
 write_switch=True
-load_MLmod=True
+load_MLmod=False
 
 plt.rc('font', size=12) #controls default text size
 plt.rc('axes', titlesize=12) #fontsize of the title
@@ -36,7 +36,7 @@ plt.rc('xtick', labelsize=12) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=12) #fontsize of the y tick labels
 plt.rc('legend', fontsize=12) #fontsize of the legend
 
-base_in_folder="BCN_data/"
+base_in_folder="/home/sjet/Documents/data/323_end_noise/BCN_data/"
 
 in_grid_file1="bcn_dist2road_urbanatlas_osm_merge.npy"
 in_grid_file2="bcn_distance2topo_dem.npy"
@@ -47,11 +47,14 @@ in_grid_file5="OSM_roads_bcn_nlanes_clipfill_kde15.npy"
 # in_grid_file6="OSM_roads_bcn_maxspeed_clip_smooth.npy"
 in_grid_file6="OSM_roads_bcn_maxspeed_clipfill_kde15.npy"
 in_grid_file7="bcn_road_focalstats50_clip.npy"
+in_grid_file8="ES002_BARCELONA_UA2012_DHM_V010_buildingheight_clip.npy"
 
 in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
 out_grid_file ="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
-in_model_file="2017_isofones_predRFC03_nest100_maxd20_TEST_compressed.joblib"
-out_model_file="2017_isofones_predRFC02_nest12_maxd20_TEST_compressed.joblib"
+
+in_model_file="2017_isofones_predRFC04_nest12_maxd20_compressed.joblib"
+
+out_model_file="2017_isofones_predRFC04_nest12_maxd20_compressed.joblib"
 
 grid1=np.load(base_in_folder+in_grid_file1)
 grid2=np.load(base_in_folder+in_grid_file2)
@@ -60,6 +63,7 @@ grid4=np.load(base_in_folder+in_grid_file4)
 grid5=np.load(base_in_folder+in_grid_file5)
 grid6=np.load(base_in_folder+in_grid_file6)
 grid7=np.load(base_in_folder+in_grid_file7)
+grid8=np.load(base_in_folder+in_grid_file8)
 
 grid_target=np.load(base_in_folder+in_grid_target)
 grid_target= grid_target.astype(float)
@@ -89,9 +93,10 @@ df = pd.DataFrame(np.array((grid_target[indexxy].flatten(order='C'),
                             grid4[indexxy].flatten(order='C'), 
                             grid5[indexxy].flatten(order='C'),
                             grid6[indexxy].flatten(order='C'),
-                            grid7[indexxy].flatten(order='C')  )).transpose(), 
+                            grid7[indexxy].flatten(order='C'),
+                            grid8[indexxy].flatten(order='C'))).transpose(), 
                   columns=["Noise","Dist2Road","DivTopo","MeanTreeDens",
-                            "StreetClass","NLanes","SpeedLimit","RoadFocal"])
+                            "StreetClass","NLanes","SpeedLimit","RoadFocal","BuildingHeight"])
 
 # df = pd.DataFrame(np.array((grid_target.flatten(),
 #                             grid1.flatten(), 
@@ -110,7 +115,7 @@ df = pd.DataFrame(np.array((grid_target[indexxy].flatten(order='C'),
 
 x = df.drop(["Noise","StreetClass"], axis = 1)
 
-# x = df[['Dist2Road','MeanTreeDens',"SpeedLimit", "RoadFocal"]]
+x = df[["Dist2Road","DivTopo","MeanTreeDens","StreetClass","NLanes","SpeedLimit","BuildingHeight"]]
 # x = df[['Dist2Road','MeanTreeDens',"SpeedLimit"]]
 # x = df[['Dist2Road',"SpeedLimit"]]
 # x = df[['NLanes']]
@@ -135,7 +140,7 @@ if load_MLmod:
     rfc_model = joblib.load(base_in_folder+in_model_file)
 else:
     #Create a Gaussian Classifier
-    rfc_model=RandomForestClassifier(n_estimators=500, random_state = 42,verbose=2, n_jobs= 6, 
+    rfc_model=RandomForestClassifier(n_estimators=100, random_state = 42,verbose=2, n_jobs= 6, 
                                warm_start = True, max_features="sqrt")
     rfc_model.fit(x_train, y_train)
     joblib.dump(rfc_model, base_in_folder+out_model_file, compress=3)  # compression is ON!
@@ -192,10 +197,11 @@ if plot_switch:
     
     matrix2=np.copy(matrix)
     for ii in range(1,9):
-        matrix2[ii,ii]=matrix2[ii,ii-1]+matrix2[ii,ii]+matrix2[ii,ii+1]
+        for jj in range(0,9):
+            matrix2[ii,jj]=matrix[ii,jj-1]+matrix[ii,jj]+matrix[ii,jj+1]
     
-    matrix2[0,0]=matrix2[0,0]+matrix2[0,1]
-    matrix2[9,9]=matrix2[9,9]+matrix2[9,8]
+    matrix2[0,0]=matrix[0,0]+matrix[0,1]
+    matrix2[9,9]=matrix[9,9]+matrix[9,8]
     # Build the plot
     plt.figure(figsize=(16,7))
     sns.set(font_scale=1.4)

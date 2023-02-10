@@ -36,7 +36,7 @@ plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-base_in_folder="BCN_data/"
+base_in_folder="/home/sjet/Documents/data/323_end_noise/BCN_data/"
 
 in_grid_file1="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
 in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
