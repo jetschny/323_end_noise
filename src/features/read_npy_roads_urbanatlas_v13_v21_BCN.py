@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 
 plt.close('all')
 
-base_folder="BCN_data"
+base_folder="/home/sjet/Documents/data/323_end_noise/BCN_data/"
 
 print("#### Loading npy file")
 in_grid_file1="ES002L2_BARCELONA_UA2018_v013_clip.npy"
@@ -29,7 +29,7 @@ in_grid_file2="ES002L2_BARCELONA_UA2018_v021_clip.npy"
 grid2=np.load(base_folder+"/"+in_grid_file2)
 grid2=np.asarray(grid2,dtype=np.int32)
 
-write_switch=False
+write_switch=True
 out_grid_file="bcn_road_urbanatlas_v13_v21_merged"
 
 print("#### Loading npy file done")
@@ -107,6 +107,6 @@ print("#### Potting file done")
 if write_switch:
     print("#### Saving to npy file")
     out_grid_file=out_grid_file+".npy"
-    np.save(base_folder+"/"+out_grid_file,grid3_road)
+    np.save(base_folder+"/"+out_grid_file,grid2_road)
     print("#### Saving to npy file done")
     
