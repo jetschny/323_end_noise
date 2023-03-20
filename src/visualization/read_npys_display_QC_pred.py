@@ -36,11 +36,13 @@ plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-base_in_folder="/home/sjet/Documents/data/323_end_noise/BCN_data/"
+base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
+base_out_folder="/home/sjet/repos/323_end_noise/src/visualization/pics/"
 
 in_grid_file1="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
 in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
 
+out_pic_file="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_zoom"
 
 grid1=np.load(base_in_folder+in_grid_file1)
 
@@ -67,41 +69,47 @@ colMap = plt.cm.get_cmap("gist_rainbow").copy()
 colMap.set_under(color='white')
 
 if plot_switch:
-    fig, axs = plt.subplots(1, 3, figsize=(12, 8))
+    x_windows=[(400, 600),( 600, 800),( 600, 800),( 600, 800),( 900, 1100)]
+    y_windows=[(1200, 1400),( 800, 1000),( 1000, 1200),( 1200, 1400),( 800, 1000)]
+    
+    for ii in range(5):
+        
+        fig, axs = plt.subplots(1, 3, figsize=(20, 5))
     
    
-    im1=axs[0].imshow(grid_target, cmap=colMap, vmin=0.1)
-    im2=axs[1].imshow(grid1, cmap=colMap, vmin=0.1)
-    im3=axs[2].imshow(grid_target-grid1, cmap="seismic")
-    
-      # plt.axis('off')
-    # plt.contourf(grid1)
-    plt.colorbar(im1, ax=axs[0])
-    plt.colorbar(im2, ax=axs[1])
-    plt.colorbar(im3, ax=axs[2])
-    
-    axs[0].set_aspect('equal', 'box')
-    axs[1].set_aspect('equal', 'box')
-    axs[2].set_aspect('equal', 'box')
- 
-    # im1.set_clim(0.1,80)
-    # im2.set_clim(0.1,80)
-    im3.set_clim(-2,2)
-    
-    x_window=[600, 800]
-    y_window=[1200, 1400]
-    axs[0].set_xlim(x_window)
-    axs[1].set_xlim(x_window)
-    axs[2].set_xlim(x_window)
-    
-    axs[0].set_ylim(y_window)
-    axs[1].set_ylim(y_window)
-    axs[2].set_ylim(y_window)
-    
-    # axs[0].set_title('Distance to Road')
-    # axs[1].set_title('Divergence from Topo')
- 
-    
-    # plt.colorbar(con2, ax=ax2)
-    plt.show()
+        im1=axs[0].imshow(grid_target, cmap=colMap, vmin=0.1)
+        im2=axs[1].imshow(grid1, cmap=colMap, vmin=0.1)
+        im3=axs[2].imshow(grid_target-grid1, cmap="seismic")
+        
+          # plt.axis('off')
+        # plt.contourf(grid1)
+        plt.colorbar(im1, ax=axs[0])
+        plt.colorbar(im2, ax=axs[1])
+        plt.colorbar(im3, ax=axs[2])
+        
+        axs[0].set_aspect('equal', 'box')
+        axs[1].set_aspect('equal', 'box')
+        axs[2].set_aspect('equal', 'box')
+     
+        # im1.set_clim(0.1,80)
+        # im2.set_clim(0.1,80)
+        im3.set_clim(-2,2)
+        
+        # x_window=
+        # y_window=[1200, 1400]
+        axs[0].set_xlim(x_windows[ii])
+        axs[1].set_xlim(x_windows[ii])
+        axs[2].set_xlim(x_windows[ii])
+        
+        axs[0].set_ylim(y_windows[ii])
+        axs[1].set_ylim(y_windows[ii])
+        axs[2].set_ylim(y_windows[ii])
+        
+        # axs[0].set_title('Distance to Road')
+        # axs[1].set_title('Divergence from Topo')
+     
+        
+        # plt.colorbar(con2, ax=ax2)
+        plt.show()
+        plt.savefig(base_out_folder+out_pic_file+str(ii)+".png")
     
