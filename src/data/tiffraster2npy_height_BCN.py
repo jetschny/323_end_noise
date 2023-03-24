@@ -28,19 +28,20 @@ from rasterio.mask import mask
 
 plt.close('all')
 
-out_grid_file="ES002_BARCELONA_UA2012_DHM_V010_buildingheight"
 plot_switch=True
-write_switch=True
+write_switch=False
 clip_switch=True
 interp_switch=True
 
 print("#### Loading file")
 
 #2018 imperviousness Density
-base_in_folder="/home/sjet/Documents/data/323_end_noise/BCN_data/"
-filename = 'ES002_BARCELONA_UA2012_DHM_V010/Dataset/ES002_BARCELONA_UA2012_DHM_V010.tif'
+base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
+base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
+in_file  = 'ES002_BARCELONA_UA2012_DHM_V010/Dataset/ES002_BARCELONA_UA2012_DHM_V010.tif'
+out_file = "ES002_BARCELONA_UA2012_DHM_V010_buildingheight"
 
-img = rasterio.open(base_in_folder+filename, 'r') 
+img = rasterio.open(base_in_folder+in_file, 'r') 
   
 print("#### Loading file done\n")
 
@@ -96,9 +97,9 @@ print("#### Plotting file done \n")
 if write_switch:
     print("#### Saving to npy file")
     if clip_switch:
-        out_grid_file=out_grid_file+"_clip.npy"
+        out_grid_file=base_out_folder+out_file+"_clip.npy"
     else:
-        out_grid_file=out_grid_file+".npy"
+        out_grid_file=base_out_folder+out_file+".npy"
     np.save(base_in_folder+out_grid_file,np.squeeze(img_clipped))
     print("#### Saving to npy file done")
     

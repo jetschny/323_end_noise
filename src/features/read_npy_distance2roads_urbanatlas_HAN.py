@@ -18,13 +18,16 @@ import matplotlib.pyplot as plt
 
 plt.close('all')
 
-base_folder="HAN_data"
+base_in_folder="/home/sjet/data/323_end_noise/HAN_data/"
+base_out_folder="/home/sjet/data/323_end_noise/HAN_data/"
+in_file="han_road_urbanatlas_osm_merge.npy"
+out_file="han_dist2road_urbanatlas_osm_merge"
+
 print("#### Loading npy file")
-in_grid_file1="han_road_urbanatlas_osm_merge.npy"
-grid1=np.load(base_folder+"/"+in_grid_file1)
+grid1=np.load(base_in_folder+in_file)
 
 write_switch=True
-out_grid_file="han_dist2road_urbanatlas_osm_merge"
+
 
 print("#### Loading npy file done")
 
@@ -106,7 +109,7 @@ print("#### Potting file done")
 
 if write_switch:
     print("#### Saving to npy file")
-    out_grid_file=out_grid_file+".npy"
-    np.save(base_folder+"/"+out_grid_file,grid1_dist2road)
+    out_grid_filename=base_out_folder+out_file+".npy"
+    np.save(out_grid_filename,grid1_dist2road)
     print("#### Saving to npy file done")
     

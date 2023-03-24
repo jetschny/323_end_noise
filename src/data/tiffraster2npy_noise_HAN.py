@@ -29,7 +29,7 @@ from skimage.transform import resize
 
 plt.close('all')
 
-out_grid_file="DE_Hannover_Aggroad_Lden"
+
 plot_switch=True
 write_switch=True
 clip_switch=True
@@ -37,10 +37,13 @@ interp_switch=False
 
 print("#### Loading file")
 
-base_in_folder="HAN_data/"
-filename = 'DE_Hannover_Aggroad_Lden.tif'
+base_in_folder="/home/sjet/data/323_end_noise/HAN_data/"
+base_out_folder="/home/sjet/data/323_end_noise/HAN_data/"
 
-img = rasterio.open(base_in_folder+filename, 'r') 
+in_file = 'DE_Hannover_Aggroad_Lden.tif'
+out_file="DE_Hannover_Aggroad_Lden"
+
+img = rasterio.open(base_in_folder+in_file, 'r') 
   
 print("#### Loading file done\n")
 
@@ -51,22 +54,35 @@ print("#### Cropping file")
 
 if clip_switch:
     # Create a custom polygon
-    corner_point1=np.array((4.296 , 3.243 ))*1e6
-    corner_point2=np.array((4.311 , 3.258 ))*1e6
+    # corner_point1=np.array((4.296 , 3.243 ))*1e6
+    # corner_point2=np.array((4.311 , 3.258 ))*1e6
+    
+    # polygon = Polygon([(corner_point1[0], corner_point1[1] ), (corner_point2[0], corner_point1[1]), 
+    #                    (corner_point2[0], corner_point2[1]),(corner_point1[0], corner_point2[1]), (corner_point1[0],corner_point1[1])])
+
+    # # coords_transformed = warp.transform({'init': 'epsg:3035'},{'init': 'epsg:25832'},[corner_point1[0], corner_point2[0]], [corner_point1[1], corner_point2[1]])
+    
+    # # corner_point1=np.array(coords_transformed[0])
+    # # corner_point2=np.array(coords_transformed[1])
+    # # 
+    # polygon_transformed = Polygon([(corner_point1[0], corner_point1[1] ), (corner_point2[0], corner_point1[1]), 
+    #                    (corner_point2[0], corner_point2[1]),(corner_point1[0], corner_point2[1]), (corner_point1[0],corner_point1[1])])
+    
+    # poly_gdf = gpd.GeoDataFrame([1], geometry=[polygon_transformed], crs=img.crs)
+
+    # img_clipped, out_transform = mask(img, shapes=[polygon_transformed], crop=True)
+    
+    # Create a custom polygon
+    corner_point1=np.array((4.295 , 3.244 ))*1e6
+    corner_point2=np.array((4.314 , 3.259 ))*1e6
+    # polygon = Polygon([(3.645*1e06, 2.05*1e06 ), (3.67*1e06, 2.05*1e06), (3.67*1e06, 2.07*1e06), (3.645*1e06, 2.07*1e06), (3.645*1e06,2.05*1e06)])
     polygon = Polygon([(corner_point1[0], corner_point1[1] ), (corner_point2[0], corner_point1[1]), 
                        (corner_point2[0], corner_point2[1]),(corner_point1[0], corner_point2[1]), (corner_point1[0],corner_point1[1])])
-
-    coords_transformed = warp.transform({'init': 'epsg:3035'},{'init': 'epsg:25832'},[corner_point1[0], corner_point2[0]], [corner_point1[1], corner_point2[1]])
     
-    corner_point1=np.array(coords_transformed[0])
-    corner_point2=np.array(coords_transformed[1])
+    # polygon = Polygon([(3.645*1e06, 2.05*1e06 ), (3.67*1e06, 2.05*1e06), (3.67*1e06, 2.07*1e06), (3.645*1e06, 2.07*1e06), (3.645*1e06,2.05*1e06)])
+    poly_gdf = gpd.GeoDataFrame([1], geometry=[polygon], crs=img.crs)
+    img_clipped, out_transform = mask(img, shapes=[polygon], crop=True)
     
-    polygon_transformed = Polygon([(corner_point1[0], corner_point1[1] ), (corner_point2[0], corner_point1[1]), 
-                       (corner_point2[0], corner_point2[1]),(corner_point1[0], corner_point2[1]), (corner_point1[0],corner_point1[1])])
-    
-    poly_gdf = gpd.GeoDataFrame([1], geometry=[polygon_transformed], crs=img.crs)
-
-    img_clipped, out_transform = mask(img, shapes=[polygon_transformed], crop=True)
 else:
     img_clipped=img.read()
     # img_clipped=np.array(img)
@@ -93,7 +109,7 @@ if plot_switch:
     plt.imshow(np.squeeze(img_clipped),cmap="jet")
     # plt.clim(0, 300)
     plt.colorbar()
-    plt.savefig(base_in_folder+out_grid_file+"_clip.png")
+    plt.savefig(base_in_folder+out_file+"_clip.png")
     plt.show()
 
 print("#### Plotting file done \n")
@@ -102,9 +118,9 @@ print("#### Plotting file done \n")
 if write_switch:
     print("#### Saving to npy file")
     if clip_switch:
-        out_grid_file=out_grid_file+"_clip.npy"
+        out_grid_file=base_out_folder+ out_file+"_clip.npy"
     else:
-        out_grid_file=out_grid_file+".npy"
+        out_grid_file=base_out_folder + out_grid_file+".npy"
     np.save(base_in_folder+out_grid_file,np.squeeze(img_clipped))
     print("#### Saving to npy file done")
     

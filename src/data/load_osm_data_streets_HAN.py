@@ -31,6 +31,8 @@ write_switch=True
 plot_switch=True
 convcrs_switch=True
 
+base_out_folder="/home/sjet/data/323_end_noise/HAN_data/"
+
 #output file
 out_grid_file="OSM_roads_han"
 
@@ -38,11 +40,12 @@ out_grid_file="OSM_roads_han"
 print("#### Loading file")
 
 #define corner points for crop window
-# corner_point1=np.round(np.array((3.6560 , 2.0600 ))*1e6)-1000
-# corner_point2=np.round(np.array((3.6690 , 2.0740 ))*1e6)+1000
+# corner_point1=np.array((4.295 , 3.244 ))*1e6-1000
+# corner_point2=np.array((4.314 , 3.259 ))*1e6+1000
 
-corner_point1=np.array((4.296 , 3.243 ))*1e6-1000
-corner_point2=np.array((4.311 , 3.258 ))*1e6+1000
+corner_point1=np.array((4.295 , 3.244 ))*1e6
+corner_point2=np.array((4.314 , 3.259 ))*1e6
+
 
 #transform corner points from source (3035) to destination (4326) reference system
 coords_transformed = warp.transform({'init': 'epsg:3035'},{'init': 'epsg:4326'},[corner_point1[0], corner_point2[0]], [corner_point1[1], corner_point2[1]])
@@ -65,11 +68,6 @@ if convcrs_switch:
 
 print("#### Converting CRS done\n")
 
-# corner_point1=np.round(np.array((3.6560 , 2.0600 ))*1e6)
-# corner_point2=np.round(np.array((3.6690 , 2.0740 ))*1e6)
-
-corner_point1=np.array((4.296 , 3.243 ))*1e6
-corner_point2=np.array((4.311 , 3.258 ))*1e6
 
 polygon = Polygon([(corner_point1[0], corner_point1[1] ), (corner_point2[0], corner_point1[1]), 
                    (corner_point2[0], corner_point2[1]),(corner_point1[0], corner_point2[1]), (corner_point1[0],corner_point1[1])])
@@ -112,7 +110,7 @@ if write_switch:
     print("#### Saving to npy file")
     # out_grid_file=out_grid_file+"_maxspeed_clip.npy"
     # a=np.array(out_grid_maxspeed.maxspeed, dtype=np.uint16)
-    np.save(out_grid_file+"_maxspeed_clip.npy",np.array(out_grid_maxspeed.maxspeed, dtype=np.uint16))
+    np.save(base_out_folder+out_grid_file+"_maxspeed_clip.npy",np.array(out_grid_maxspeed.maxspeed, dtype=np.uint16))
     print("#### Saving to npy file done")
 
 if plot_switch:
@@ -123,7 +121,7 @@ if plot_switch:
     ax1.set_aspect('equal', 'box')
     ax2.set_aspect('equal', 'box')
     plt.show()
-    plt.savefig(out_grid_file+"_maxspeed_clip_grid.png")
+    plt.savefig(base_out_folder+out_grid_file+"_maxspeed_clip_grid.png")
     
     
     
@@ -181,10 +179,10 @@ out_grid_hway = make_geocube(vector_data=df_hway,resolution=(-10, 10),geom=json.
 if write_switch:
     print("#### Saving to npy file")
     # out_grid_file=out_grid_file+"_maxspeed_clip.npy"
-    np.save(out_grid_file+"_streetclass_clip.npy",np.array(out_grid_hway.highway_class, dtype=np.uint8))
+    np.save(base_out_folder+out_grid_file+"_streetclass_clip.npy",np.array(out_grid_hway.highway_class, dtype=np.uint8))
     print("#### Saving to npy file done")
     print("#### Saving to class file")
-    df_road_classes.to_csv(out_grid_file+"_streetclass_def.csv")
+    df_road_classes.to_csv(base_out_folder+out_grid_file+"_streetclass_def.csv")
     # np.savetxt(out_grid_file+"_streetclass_def.csv", road_classes, '%s', ',')
     print("#### Saving to class file done")
     
@@ -196,7 +194,7 @@ if plot_switch:
      ax1.set_aspect('equal', 'box')
      ax2.set_aspect('equal', 'box')
      plt.show()
-     plt.savefig(out_grid_file+"_highway_clip_grid.png")
+     plt.savefig(base_out_folder+out_grid_file+"_highway_clip_grid.png")
      
 # creating StreetLane layer
 #select only 2 columns from dataframe
@@ -218,7 +216,7 @@ out_grid_lanes = make_geocube(vector_data=df_lanes,resolution=(-10, 10),geom=jso
 if write_switch:
     print("#### Saving to npy file")
     # out_grid_file=out_grid_file+"_maxspeed_clip.npy"
-    np.save(out_grid_file+"_nlanes_clip.npy",np.array(out_grid_lanes.lanes, dtype=np.uint8))
+    np.save(base_out_folder+out_grid_file+"_nlanes_clip.npy",np.array(out_grid_lanes.lanes, dtype=np.uint8))
     print("#### Saving to npy file done")
     
 if plot_switch:
@@ -229,4 +227,4 @@ if plot_switch:
      ax1.set_aspect('equal', 'box')
      ax2.set_aspect('equal', 'box')
      plt.show()
-     plt.savefig(out_grid_file+"_nlanes_clip_grid.png")
+     plt.savefig(base_out_folder+out_grid_file+"_nlanes_clip_grid.png")

@@ -34,7 +34,7 @@ plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-base_folder="BCN_data"
+base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
 
 in_grid_file1="bcn_dist2road_urbanatlas_osm_merge.npy"
 in_grid_file2="bcn_distance2topo_dem.npy"
@@ -44,19 +44,21 @@ in_grid_file4="OSM_roads_bcn_streetclass_clip.npy"
 in_grid_file5="OSM_roads_bcn_nlanes_clipfill_kde15.npy"
 # in_grid_file6="OSM_roads_bcn_maxspeed_clip_smooth.npy"
 in_grid_file6="OSM_roads_bcn_maxspeed_clipfill_kde15.npy"
-in_grid_file7="bcn_road_focalstats50_clip.npy"
+# in_grid_file7="bcn_road_focalstats50_clip.npy"
+in_grid_file7="bcn_distance2buildings_bcd.npy"
+
 
 in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
 
-grid1=np.load(base_folder+"/"+in_grid_file1)
-grid2=np.load(base_folder+"/"+in_grid_file2)
-grid3=np.load(base_folder+"/"+in_grid_file3)
-grid4=np.load(base_folder+"/"+in_grid_file4)
-grid5=np.load(base_folder+"/"+in_grid_file5)
-grid6=np.load(base_folder+"/"+in_grid_file6)
-grid7=np.load(base_folder+"/"+in_grid_file7)
+grid1=np.load(base_in_folder+"/"+in_grid_file1)
+grid2=np.load(base_in_folder+"/"+in_grid_file2)
+grid3=np.load(base_in_folder+"/"+in_grid_file3)
+grid4=np.load(base_in_folder+"/"+in_grid_file4)
+grid5=np.load(base_in_folder+"/"+in_grid_file5)
+grid6=np.load(base_in_folder+"/"+in_grid_file6)
+grid7=np.load(base_in_folder+"/"+in_grid_file7)
 
-grid_target=np.load(base_folder+"/"+in_grid_target)
+grid_target=np.load(base_in_folder+"/"+in_grid_target)
 grid_target= grid_target.astype(float)
 
 # x = np.linspace(1, grid1.shape[1], grid1.shape[1])
@@ -122,7 +124,7 @@ if plot_switch:
     im1.set_clim(0.1,8)
     im2.set_clim(-10,10)
     im3.set_clim(0.1,15)
-    im7.set_clim(5,400)
+    # im7.set_clim(5,400)
     
     axs[0,0].set_title('Distance to Road')
     axs[0,1].set_title('Divergence from Topo')
@@ -130,7 +132,7 @@ if plot_switch:
     axs[0,3].set_title('OSM Street Class')
     axs[1,0].set_title('OSM Number of Lanes')
     axs[1,1].set_title('OSM Speet Limit')
-    axs[1,2].set_title('OSM Street FocalStats')
+    axs[1,2].set_title('Building Height Density')
     axs[1,3].set_title('Modeled Noise')
     
     x_window=[400, 600]

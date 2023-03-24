@@ -34,17 +34,17 @@ plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-base_folder="HAN_data"
+base_folder="/home/sjet/data/323_end_noise/HAN_data/"
 
 in_grid_file1="han_dist2road_urbanatlas_osm_merge.npy"
-in_grid_file2="HAN_distance2topo_dem.npy"
+in_grid_file2="han_distance2topo_dem.npy"
 in_grid_file3="HAN_distance2trees_TCD.npy"
 in_grid_file4="OSM_roads_han_streetclass_clip.npy"
 # in_grid_file5="OSM_roads_bcn_nlanes_clip_smooth.npy"
 in_grid_file5="OSM_roads_han_nlanes_clip.npy"
 # in_grid_file6="OSM_roads_bcn_maxspeed_clip_smooth.npy"
 in_grid_file6="OSM_roads_han_maxspeed_clip.npy"
-in_grid_file7="OSM_roads_han_maxspeed_clip.npy"
+in_grid_file7="han_distance2buildings_bcd.npy"
 # in_grid_file7="bcn_road_focalstats50_clip.npy"
 
 # in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
@@ -128,7 +128,7 @@ if plot_switch:
     axs[0,3].set_title('OSM Street Class')
     axs[1,0].set_title('OSM Number of Lanes')
     axs[1,1].set_title('OSM Speet Limit')
-    axs[1,2].set_title('OSM Street FocalStats')
+    axs[1,2].set_title('Mean Building Height density')
     axs[1,3].set_title('Modeled Noise')
     
     # plt.colorbar(con2, ax=ax2)
@@ -143,7 +143,7 @@ if plot_switch:
     im1=axs1.imshow(grid4, cmap=colMap, vmin = 0.2)
     
     im2=axs2.imshow(grid_target, cmap=colMap, vmin = 0.2)
-    grid_target_crop=grid_target[0:1500,0:1500]
+    grid_target_crop=grid_target[0:1500,0:1900]
     grid4_crop=grid4
     grid_qc=np.where(grid4_crop>0, 2,0)+np.where(grid_target_crop>60, 1,0)
     im3=axs3.imshow(grid_qc, cmap=colMap, vmin = 0.2)

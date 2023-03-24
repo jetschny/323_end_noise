@@ -18,19 +18,23 @@ import matplotlib.pyplot as plt
 
 plt.close('all')
 
-base_folder="HAN_data"
+base_in_folder="/home/sjet/data/323_end_noise/HAN_data/"
+base_out_folder="/home/sjet/data/323_end_noise/HAN_data/"
+in_file1="DE013L1_HANNOVER_UA2018_v013_clip.npy"
+in_file2="OSM_roads_han_streetclass_clip.npy"
+
+out_file="han_road_urbanatlas_osm_merge"
 
 print("#### Loading npy file")
-in_grid_file1="DE013L1_HANNOVER_UA2018_v013_clip.npy"
-grid1=np.load(base_folder+"/"+in_grid_file1)
+
+grid1=np.load(base_in_folder+in_file1)
 grid=np.asarray(grid1,dtype=np.int32)
 
-in_grid_file2="OSM_roads_han_streetclass_clip.npy"
-grid2=np.load(base_folder+"/"+in_grid_file2)
+grid2=np.load(base_in_folder+in_file2)
 grid2=np.asarray(grid2,dtype=np.int32)
 
 write_switch=True
-out_grid_file="han_road_urbanatlas_osm_merge"
+
 
 print("#### Loading npy file done")
 
@@ -131,7 +135,7 @@ print("#### Potting file done")
 
 if write_switch:
     print("#### Saving to npy file")
-    out_grid_file=out_grid_file+".npy"
-    np.save(base_folder+"/"+out_grid_file,grid3_road)
+    out_grid_filename=base_out_folder+out_file+".npy"
+    np.save(out_grid_filename,grid3_road)
     print("#### Saving to npy file done")
     
