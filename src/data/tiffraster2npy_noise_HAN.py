@@ -41,7 +41,7 @@ base_in_folder="/home/sjet/data/323_end_noise/HAN_data/"
 base_out_folder="/home/sjet/data/323_end_noise/HAN_data/"
 
 in_file = 'DE_Hannover_Aggroad_Lden.tif'
-out_file="DE_Hannover_Aggroad_Lden"
+out_file="han_noise_Aggroad_Lden"
 
 img = rasterio.open(base_in_folder+in_file, 'r') 
   
@@ -118,10 +118,10 @@ print("#### Plotting file done \n")
 if write_switch:
     print("#### Saving to npy file")
     if clip_switch:
-        out_grid_file=base_out_folder+ out_file+"_clip.npy"
+        out_grid_filename=base_out_folder+ out_file+"_clip.npy"
     else:
-        out_grid_file=base_out_folder + out_grid_file+".npy"
-    np.save(base_in_folder+out_grid_file,np.squeeze(img_clipped))
+        out_grid_filename=base_out_folder + out_file+".npy"
+    np.save(out_grid_filename,np.squeeze(img_clipped))
     print("#### Saving to npy file done")
     
 

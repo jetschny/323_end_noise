@@ -38,27 +38,27 @@ base_folder="/home/sjet/data/323_end_noise/HAN_data/"
 
 in_grid_file1="han_dist2road_urbanatlas_osm_merge.npy"
 in_grid_file2="han_distance2topo_dem.npy"
-in_grid_file3="HAN_distance2trees_TCD.npy"
+in_grid_file3="han_distance2trees_tcd.npy"
 in_grid_file4="OSM_roads_han_streetclass_clip.npy"
-# in_grid_file5="OSM_roads_bcn_nlanes_clip_smooth.npy"
-in_grid_file5="OSM_roads_han_nlanes_clip.npy"
+in_grid_file5="OSM_roads_han_nlanes_clipfill.npy"
+# in_grid_file5="OSM_roads_han_nlanes_clipfill_kde15.npy"
 # in_grid_file6="OSM_roads_bcn_maxspeed_clip_smooth.npy"
-in_grid_file6="OSM_roads_han_maxspeed_clip.npy"
+in_grid_file6="OSM_roads_han_maxspeed_clipfill_kde15.npy"
 in_grid_file7="han_distance2buildings_bcd.npy"
 # in_grid_file7="bcn_road_focalstats50_clip.npy"
 
 # in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
-in_grid_target="DE_Hannover_Aggroad_Lden_clip.npy"
+in_grid_target="han_noise_Aggroad_Lden_clip.npy"
 
-grid1=np.load(base_folder+"/"+in_grid_file1)
-grid2=np.load(base_folder+"/"+in_grid_file2)
-grid3=np.load(base_folder+"/"+in_grid_file3)
-grid4=np.load(base_folder+"/"+in_grid_file4)
-grid5=np.load(base_folder+"/"+in_grid_file5)
-grid6=np.load(base_folder+"/"+in_grid_file6)
-grid7=np.load(base_folder+"/"+in_grid_file7)
+grid1=np.load(base_folder+in_grid_file1)
+grid2=np.load(base_folder+in_grid_file2)
+grid3=np.load(base_folder+in_grid_file3)
+grid4=np.load(base_folder+in_grid_file4)
+grid5=np.load(base_folder+in_grid_file5)
+grid6=np.load(base_folder+in_grid_file6)
+grid7=np.load(base_folder+in_grid_file7)
 
-grid_target=np.load(base_folder+"/"+in_grid_target)
+grid_target=np.load(base_folder+in_grid_target)
 grid_target= grid_target.astype(float)
 
 # x = np.linspace(1, grid1.shape[1], grid1.shape[1])

@@ -29,8 +29,6 @@ grid1=np.load(base_in_folder+in_file)
 
 write_switch=True
 
-
-
 # grid1_trees=grid1*0
 # indexxy = np.where(grid1 == 12210)
 # grid1_trees[indexxy]=2
