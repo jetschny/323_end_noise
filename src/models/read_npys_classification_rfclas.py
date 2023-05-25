@@ -27,7 +27,7 @@ from sklearn.ensemble import RandomForestClassifier
 plt.close('all')
 plot_switch=True
 write_switch=True
-load_MLmod=False
+load_MLmod=True
 
 plt.rc('font', size=12) #controls default text size
 plt.rc('axes', titlesize=12) #fontsize of the title
@@ -36,7 +36,7 @@ plt.rc('xtick', labelsize=12) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=12) #fontsize of the y tick labels
 plt.rc('legend', fontsize=12) #fontsize of the legend
 
-base_in_folder="/storage/home/sjet/data/323_end_noise/BCN_data/"
+base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
 
 in_grid_file1="bcn_dist2road_urbanatlas_osm_merge.npy"
 in_grid_file2="bcn_distance2topo_dem.npy"
