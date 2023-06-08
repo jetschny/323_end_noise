@@ -27,7 +27,10 @@ import json
 plt.close('all')
 
 # out_grid_file="ES002L2_BARCELONA_UA2018_v013.npy"
-out_grid_file="2017_isofones_total_dia_mapa_estrategic_soroll_bcn"
+base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
+base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
+in_file = '2017_isofones_total_dia_mapa_estrategic_soroll_bcn.gpkg'
+out_file = "2017_isofones_total_dia_mapa_estrategic_soroll_bcn"
 
 plot_switch=False
 write_switch=True
@@ -36,12 +39,8 @@ convcrs_switch=True
 
 print("#### Loading file")
 
-#2018 urban atlas area classifcation functional urban areas
-filename = '2017_isofones_total_dia_mapa_estrategic_soroll_bcn.gpkg'
-#2012 urban atlas area classifcation functional urban areas
-# filename = './ES002L2_BARCELONA_UA2012_revised_v021/Data/ES002L2_BARCELONA_UA2012_revised_v021.gpkg'
 
-gdf = gpd.read_file(filename)
+gdf = gpd.read_file(base_in_folder+in_file)
 # corner_point1=np.array((3.655 , 2.06))*1e6
 # corner_point2=np.array((3.670 , 2.08))*1e6
 # # polygon = Polygon([(3.645*1e06, 2.05*1e06 ), (3.67*1e06, 2.05*1e06), (3.67*1e06, 2.07*1e06), (3.645*1e06, 2.07*1e06), (3.645*1e06,2.05*1e06)])
@@ -108,7 +107,7 @@ if plot_switch:
     # ax2.set_axis_off()
     gdf_clipped.plot( ax=ax2, legend=True)
     plt.show()
-    plt.savefig(out_grid_file+"_clip.png")
+    plt.savefig(base_out_folder+out_file+"_clip.png")
 
     print("#### Plotting file done \n")
 
@@ -148,13 +147,13 @@ if plot_switch:
     ax1.set_aspect('equal', 'box')
     ax2.set_aspect('equal', 'box')
     plt.show()
-    plt.savefig(out_grid_file+"_grid.png")
+    plt.savefig(base_out_folder+out_file+"_grid.png")
  
 if write_switch:
     print("#### Saving to npy file")
     if clip_switch:
-        out_grid_file=out_grid_file+"_clip.npy"
+        out_grid_file=base_out_folder+out_file+"_clip.npy"
     else:
-        out_grid_file=out_grid_file+".npy"
+        out_grid_file=base_out_folder+out_file+".npy"
     np.save(out_grid_file,np.array(out_grid.noise_class, dtype=np.uint8))
     print("#### Saving to npy file done")

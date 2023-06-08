@@ -28,7 +28,7 @@ from skimage.transform import resize
 
 plt.close('all')
 
-out_grid_file="eu_dem_v11_E30N20"
+
 plot_switch=True
 write_switch=False
 clip_switch=True
@@ -37,10 +37,13 @@ interp_switch=True
 print("#### Loading file")
 
 #2018 imperviousness Density
-base_in_folder="BCN_data/"
-filename = 'eu_dem_v11_E30N20/eu_dem_v11_E30N20.TIF'
+base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
+base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
+in_file = 'eu_dem_v11_E30N20/eu_dem_v11_E30N20.TIF'
+out_file = "eu_dem_v11_E30N20"
 
-img = rasterio.open(base_in_folder+filename, 'r') 
+
+img = rasterio.open(base_in_folder+in_file, 'r') 
   
 print("#### Loading file done\n")
 
@@ -86,7 +89,7 @@ if plot_switch:
     plt.imshow(np.squeeze(img_clipped),cmap="jet")
     plt.clim(0, 300)
     plt.colorbar()
-    plt.savefig(base_in_folder+out_grid_file+"_clip.png")
+    plt.savefig(base_out_folder+out_file+"_clip.png")
     plt.show()
 
 print("#### Plotting file done \n")
@@ -95,10 +98,10 @@ print("#### Plotting file done \n")
 if write_switch:
     print("#### Saving to npy file")
     if clip_switch:
-        out_grid_file=out_grid_file+"_clip.npy"
+        out_grid_file=out_file+"_clip.npy"
     else:
-        out_grid_file=out_grid_file+".npy"
-    np.save(base_in_folder+out_grid_file,np.squeeze(img_clipped))
+        out_grid_file=out_file+".npy"
+    np.save(base_out_folder+out_grid_file,np.squeeze(img_clipped))
     print("#### Saving to npy file done")
     
 

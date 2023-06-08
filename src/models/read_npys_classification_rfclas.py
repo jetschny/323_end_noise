@@ -49,12 +49,14 @@ in_grid_file6="OSM_roads_bcn_maxspeed_clipfill_kde15.npy"
 in_grid_file7="bcn_road_focalstats50_clip.npy"
 in_grid_file8="ES002_BARCELONA_UA2012_DHM_V010_buildingheight_clip.npy"
 
-in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
-out_grid_file ="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
+# in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
+# out_grid_file ="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
+in_grid_target="MES2017_Transit_Lden_3035_clip_clip.npy"
+out_grid_file ="MES2017_Transit_Lden_3035_clip_clip_predRFC02_test.npy"
 
-in_model_file="2017_isofones_predRFC04_nest12_maxd20_compressed.joblib"
 
-out_model_file="2017_isofones_predRFC04_nest12_maxd20_compressed.joblib"
+in_model_file="MES2017_Transit_predRFC01_maxd10_compressed.joblib"
+out_model_file="MES2017_Transit_predRFC01_maxd10_compressed.joblib"
 
 grid1=np.load(base_in_folder+in_grid_file1)
 grid2=np.load(base_in_folder+in_grid_file2)
