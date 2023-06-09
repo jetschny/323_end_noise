@@ -47,7 +47,7 @@ in_grid_file5="OSM_roads_bcn_nlanes_clipfill_kde15.npy"
 # in_grid_file6="OSM_roads_bcn_maxspeed_clip_smooth.npy"
 in_grid_file6="OSM_roads_bcn_maxspeed_clipfill_kde15.npy"
 in_grid_file7="bcn_road_focalstats50_clip.npy"
-in_grid_file8="ES002_BARCELONA_UA2012_DHM_V010_buildingheight_clip.npy"
+in_grid_file8="bcn_distance2buildings_bcd.npy"
 
 # in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
 # out_grid_file ="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
@@ -196,9 +196,9 @@ if plot_switch:
                 cmap=plt.cm.Greens, linewidths=0.2)
     
     # Add labels to the plot
-    noise_classes_new=np.array(range(42, 80, 5))
-    noise_classes_new=np.append([32],noise_classes_new)
-    noise_classes_new=np.append(noise_classes_new,[87])
+    noise_classes_new=np.array(range(1, 86, 1))
+    # noise_classes_new=np.append([32],noise_classes_new)
+    # noise_classes_new=np.append(noise_classes_new,[87])
     
     class_names= [str(x) for x in noise_classes_new]
     # class_names = ['Spruce/Fir', 'Lodgepole Pine', 'Ponderosa Pine', 
