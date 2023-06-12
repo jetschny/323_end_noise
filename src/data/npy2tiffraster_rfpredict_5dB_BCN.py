@@ -78,6 +78,19 @@ if interp_switch:
 
 img_clipped[img_clipped==65535]=0
 
+# remapping to dB scale
+noise_classes_old=np.array(range(1, 11, 1))
+
+noise_classes_new=np.array(range(42, 80, 5))
+noise_classes_new=np.append([32],noise_classes_new)
+noise_classes_new=np.append(noise_classes_new,[87])
+
+counter=0
+for a in noise_classes_old:
+    grid1[grid1==a]=noise_classes_new[counter]
+    counter=counter+1
+
+
 print("#### Cropping file done \n")
 
 if plot_switch:
