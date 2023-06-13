@@ -25,7 +25,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 plt.close('all')
-plot_switch=True
+plot_switch=False
 write_switch=True
 load_MLmod=False
 
@@ -36,7 +36,8 @@ plt.rc('xtick', labelsize=12) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=12) #fontsize of the y tick labels
 plt.rc('legend', fontsize=12) #fontsize of the legend
 
-base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
+base_in_folder="/storage/home/sjet/repos/323_end_noise/data/processed/"
+base_out_folder="/storage/home/sjet/repos/323_end_noise/"
 
 in_grid_file1="bcn_dist2road_urbanatlas_osm_merge.npy"
 in_grid_file2="bcn_distance2topo_dem.npy"
@@ -52,11 +53,11 @@ in_grid_file8="bcn_distance2buildings_bcd.npy"
 # in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
 # out_grid_file ="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
 in_grid_target="MES2017_Transit_Lden_3035_clip.npy"
-out_grid_file ="MES2017_Transit_Lden_3035_clip_predRFC02_test.npy"
+out_grid_file ="data/output/MES2017_Transit_Lden_3035_clip_predRFC01.npy"
 
 
-in_model_file="MES2017_Transit_predRFC01_maxd10_compressed.joblib"
-out_model_file="MES2017_Transit_predRFC01_maxd10_compressed.joblib"
+in_model_file="models/MES2017_Transit_predRFC01_maxd10_compressed.joblib"
+out_model_file="models/MES2017_Transit_predRFC01_maxd10_compressed.joblib"
 
 grid1=np.load(base_in_folder+in_grid_file1)
 grid2=np.load(base_in_folder+in_grid_file2)
@@ -68,7 +69,7 @@ grid7=np.load(base_in_folder+in_grid_file7)
 grid8=np.load(base_in_folder+in_grid_file8)
 
 grid_target=np.load(base_in_folder+in_grid_target)
-grid_target= grid_target.astype(float)
+# grid_target= grid_target.astype(float)
 
 noise_classes_old=sorted(np.unique(grid_target))
 noise_classes_new=np.array(range(0, len(noise_classes_old), 1))
@@ -124,13 +125,13 @@ print("\n \n ##### random forest classification ML  \n")
 
 # fit the model on the whole dataset
 if load_MLmod:   
-    rfc_model = joblib.load(base_in_folder+in_model_file)
+    rfc_model = joblib.load(base_out_folder+in_model_file)
 else:
     #Create a Gaussian Classifier
     rfc_model=RandomForestClassifier(n_estimators=200, random_state = 42,verbose=2, n_jobs= 6, 
                                warm_start = True, max_features="sqrt", max_depth=10)
     rfc_model.fit(x_train, y_train)
-    joblib.dump(rfc_model, base_in_folder+out_model_file, compress=3)  # compression is ON!
+    joblib.dump(rfc_model, base_out_folder+out_model_file, compress=3)  # compression is ON!
 
 
 # predict the class label
@@ -229,5 +230,5 @@ if write_switch:
     
     grid_target_export[indexxy_train]=y_pred_train_rfc
     grid_target_export[indexxy_test] =y_pred_test_rfc
-    np.save(base_in_folder+out_grid_file,grid_target_export)
+    np.save(base_out_folder+out_grid_file,grid_target_export)
     print("#### Saving to npy file done")
