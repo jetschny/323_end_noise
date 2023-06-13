@@ -68,7 +68,8 @@ if clip_switch:
     out_meta.update({"driver": "GTiff",
                  "height": img_clipped.shape[1],
                  "width": img_clipped.shape[2],
-                 "transform": out_transform})
+                 "transform": out_transform,
+                 "nodata" : 0})
 else:
     img_clipped=img.read()
     # img_clipped=np.array(img)
@@ -77,6 +78,19 @@ if interp_switch:
     img_clipped = np.resize(np.squeeze(img_clipped),(1400,1300))
 
 img_clipped[img_clipped==65535]=0
+
+# remapping to dB scale
+noise_classes_old=np.array(range(1, 11, 1))
+
+noise_classes_new=np.array(range(42, 80, 5))
+noise_classes_new=np.append([32],noise_classes_new)
+noise_classes_new=np.append(noise_classes_new,[87])
+
+counter=0
+for a in noise_classes_old:
+    grid1[grid1==a]=noise_classes_new[counter]
+    counter=counter+1
+    
 
 print("#### Cropping file done \n")
 
@@ -119,6 +133,6 @@ if write_switch:
 
     with rasterio.open(base_out_folder+out_file_tif, 'w', **out_meta) as dst:
         dst.write(grid1.astype(rasterio.uint16), 1)
-    print("#### Saving to npy file done")
+    print("#### Saving to tif file done")
     
 

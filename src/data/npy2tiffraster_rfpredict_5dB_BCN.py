@@ -68,7 +68,8 @@ if clip_switch:
     out_meta.update({"driver": "GTiff",
                  "height": img_clipped.shape[1],
                  "width": img_clipped.shape[2],
-                 "transform": out_transform})
+                 "transform": out_transform,
+                 "nodata" : 0})
 else:
     img_clipped=img.read()
     # img_clipped=np.array(img)

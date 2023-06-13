@@ -78,6 +78,23 @@ if interp_switch:
 
 img_clipped[img_clipped==65535]=0
 
+# remapping to dB scale
+noise_classes_old=np.array(range(40, 80, 5))
+
+noise_classes_new=np.array(range(42, 80, 5))
+noise_classes_new=np.append([32],noise_classes_new)
+noise_classes_new=np.append(noise_classes_new,[87])
+
+
+for counter in range(0,np.len(noise_classes_old)-1,1):
+    grid1[ (grid1>=noise_classes_old[counter]) &
+           (grid1<=noise_classes_old[counter+1])] = noise_classes_new[counter+1]
+    # grid1[ (grid1 <= 10) & (grid1>=noise_classes_old[counter+1])] = noise_classes_new[counter]
+
+grid1[ (grid1<=noise_classes_old[0])]= noise_classes_new[0]
+grid1[ (grid1>=noise_classes_old[-1])]= noise_classes_new[-1]    
+
+
 print("#### Cropping file done \n")
 
 if plot_switch:
@@ -119,6 +136,6 @@ if write_switch:
 
     with rasterio.open(base_out_folder+out_file_tif, 'w', **out_meta) as dst:
         dst.write(grid1.astype(rasterio.uint16), 1)
-    print("#### Saving to npy file done")
+    print("#### Saving to tif file done")
     
 

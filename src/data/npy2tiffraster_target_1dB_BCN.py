@@ -39,8 +39,8 @@ print("#### Loading file")
 base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
 base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
 in_file_tif  = 'ES002_BARCELONA_UA2012_DHM_V010/Dataset/ES002_BARCELONA_UA2012_DHM_V010.tif'
-in_file_npy = "full_dnn_map.npy"
-out_file_tif  = 'full_dnn_map.tif'
+in_file_npy = "MES2017_Transit_Lden_3035_clip.npy"
+out_file_tif  = 'MES2017_Transit_Lden_3035_clip_1dB_BCN.tif'
 
 img = rasterio.open(base_in_folder+in_file_tif, 'r') 
 grid1=np.load(base_in_folder+in_file_npy)
@@ -77,19 +77,23 @@ else:
 if interp_switch:
     img_clipped = np.resize(np.squeeze(img_clipped),(1400,1300))
 
-img_clipped[img_clipped==65535]=0
+# img_clipped[img_clipped==65535]=0
 
-# remapping to dB scale
-noise_classes_old=np.array(range(1, 11, 1))
+# # remapping to dB scale
+# noise_classes_old=np.array(range(40, 80, 5))
 
-noise_classes_new=np.array(range(42, 80, 5))
-noise_classes_new=np.append([32],noise_classes_new)
-noise_classes_new=np.append(noise_classes_new,[87])
+# noise_classes_new=np.array(range(42, 80, 5))
+# noise_classes_new=np.append([32],noise_classes_new)
+# noise_classes_new=np.append(noise_classes_new,[87])
 
-counter=0
-for a in noise_classes_old:
-    grid1[grid1==a]=noise_classes_new[counter]
-    counter=counter+1
+
+# for counter in range(0,np.size(noise_classes_old)-1,1):
+#     grid1[ (grid1>=noise_classes_old[counter]) &
+#            (grid1<=noise_classes_old[counter+1])] = noise_classes_new[counter+1]
+#     # grid1[ (grid1 <= 10) & (grid1>=noise_classes_old[counter+1])] = noise_classes_new[counter]
+
+# grid1[ (grid1<=noise_classes_old[0])]= noise_classes_new[0]
+# grid1[ (grid1>=noise_classes_old[-1])]= noise_classes_new[-1] 
 
 print("#### Cropping file done \n")
 
@@ -132,6 +136,6 @@ if write_switch:
 
     with rasterio.open(base_out_folder+out_file_tif, 'w', **out_meta) as dst:
         dst.write(grid1.astype(rasterio.uint16), 1)
-    print("#### Saving to npy file done")
+    print("#### Saving to tif file done")
     
 
