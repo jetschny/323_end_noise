@@ -40,7 +40,7 @@ base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
 base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
 in_file_tif  = 'ES002_BARCELONA_UA2012_DHM_V010/Dataset/ES002_BARCELONA_UA2012_DHM_V010.tif'
 in_file_npy = "MES2017_Transit_Lden_3035_clip_predRFC02_test.npy"
-out_file_tif  = 'MES2017_Transit_Lden_3035_clip_MLpredRFC02.tif'
+out_file_tif  = 'MES2017_Transit_Lden_3035_clip_predRFC02_1dB_BCN.tif'
 
 img = rasterio.open(base_in_folder+in_file_tif, 'r') 
 grid1=np.load(base_in_folder+in_file_npy)
@@ -68,7 +68,8 @@ if clip_switch:
     out_meta.update({"driver": "GTiff",
                  "height": img_clipped.shape[1],
                  "width": img_clipped.shape[2],
-                 "transform": out_transform})
+                 "transform": out_transform,
+                 "nodata" : 0})
 else:
     img_clipped=img.read()
     # img_clipped=np.array(img)
@@ -76,24 +77,23 @@ else:
 if interp_switch:
     img_clipped = np.resize(np.squeeze(img_clipped),(1400,1300))
 
-img_clipped[img_clipped==65535]=0
+# img_clipped[img_clipped==65535]=0
 
-# remapping to dB scale
-noise_classes_old=np.array(range(40, 80, 5))
+# # remapping to dB scale
+# noise_classes_old=np.array(range(40, 80, 5))
 
-noise_classes_new=np.array(range(42, 80, 5))
-noise_classes_new=np.append([32],noise_classes_new)
-noise_classes_new=np.append(noise_classes_new,[87])
+# noise_classes_new=np.array(range(42, 80, 5))
+# noise_classes_new=np.append([32],noise_classes_new)
+# noise_classes_new=np.append(noise_classes_new,[87])
 
 
-for counter in range(0,np.len(noise_classes_old)-1,1):
-    grid1[ (grid1>=noise_classes_old[counter]) &
-           (grid1<=noise_classes_old[counter+1])] = noise_classes_new[counter+1]
-    # grid1[ (grid1 <= 10) & (grid1>=noise_classes_old[counter+1])] = noise_classes_new[counter]
+# for counter in range(0,np.size(noise_classes_old)-1,1):
+#     grid1[ (grid1>=noise_classes_old[counter]) &
+#            (grid1<=noise_classes_old[counter+1])] = noise_classes_new[counter+1]
+#     # grid1[ (grid1 <= 10) & (grid1>=noise_classes_old[counter+1])] = noise_classes_new[counter]
 
-grid1[ (grid1<=noise_classes_old[0])]= noise_classes_new[0]
-grid1[ (grid1>=noise_classes_old[-1])]= noise_classes_new[-1]    
-
+# grid1[ (grid1<=noise_classes_old[0])]= noise_classes_new[0]
+# grid1[ (grid1>=noise_classes_old[-1])]= noise_classes_new[-1] 
 
 print("#### Cropping file done \n")
 

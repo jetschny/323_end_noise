@@ -112,4 +112,21 @@ if plot_switch:
         # plt.colorbar(con2, ax=ax2)
         plt.show()
         plt.savefig(base_out_folder+out_pic_file+str(ii)+".png")
+        
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 8))
+
+    grid_pred=grid1
+    im1=ax1.imshow(grid_target,cmap="jet")
+    # im1.set_clim(0, 50)
+    fig.colorbar(im1, orientation='vertical', ax=ax1)
+    # plt.colorbar()
+    # plt.savefig(base_in_folder+out_grid_file+"_clip.png")
+    im2=ax2.imshow(grid_pred,cmap="jet")
+    # plt.clim(0, 300)
+    fig.colorbar(im2, orientation='vertical', ax=ax2)
+    
+    im3=ax3.imshow(grid_target-grid_pred,cmap="jet")
+    # plt.clim(-20, 20)
+    fig.colorbar(im3, orientation='vertical', ax=ax3)
+    plt.show()
     
