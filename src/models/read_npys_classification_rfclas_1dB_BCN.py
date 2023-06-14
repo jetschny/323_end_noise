@@ -53,7 +53,7 @@ in_grid_file8="bcn_distance2buildings_bcd.npy"
 # in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
 # out_grid_file ="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
 in_grid_target="MES2017_Transit_Lden_3035_clip.npy"
-out_grid_file ="data/output/MES2017_Transit_Lden_3035_clip_predRFC01.npy"
+out_grid_file ="data/output/MES2017_Transit_Lden_3035_clip_predRFC02.npy"
 
 
 in_model_file="models/MES2017_Transit_predRFC01_maxd10_compressed.joblib"
@@ -128,8 +128,8 @@ if load_MLmod:
     rfc_model = joblib.load(base_out_folder+in_model_file)
 else:
     #Create a Gaussian Classifier
-    rfc_model=RandomForestClassifier(n_estimators=200, random_state = 42,verbose=2, n_jobs= 6, 
-                               warm_start = True, max_features="sqrt", max_depth=10)
+    rfc_model=RandomForestClassifier(n_estimators=100, random_state = 42,verbose=2, n_jobs= 6, 
+                               warm_start = True, max_features="sqrt", max_depth=15)
     rfc_model.fit(x_train, y_train)
     joblib.dump(rfc_model, base_out_folder+out_model_file, compress=3)  # compression is ON!
 
