@@ -36,7 +36,7 @@ plt.rc('xtick', labelsize=12) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=12) #fontsize of the y tick labels
 plt.rc('legend', fontsize=12) #fontsize of the legend
 
-base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
+base_in_folder="/storage/home/sjet/repos/323_end_noise/data/processed/"
 
 in_grid_file1="bcn_dist2road_urbanatlas_osm_merge.npy"
 in_grid_file2="bcn_distance2topo_dem.npy"
@@ -143,7 +143,7 @@ if load_MLmod:
 else:
     #Create a Gaussian Classifier
     rfc_model=RandomForestClassifier(n_estimators=6, random_state = 42,verbose=2, n_jobs= 6, 
-                               warm_start = True, max_features="sqrt", max_depth=2)
+                               warm_start = True, max_features="sqrt", max_depth=10)
     rfc_model.fit(x_train, y_train)
     joblib.dump(rfc_model, base_in_folder+out_model_file, compress=3)  # compression is ON!
 
@@ -240,7 +240,7 @@ print("\n##### random forest classification ML  done... \n")
 
 if write_switch:
     print("#### Saving to npy file")
-    grid_target_export=np.empty(grid_target.shape)*0
+    grid_target_export=np.zeros(grid_target.shape)
     
     grid_target_export[indexxy_train]=y_pred_train_rfc
     grid_target_export[indexxy_test] =y_pred_test_rfc
