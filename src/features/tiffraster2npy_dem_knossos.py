@@ -75,14 +75,15 @@ else:
     # img_clipped=np.array(img)
 
 grid1=np.squeeze(grid1)
+index0 = np.where(grid1 == img.nodata)
+grid1[index0]=0.000123
 
 if interp_switch:
     grid1 = resize(grid1,img_target.shape)
     # grid1 = rescale(grid1,2.5)
     # 45
 
-index0 = np.where(grid1 == img.nodata)
-grid1[index0]=0
+
 
 print("#### Cropping file done \n")
 
@@ -104,7 +105,7 @@ def calc_distance(indexxy):
     return grid1_pad[indexxy]-np.mean(grid1_pad[indexxy[0]-radius:indexxy[0]+radius,indexxy[1]-radius:indexxy[1]+radius])  
   
 def check_frame(indexxy):
-    if (min(indexxy)>radius) and (indexxy[0]<(dim_grid1_pad[0]-radius)) and (indexxy[1]<(dim_grid1_pad[1]-radius)):
+    if (min(indexxy)>=radius) and (indexxy[0]<(dim_grid1_pad[0]-radius)) and (indexxy[1]<(dim_grid1_pad[1]-radius)):
         return calc_distance(indexxy)
     else:
         return 0
@@ -113,6 +114,8 @@ for indexxy, item in np.ndenumerate(grid1_pad):
     grid1_distance[indexxy]=check_frame(indexxy)
 
 grid1_distance=grid1_distance[radius:-radius, radius:-radius]
+# grid1_distance[index0]=-999.25
+index0 = np.where(grid1 == 0.000123)
 grid1_distance[index0]=-999.25
 grid1_distance=grid1_distance.astype(np.float32)
 
@@ -146,8 +149,8 @@ if plot_switch:
     # ax1.set_axis_off()
     # ax2.set_axis_off()
     # show(img_clipped, ax=ax2)
-    plt.imshow(np.squeeze(grid1),cmap="jet")
-    plt.clim(0, 0.75*np.max(grid1))
+    plt.imshow(np.squeeze(grid1_distance),cmap="jet")
+    plt.clim(0, 0.75*np.max(grid1_distance))
     plt.colorbar()
     plt.savefig(base_out_folder+city_string_in+"/"+city_string_out+out_file+".png")
     plt.show()

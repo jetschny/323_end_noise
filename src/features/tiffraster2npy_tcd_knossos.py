@@ -103,7 +103,7 @@ def calc_distance(indexxy):
     return np.mean(grid1_pad[indexxy[0]-radius:indexxy[0]+radius,indexxy[1]-radius:indexxy[1]+radius])  
   
 def check_frame(indexxy):
-    if (min(indexxy)>radius) and (indexxy[0]<(dim_grid1_pad[0]-radius)) and (indexxy[1]<(dim_grid1_pad[1]-radius)):
+    if (min(indexxy)>=radius) and (indexxy[0]<(dim_grid1_pad[0]-radius)) and (indexxy[1]<(dim_grid1_pad[1]-radius)):
         return calc_distance(indexxy)
     else:
         return 0

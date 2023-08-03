@@ -44,16 +44,18 @@ base_out_folder="/home/sjet/data/323_end_noise/"
 # OSM street class, distance to clipped street class
 in_grid_file1="_feat_dist2road.npy"
 # EU DEM, divergernce from mean topography
-in_grid_file2="_feat_eu_dem_v11_clip.npy"
+in_grid_file2="_feat_eu_dem_v11.npy"
 # Copernicus, TreeCoverDensity, distance to TCD
-in_grid_file3="_feat_dist2tree_clip.npy"
+in_grid_file3="_feat_dist2tree.npy"
 # OSM maximum speed and number of lanes, merged and smoothed, 0-1
 in_grid_file4="_feat_osmmaxspeed_nolanes_smooth.npy"
 # Urban atlas land use land cover, reclassified to represent absortpion, 0-10
-in_grid_file5="_feat_absoprtion_clip.npy"
+in_grid_file5="_feat_absoprtion.npy"
 # Urban atlas building height 0-x00 m
-in_grid_file6="_feat_UA2012_bheight_clip.npy"
+in_grid_file6="_feat_UA2012_bheight.npy"
 
+#output figure file 
+out_file = "_panel_features"
 
 # target noise data
 in_grid_target="_target_noise_Aggroad_Lden.npy"
@@ -92,6 +94,7 @@ if plot_switch:
     
     ###########################################
     #############plot all grids, panel of all
+    print("#### Plotting file")
     
     fig, axs = plt.subplots(2, 4, figsize=(25, 15))
     plt.rcParams['axes.grid'] = False
@@ -172,7 +175,7 @@ if plot_switch:
     
     # plt.colorbar(con2, ax=ax2)
     plt.show()
-
+    plt.savefig(base_out_folder+city_string_in+"/"+city_string_out+out_file+".png")
 
     ###########################################
     #############plot 3 grids, panel of some, zoom
@@ -259,6 +262,6 @@ if plot_switch:
     
     
     plt.show()
-    
+    print("#### Plotting file done \n")
 
 

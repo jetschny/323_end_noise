@@ -64,7 +64,7 @@ def distance2road(indexxy):
                                          indexxy[1]-radius_road:indexxy[1]+radius_road],distance_matrix))
 
 def checkframe(indexxy):
-    if (min(indexxy)>radius_road)  and (indexxy[0]<(dim_grid1[0]-radius_road)) and (indexxy[1]<(dim_grid1[1]-radius_road)):
+    if (min(indexxy)>=radius_road)  and (indexxy[0]<(dim_grid1[0]-radius_road)) and (indexxy[1]<(dim_grid1[1]-radius_road)):
         return distance2road(indexxy)
     else:
         return 0
