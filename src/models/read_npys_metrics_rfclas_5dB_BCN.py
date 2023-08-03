@@ -36,13 +36,13 @@ plt.rc('xtick', labelsize=12) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=12) #fontsize of the y tick labels
 plt.rc('legend', fontsize=12) #fontsize of the legend
 
-# base_in_folder="/home/sjet/repos/323_end_noise/data/"
-# base_out_folder="/home/sjet/repos/323_end_noise/data/"
-base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
-base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
+base_in_folder="/home/sjet/repos/323_end_noise/data/"
+base_out_folder="/home/sjet/repos/323_end_noise/data/"
+# base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
+# base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
 
 # in_grid_file1="output/2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC02_test.npy"
-in_grid_file1="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC03_dtest.npy"
+in_grid_file1="output/2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC04.npy"
 in_grid_file2="processed/2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
 
 
@@ -74,11 +74,15 @@ if plot_switch:
 
     # plt.show()
 
-    y_test=grid_target[indexxy].flatten(order='C')
-    y_pred=grid_pred[indexxy].flatten(order='C')
+    x=grid_target[indexxy].flatten(order='C')
+    y=grid_pred[indexxy].flatten(order='C')
+    
+    test_size=0.3
+    x_train, x_test = np.split(x,[int((1-test_size) * len(x))])
+    y_train, y_test = np.split(y,[int((1-test_size) * len(x))])
     
     # Get and reshape confusion matrix data
-    matrix = metrics.confusion_matrix(y_test, y_pred)
+    matrix = metrics.confusion_matrix(x_test, y_test)
     matrix = matrix.astype('float') / matrix.sum(axis=1)[:, np.newaxis]
     
     # Build the plot
@@ -117,7 +121,7 @@ if plot_switch:
     # plt.clim(0, 300)
     fig.colorbar(im2, orientation='vertical', ax=ax2)
     
-    im3=ax3.imshow(grid_target-grid_pred,cmap="jet")
+    im3=ax3.imshow(grid_target-grid_pred,cmap="seismic")
     # plt.clim(-20, 20)
     fig.colorbar(im3, orientation='vertical', ax=ax3)
     plt.show()

@@ -36,11 +36,13 @@ plt.rc('xtick', labelsize=12) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=12) #fontsize of the y tick labels
 plt.rc('legend', fontsize=12) #fontsize of the legend
 
-base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
-base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
+# base_in_folder="/home/sjet/data/323_end_noise/BCN_data/"
+# base_out_folder="/home/sjet/data/323_end_noise/BCN_data/"
+base_in_folder="/home/sjet/repos/323_end_noise/data/"
+base_out_folder="/home/sjet/repos/323_end_noise/data/"
 
-in_grid_file1="MES2017_Transit_Lden_3035_clip_predRFC01_1dB_re5dB_BCN.npy"
-in_grid_file2="MES2017_Transit_Lden_3035_clip_1db_re5dB.npy"
+in_grid_file1="output/MES2017_Transit_Lden_3035_clip_predRFC02_1dB_re5dB_BCN.npy"
+in_grid_file2="processed/MES2017_Transit_Lden_3035_clip_1db_re5dB.npy"
 
 
 grid_pred=np.load(base_in_folder+in_grid_file1)
@@ -59,6 +61,8 @@ grid_target=np.load(base_in_folder+in_grid_file2)
 colMap = plt.cm.get_cmap("gist_rainbow").copy()
 colMap.set_under(color='white')
 
+
+# indexxy = np.where(grid_target[~np.isnan(grid_target)] >0)
 indexxy = np.where(grid_target >0)
 
 print("\n\n Random forest classification Train Accuracy : {:.5f} \n\n ".format(metrics.accuracy_score(grid_target[indexxy].flatten(order='C'), grid_pred[indexxy].flatten(order='C'))))
@@ -71,11 +75,15 @@ if plot_switch:
 
     # plt.show()
 
-    y_test=grid_target[indexxy].flatten(order='C')
-    y_pred=grid_pred[indexxy].flatten(order='C')
+    x=grid_target[indexxy].flatten(order='C')
+    y=grid_pred[indexxy].flatten(order='C')
+    
+    test_size=0.3
+    x_train, x_test = np.split(x,[int((1-test_size) * len(x))])
+    y_train, y_test = np.split(y,[int((1-test_size) * len(x))])
     
     # Get and reshape confusion matrix data
-    matrix = metrics.confusion_matrix(y_test, y_pred)
+    matrix = metrics.confusion_matrix(x_test, y_test)
     matrix = matrix.astype('float') / matrix.sum(axis=1)[:, np.newaxis]
     
     # Build the plot
