@@ -37,8 +37,9 @@ interp_switch=False
 
 print("#### Loading file")
 
-city_string_in="Riga"
-city_string_out="RIG"
+city_string_in="Vienna" #"Innsbruck" #"Bordeaux" #"Grenoble" #"Salzburg" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_out="VIE" #"INN" #"BOR" #"GRE" #"SAL" #"PIL" #"CLF" #"RIG"
+
 
 base_in_folder="/home/sjet/data/323_end_noise/"
 base_out_folder="/home/sjet/data/323_end_noise/"
