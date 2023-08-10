@@ -34,8 +34,8 @@ plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-city_string_in="riga"
-city_string_out="RIG"
+city_string_in="Clermont_Ferrand" #"Riga"
+city_string_out="CLF" #"RIG"
 
 base_in_folder="/home/sjet/repos/323_end_noise/data/processed/"
 base_out_folder="/home/sjet/repos/323_end_noise/data/processed/"
@@ -180,26 +180,26 @@ if plot_switch:
     
     # x_window=[400, 600]
     # y_window=[1200, 1400]
-    x_window=[00, 2512]
-    y_window=[00, 2283]
+    # x_window=[00, 2512]
+    # y_window=[00, 2283]
     
-    axs[0,0].set_xlim(x_window)
-    axs[0,1].set_xlim(x_window)
-    axs[0,2].set_xlim(x_window)
-    axs[0,3].set_xlim(x_window)
-    axs[1,0].set_xlim(x_window)
-    axs[1,1].set_xlim(x_window)
-    axs[1,2].set_xlim(x_window)
-    axs[1,3].set_xlim(x_window)
+    # axs[0,0].set_xlim(x_window)
+    # axs[0,1].set_xlim(x_window)
+    # axs[0,2].set_xlim(x_window)
+    # axs[0,3].set_xlim(x_window)
+    # axs[1,0].set_xlim(x_window)
+    # axs[1,1].set_xlim(x_window)
+    # axs[1,2].set_xlim(x_window)
+    # axs[1,3].set_xlim(x_window)
     
-    axs[0,0].set_ylim(y_window)
-    axs[0,1].set_ylim(y_window)
-    axs[0,2].set_ylim(y_window)
-    axs[0,3].set_ylim(y_window)
-    axs[1,0].set_ylim(y_window)
-    axs[1,1].set_ylim(y_window)
-    axs[1,2].set_ylim(y_window)
-    axs[1,3].set_ylim(y_window)
+    # axs[0,0].set_ylim(y_window)
+    # axs[0,1].set_ylim(y_window)
+    # axs[0,2].set_ylim(y_window)
+    # axs[0,3].set_ylim(y_window)
+    # axs[1,0].set_ylim(y_window)
+    # axs[1,1].set_ylim(y_window)
+    # axs[1,2].set_ylim(y_window)
+    # axs[1,3].set_ylim(y_window)
     
     
     # plt.colorbar(con2, ax=ax2)

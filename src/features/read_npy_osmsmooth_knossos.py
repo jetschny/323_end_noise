@@ -26,8 +26,8 @@ plot_switch=True
 
 print("#### Loading npy file")
 
-city_string_in="Riga"
-city_string_out="RIG"
+city_string_in="Clermont_Ferrand" #"Riga"
+city_string_out="CLF" #"RIG"
 
 base_in_folder="/home/sjet/data/323_end_noise/"
 base_out_folder="/home/sjet/data/323_end_noise/"

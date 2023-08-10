@@ -32,8 +32,8 @@ write_switch=True
 plot_switch=True
 convcrs_switch=True
 
-city_string_in="Riga"
-city_string_out="RIG"
+city_string_in="Clermont_Ferrand" #"Riga"
+city_string_out="CLF" #"RIG"
 
 base_in_folder="/home/sjet/data/323_end_noise/"
 base_out_folder="/home/sjet/data/323_end_noise/"
@@ -98,6 +98,13 @@ df_maxspeed=edges_clipped[["maxspeed", "geometry"]]
 df_maxspeed.reset_index(drop=True, inplace=True)
 #remove nan values
 df_maxspeed=df_maxspeed.dropna()
+
+if city_string_out=="CLF":
+    df_maxspeed=df_maxspeed.replace("FR:urban",30)
+    # df_maxspeed=df_maxspeed.replace("['FR:urban', '30']",30)
+    df_maxspeed.loc[27030].maxspeed[0]=30
+    df_maxspeed.loc[27031].maxspeed[0]=30
+
 # remove nested array and replace with mean of array
 df_maxspeed["maxspeed"] = df_maxspeed["maxspeed"].map(lambda x: np.mean(np.int_(x))) 
 #format column as int16 type

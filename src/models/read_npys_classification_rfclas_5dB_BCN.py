@@ -29,31 +29,39 @@ plot_switch=True
 write_switch=True
 load_MLmod=False
 
-plt.rc('font', size=12) #controls default text size
-plt.rc('axes', titlesize=12) #fontsize of the title
-plt.rc('axes', labelsize=12) #fontsize of the x and y labels
-plt.rc('xtick', labelsize=12) #fontsize of the x tick labels
-plt.rc('ytick', labelsize=12) #fontsize of the y tick labels
-plt.rc('legend', fontsize=12) #fontsize of the legend
+default_font_size=11
+plt.rc('font', size=default_font_size) #controls default text size
+plt.rc('axes', titlesize=default_font_size) #fontsize of the title
+plt.rc('axes', labelsize=default_font_size) #fontsize of the x and y labels
+plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
+plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
+plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-base_in_folder="/storage/home/sjet/repos/323_end_noise/data/processed/"
-base_out_folder="/storage/home/sjet/repos/323_end_noise/"
+city_string_in="riga"
+city_string_out="RIG"
 
-in_grid_file1="bcn_dist2road_urbanatlas_osm_merge.npy"
-in_grid_file2="bcn_distance2topo_dem.npy"
-in_grid_file3="bcn_distance2trees_tcd.npy"
-in_grid_file4="OSM_roads_bcn_streetclass_clip.npy"
-# in_grid_file5="OSM_roads_bcn_nlanes_clip_smooth.npy"
-in_grid_file5="OSM_roads_bcn_nlanes_clipfill_kde15.npy"
-# in_grid_file6="OSM_roads_bcn_maxspeed_clip_smooth.npy"
-in_grid_file6="OSM_roads_bcn_maxspeed_clipfill_kde15.npy"
-in_grid_file7="bcn_road_focalstats50_clip.npy"
-in_grid_file8="bcn_distance2buildings_bcd.npy"
+base_in_folder="/home/sjet/repos/323_end_noise/data/processed/"
+base_out_folder="/home/sjet/repos/323_end_noise/data/processed/"
 
-in_grid_target="2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip.npy"
-out_grid_file ="data/output/2017_isofones_total_dia_mapa_estrategic_soroll_bcn_clip_predRFC04.npy"
-# in_grid_target="MES2017_Transit_Lden_3035_clip_clip.npy"
-# out_grid_file ="MES2017_Transit_Lden_3035_clip_clip_predRFC02_test.npy"
+# feature data
+# OSM street class, distance to clipped street class
+in_grid_file1="_feat_dist2road.npy"
+# EU DEM, divergernce from mean topography
+in_grid_file2="_feat_eu_dem_v11.npy"
+# Copernicus, TreeCoverDensity, distance to TCD
+in_grid_file3="_feat_dist2tree.npy"
+# OSM maximum speed and number of lanes, merged and smoothed, 0-1
+in_grid_file4="_feat_osmmaxspeed_nolanes_smooth.npy"
+# Urban atlas land use land cover, reclassified to represent absortpion, 0-10
+in_grid_file5="_feat_absoprtion.npy"
+# Urban atlas building height 0-x00 m
+in_grid_file6="_feat_UA2012_bheight.npy"
+
+# target noise data
+in_grid_target="_target_noise_Aggroad_Lden.npy"
+
+#output figure file 
+out_file = "_panel_features"
 
 
 in_model_file="models/2017_isofones_total_predRFC01_maxd10_compressed.joblib"
@@ -65,8 +73,7 @@ grid3=np.load(base_in_folder+in_grid_file3)
 grid4=np.load(base_in_folder+in_grid_file4)
 grid5=np.load(base_in_folder+in_grid_file5)
 grid6=np.load(base_in_folder+in_grid_file6)
-grid7=np.load(base_in_folder+in_grid_file7)
-grid8=np.load(base_in_folder+in_grid_file8)
+
 
 grid_target=np.load(base_in_folder+in_grid_target)
 grid_target= grid_target.astype(float)
@@ -95,9 +102,7 @@ df = pd.DataFrame(np.array((grid_target[indexxy].flatten(order='C'),
                             grid3[indexxy].flatten(order='C'), 
                             grid4[indexxy].flatten(order='C'), 
                             grid5[indexxy].flatten(order='C'),
-                            grid6[indexxy].flatten(order='C'),
-                            grid7[indexxy].flatten(order='C'),
-                            grid8[indexxy].flatten(order='C'))).transpose(), 
+                            grid6[indexxy].flatten(order='C'),).transpose(), 
                   columns=["Noise","Dist2Road","DivTopo","MeanTreeDens",
                             "StreetClass","NLanes","SpeedLimit","RoadFocal","BuildingHeight"])
 
