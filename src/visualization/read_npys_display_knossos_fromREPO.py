@@ -34,8 +34,8 @@ plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-city_string_in="Clermont_Ferrand" #"Riga"
-city_string_out="CLF" #"RIG"
+city_string_in="Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_out="VIE" #"PIL" #"CLF" #"RIG"
 
 base_in_folder="/home/sjet/repos/323_end_noise/data/processed/"
 base_out_folder="/home/sjet/repos/323_end_noise/data/processed/"

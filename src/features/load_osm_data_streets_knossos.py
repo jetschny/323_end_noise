@@ -32,8 +32,8 @@ write_switch=True
 plot_switch=True
 convcrs_switch=True
 
-city_string_in="Clermont_Ferrand" #"Riga"
-city_string_out="CLF" #"RIG"
+city_string_in="Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_out="VIE" #"PIL" #"CLF" #"RIG"
 
 base_in_folder="/home/sjet/data/323_end_noise/"
 base_out_folder="/home/sjet/data/323_end_noise/"
@@ -104,6 +104,14 @@ if city_string_out=="CLF":
     # df_maxspeed=df_maxspeed.replace("['FR:urban', '30']",30)
     df_maxspeed.loc[27030].maxspeed[0]=30
     df_maxspeed.loc[27031].maxspeed[0]=30
+    
+if city_string_out=="VIE":
+    df_maxspeed=df_maxspeed.replace("walk",10)
+    df_maxspeed=df_maxspeed.replace("AT:walk",10)
+    df_maxspeed=df_maxspeed.replace("AT:zone:30",30)
+    df_maxspeed.loc[32879].maxspeed[0]=10
+    df_maxspeed.loc[32879].maxspeed[1]=10
+    
 
 # remove nested array and replace with mean of array
 df_maxspeed["maxspeed"] = df_maxspeed["maxspeed"].map(lambda x: np.mean(np.int_(x))) 

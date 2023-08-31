@@ -35,8 +35,8 @@ interp_switch=True
 
 print("#### Loading file")
 
-city_string_in="Clermont_Ferrand" #"Riga"
-city_string_out="CLF" #"RIG"
+city_string_in="Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_out="VIE" #"PIL" #"CLF" #"RIG"
 
 base_in_folder="/home/sjet/data/323_end_noise/"
 base_out_folder="/home/sjet/data/323_end_noise/"
@@ -78,17 +78,27 @@ else:
 grid1=np.squeeze(grid1)
 
 if interp_switch:
-    # grid2 = grid1[img_target.shape]
+    # grid1 = grid1[img_target.shape]
+    
+    if city_string_out=="PIL":
+        grid1_0 = np.zeros(img_target.shape)-999.25
+        grid1_0[0:grid1.shape[0],0:(grid1.shape[1]-1)]=grid1[0:grid1.shape[0],0:(grid1.shape[1]-1)]
+        grid1=grid1_0
     grid1 = grid1[0:img_target.shape[0],0:img_target.shape[1]]
-    # grid1 = rescale(grid1,2.5)
-    # 45
+    # grid1 = resize(grid1, img_target.shape)
+    45
 
 index0 = np.where(grid1 == img.nodata)
 grid1[index0]=0
 
-
 print("#### Cropping file done \n")
 
+if  np.squeeze(grid1).shape != img_target.shape:
+    print("#####################################################")
+    print("#### Warning : target and feature array size mismtach")
+    print("##################################################### \n´")
+    
+    
 print("#### Processing file")
 
 grid1_distance=grid1.astype(float)
