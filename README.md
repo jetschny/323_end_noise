@@ -1,7 +1,7 @@
 fairicube
 ==============================
 
-A short description of the project.
+A very short description of the project.
 
 Project Organization
 ------------
