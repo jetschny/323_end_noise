@@ -31,7 +31,7 @@ plt.close('all')
 
 
 plot_switch=True
-write_switch=True
+write_switch=False
 clip_switch=False
 interp_switch=False
 
