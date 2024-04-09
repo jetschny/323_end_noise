@@ -32,11 +32,17 @@ write_switch=True
 plot_switch=True
 convcrs_switch=True
 
-city_string_in="Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_out="VIE" #"PIL" #"CLF" #"RIG"
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_in="Salzburg"
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
+city_string_out="SAL" 
 
-base_in_folder="/home/sjet/data/323_end_noise/"
-base_out_folder="/home/sjet/data/323_end_noise/"
+# base_in_folder="/home/sjet/data/323_end_noise/"
+# base_out_folder="/home/sjet/data/323_end_noise/"
+base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder: str ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+
 in_file_target='_MRoadsLden.tif'
 #output file
 out_grid_file="_raw_osm_roads"
@@ -144,8 +150,8 @@ if plot_switch:
     
     ax1.set_aspect('equal', 'box')
     ax2.set_aspect('equal', 'box')
+    plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_maxspeed.png")
     plt.show()
-    plt.savefig(base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_maxspeed.png")
 
 ##########################################    
 # creating StreetClass layer
@@ -209,8 +215,8 @@ if plot_switch:
      
      ax1.set_aspect('equal', 'box')
      ax2.set_aspect('equal', 'box')
+     plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_streetclass.png")
      plt.show()
-     plt.savefig(base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_streetclass.png")
      
 ##########################################
 # creating StreetLane layer
@@ -247,5 +253,5 @@ if plot_switch:
      
      ax1.set_aspect('equal', 'box')
      ax2.set_aspect('equal', 'box')
+     plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_nlanes.png")
      plt.show()
-     plt.savefig(base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_nlanes.png")

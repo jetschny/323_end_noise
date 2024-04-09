@@ -15,24 +15,33 @@ except:
 
 import numpy as np
 import matplotlib.pyplot as plt
+from numpy import newaxis
+import rasterio
 
 plt.close('all')
 
 write_switch=True
 plot_switch=True
 
-city_string_in="Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_out="VIE" #"PIL" #"CLF" #"RIG"
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_in="Salzburg"
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
+city_string_out="SAL" 
 
-base_in_folder="/home/sjet/data/323_end_noise/"
-base_out_folder="/home/sjet/data/323_end_noise/"
+# base_in_folder="/home/sjet/data/323_end_noise/"
+# base_out_folder="/home/sjet/data/323_end_noise/"
+base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
 
 print("#### Loading npy file")
 
 in_file1="_raw_osm_roads_streetclass.npy"
-out_file="_feat_dist2road"
+in_file_target='_MRoadsLden.tif'
+out_grid_file="_feat_dist2road"
 
 grid1=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_file1)
+img_target = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file_target, 'r') 
 
 print("#### Loading npy file done")
 
@@ -93,9 +102,16 @@ X, Y = np.meshgrid(x, y)
 
 if write_switch:
     print("#### Saving to npy file")
-    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid1_dist2road)
+    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".npy",grid1_dist2road)
     print("#### Saving to npy file done")
-    
+    out_meta = img_target.meta.copy()
+    # epsg_code = int(img.crs.data['init'][5:])
+    out_meta.update({"driver": "GTiff",
+                     "dtype" : 'float32',
+                     "nodata" : -999.25,
+                     "crs": img_target.crs})
+    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".tif", "w", **out_meta) as dest:
+        dest.write(grid1_dist2road[newaxis,:,:])
     
 if plot_switch:
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
@@ -112,12 +128,12 @@ if plot_switch:
     plt.colorbar(im2, ax=ax2)
     # plt.colorbar(im3, ax=ax3)
     
-    ax1.set_xlim(600,800)
-    # ax2.set_xlim(600+radius_road,800+radius_road)
-    ax2.set_xlim(600,800)
-    ax1.set_ylim(1200,1400)
-    # ax2.set_ylim(1200+radius_road,1400+radius_road)
-    ax2.set_ylim(1200,1400)
+    # ax1.set_xlim(600,800)
+    # # ax2.set_xlim(600+radius_road,800+radius_road)
+    # ax2.set_xlim(600,800)
+    # ax1.set_ylim(1200,1400)
+    # # ax2.set_ylim(1200+radius_road,1400+radius_road)
+    # ax2.set_ylim(1200,1400)
     
     im2.set_clim(0,2)
     
@@ -126,9 +142,10 @@ if plot_switch:
     # ax3.set_aspect('equal', 'box')
 
     # plt.colorbar(con2, ax=ax2)
-    plt.show()
+    
 
-    plt.savefig(base_out_folder+city_string_in+"/"+city_string_out+out_file+".png")
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_grid_file+".png")
+    plt.show()
     print("#### Potting file done")
 
 

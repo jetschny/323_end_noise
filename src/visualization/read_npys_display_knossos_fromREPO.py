@@ -15,12 +15,12 @@ except:
 
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn import metrics
-from sklearn.ensemble import RandomForestRegressor
+# import pandas as pd
+# import seaborn as sns
+# from sklearn.model_selection import train_test_split
+# from sklearn.linear_model import LinearRegression
+# from sklearn import metrics
+# from sklearn.ensemble import RandomForestRegressor
 
 
 plt.close('all')
@@ -34,11 +34,15 @@ plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-city_string_in="Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_out="VIE" #"PIL" #"CLF" #"RIG"
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_in="Salzburg"
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
+city_string_out="SAL" 
 
-base_in_folder="/home/sjet/repos/323_end_noise/data/processed/"
-base_out_folder="/home/sjet/repos/323_end_noise/data/processed/"
+base_in_folder:  str ="Z:/NoiseML/2024/city_data_features/"
+# base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+
 
 # feature data
 # OSM street class, distance to clipped street class
@@ -55,7 +59,7 @@ in_grid_file5="_feat_absoprtion.npy"
 in_grid_file6="_feat_UA2012_bheight.npy"
 
 #output figure file 
-out_file = "_panel_features"
+out_file = "_features_"
 
 # target noise data
 in_grid_target="_target_noise_Aggroad_Lden.npy"
@@ -138,7 +142,7 @@ if plot_switch:
     
     im5=axs[1,0].imshow(grid5, cmap=colMap, vmin = 0.2)
     im6=axs[1,1].imshow(grid6, cmap=colMap, vmin = 0.2)
-    im7=axs[1,2].imshow(grid6, cmap=colMap, vmin = 0.2)
+    # im7=axs[1,2].imshow(grid6, cmap=colMap, vmin = 0.2)
     im8=axs[1,3].imshow(grid_target, cmap=colMap, vmin = 0.2)
     
       # plt.axis('off')
@@ -149,7 +153,7 @@ if plot_switch:
     plt.colorbar(im4, ax=axs[0,3])
     plt.colorbar(im5, ax=axs[1,0])
     plt.colorbar(im6, ax=axs[1,1])
-    plt.colorbar(im7, ax=axs[1,2])
+    # plt.colorbar(im7, ax=axs[1,2])
     plt.colorbar(im8, ax=axs[1,3])
     
     axs[0,0].set_aspect('equal', 'box')
@@ -165,7 +169,7 @@ if plot_switch:
     # im3.set_clim(0.1,15)
     im4.set_clim(0.0,0.5)
     im6.set_clim(0,10)
-    im7.set_clim(0,10)
+    # im7.set_clim(0,10)
     im8.set_clim(30,80)
     
     axs[0,0].set_title('Distance to Road')
@@ -174,7 +178,7 @@ if plot_switch:
     axs[0,3].set_title('OSM Street Information')
     axs[1,0].set_title('Absoprtion')
     axs[1,1].set_title('Building Height Density')
-    axs[1,2].set_title('Building Height Density')
+    axs[1,2].set_title('Space for addtional feature')
     axs[1,3].set_title('Target Noise')
     
     
@@ -203,8 +207,9 @@ if plot_switch:
     
     
     # plt.colorbar(con2, ax=ax2)
+    
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"panel.png")
     plt.show()
-    plt.savefig(base_out_folder+city_string_in+"/"+city_string_out+out_file+".png")
 
     ###########################################
     #############plot 3 grids, panel of some, zoom
@@ -213,15 +218,17 @@ if plot_switch:
     
     # levels = np.arange(0, 3.5, 0.5)
     
+    zoom_window_x=[200,400]
+    zoom_window_y=[400,600]
     # con1=ax1.contourf(grid1,[20, 50, 70], cmap='RdGy')
     # con2=ax2.contourf(grid2,[5000, 15000, 20000], cmap='RdGy')
-    im1=axs1.imshow(grid4[1200:1400,1200:1400], cmap=colMap, vmin = 0.02)
+    im1=axs1.imshow(grid4[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.02)
     
-    im2=axs2.imshow(grid_target[1200:1400,1200:1400], cmap=colMap, vmin = 0.02)
+    im2=axs2.imshow(grid_target[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.02)
     grid_target_crop=grid_target#[14:1300,0:1487]
     grid4_crop=grid4#[0:1286,13:1500]
     grid_qc=np.where(grid4_crop>0, 2,0)+np.where(grid_target_crop>60, 1,0)
-    im3=axs3.imshow(grid_qc, cmap=colMap, vmin = 0.2)
+    im3=axs3.imshow(grid_qc[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.2)
       # plt.axis('off')
     # plt.contourf(grid1)
     plt.colorbar(im1, ax=axs1)
@@ -241,6 +248,9 @@ if plot_switch:
     axs2.set_title('Modeled Noise')
     
     # plt.colorbar(con2, ax=ax2)
+    
+    
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"dist2road_noise.png")
     plt.show()
     
     ###########################################
@@ -249,15 +259,18 @@ if plot_switch:
     fig, (axs1)  = plt.subplots(1, 1, figsize=(12, 8))
     
     im1=axs1.imshow(grid_target, cmap=colMap, vmin = 0.2)
-    y_line_slice=1500
-    plot1=axs1.plot([0,2512],[y_line_slice, y_line_slice],'-r')
+    
+    x_dim=np.size(grid_target,axis=0)
+    y_dim=np.size(grid_target,axis=1)
+    y_line_slice=int(y_dim/2)
+    plot1=axs1.plot([0,y_dim],[y_line_slice, y_line_slice],'-r')
    
     plt.colorbar(im1, ax=axs1)
  
     axs1.set_aspect('equal', 'box')
     axs1.set_title('Modeled Noise')
     
-
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"map_profile.png")
     plt.show()
     
     
@@ -284,12 +297,13 @@ if plot_switch:
     plot4=axs1.plot(grid4_plot[y_line_slice,:]/np.max(grid4_plot[y_line_slice,:]),"-m")
     plot5=axs1.plot(grid5_plot[y_line_slice,:]/np.max(grid5_plot[y_line_slice,:]),"-k")
     plot6=axs1.plot(grid6_plot[y_line_slice,:]/np.max(grid6_plot[y_line_slice,:]),"-c")
-    plt.legend(["Noise","Distance to Road", 'Divergence from Topo', 'Mean Tree Density',
-                'OSM Street Class', 'OSM Number of Lanes', 'OSM Speet Limit'])
+    plt.legend(["Target Noise","Distance to Road", 'Divergence from Topo', 'Mean Tree Density',
+                'OSM Street Information','Absoprtion','Building Height Density'])
+
     # axs[1,2].set_title('OSM Street FocalStats')
     # axs[1,3].set_title('Modeled Noise')
     
-    
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"profile.png")
     plt.show()
     print("#### Plotting file done \n")
 

@@ -17,6 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
 import rasterio
+from numpy import newaxis
 
 plt.close('all')
 
@@ -26,11 +27,16 @@ plot_switch=True
 
 print("#### Loading npy file")
 
-city_string_in="Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_out="VIE" #"PIL" #"CLF" #"RIG"
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_in="Salzburg"
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
+city_string_out="SAL" 
 
-base_in_folder="/home/sjet/data/323_end_noise/"
-base_out_folder="/home/sjet/data/323_end_noise/"
+# base_in_folder="/home/sjet/data/323_end_noise/"
+# base_out_folder="/home/sjet/data/323_end_noise/"
+base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
 
 in_grid_file1="_raw_osm_roads_maxspeed.npy"
 in_grid_file2="_raw_osm_roads_nlanes.npy"
@@ -111,6 +117,14 @@ if write_switch:
     print("#### Saving to npy file")
     np.save(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".npy",grid3)
     print("#### Saving to npy file done")
+    out_meta = img_target.meta.copy()
+    # epsg_code = int(img.crs.data['init'][5:])
+    out_meta.update({"driver": "GTiff",
+                     "dtype" : 'float32',
+                     "nodata" : -999.25,
+                     "crs": img_target.crs})
+    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".tif", "w", **out_meta) as dest:
+        dest.write(grid3[newaxis,:,:])
     
     
 if plot_switch:
@@ -123,10 +137,15 @@ if plot_switch:
     im2.set_clim(0, np.max(grid1)*2/3)
     im3.set_clim(40, np.max(grid_target)*3/3)
     
-    y_slice=1500 
-    plot1=ax1.plot([0,2500],[y_slice, y_slice],'-r')
-    plot2=ax2.plot([0,2500],[y_slice, y_slice],'-r')
-    plot3=ax3.plot([0,2500],[y_slice, y_slice],'-r')
+    y_line_slice=1500
+    x_dim=np.size(grid_target,axis=0)
+    y_dim=np.size(grid_target,axis=1)
+    # y_line_slice=1500
+    y_line_slice=int(y_dim/2)
+    
+    plot1=ax1.plot([0,x_dim],[y_line_slice, y_line_slice],'-r')
+    plot2=ax2.plot([0,x_dim],[y_line_slice, y_line_slice],'-r')
+    plot3=ax3.plot([0,x_dim],[y_line_slice, y_line_slice],'-r')
     
     plt.colorbar(im1, ax=ax1)
     plt.colorbar(im2, ax=ax2)
@@ -145,24 +164,25 @@ if plot_switch:
     # im2.set_clim(0,2)
     
     # plt.colorbar(con2, ax=ax2)
+    plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_streetinfo.png")
     plt.show()
     
     fig, (axs1)  = plt.subplots(1, 1, figsize=(20, 8))
       
     axs2 = axs1.twinx()
-    # plot4=axs1.plot(grid4_plot[y_slice,:],"-m")
-    plot1=axs1.plot(grid1[y_slice,:],"-k")
-    plot2=axs1.plot(grid1_smooth[y_slice,:],"-g")
+    # plot4=axs1.plot(grid4_plot[y_line_slice,:],"-m")
+    plot1=axs1.plot(grid1[y_line_slice,:],"-k")
+    plot2=axs1.plot(grid1_smooth[y_line_slice,:],"-g")
     
-    plot3=axs2.plot(grid2[y_slice,:],"--b")
-    plot4=axs2.plot(grid2_smooth[y_slice,:],"-c")
-    # plot4=axs1.plot(grid3[y_slice,:],"-c")
+    plot3=axs2.plot(grid2[y_line_slice,:],"--b")
+    plot4=axs2.plot(grid2_smooth[y_line_slice,:],"-c")
+    # plot4=axs1.plot(grid3[y_line_slice,:],"-c")
     
     axs1.legend(['OSM Speet Limit', 'OSM Speet Limit smoothed'], loc="upper left")
     axs2.legend(['OSM No Lanes', 'OSM No Lanes smoothed'], loc="upper right")
     
-    # plot5=axs2.plot(grid_target[y_slice,:],"-r")
-    # plot7=axs1.plot(grid7_plot[y_slice,:],"-y")
+    # plot5=axs2.plot(grid_target[y_line_slice,:],"-r")
+    # plot7=axs1.plot(grid7_plot[y_line_slice,:],"-y")
     
     # plt.legend(['OSM Speet Limit', 'OSM Speet Limit proc'], loc="upper left")
     
@@ -171,14 +191,15 @@ if plot_switch:
     axs2.set_ylabel("OSM Number of langes",fontsize=14)
     axs2.set_ylim([0, 5])
     
+    plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_maxspeed_nolanes.png")
     plt.show()
     
     fig, (axs1)  = plt.subplots(1, 1, figsize=(20, 8))
       
     axs2 = axs1.twinx()
     
-    plot1=axs1.plot(grid3[y_slice,:],"-g")
-    plot2=axs2.plot(grid_target[y_slice,:],"-k")
+    plot1=axs1.plot(grid3[y_line_slice,:],"-g")
+    plot2=axs2.plot(grid_target[y_line_slice,:],"-k")
     
     axs1.legend(['OSM Street Info smoothed'], loc="upper left")
     axs2.legend(['Target Noise'], loc="upper right")
@@ -188,6 +209,7 @@ if plot_switch:
     axs2.set_ylabel("Target Noise",fontsize=14)
     axs2.set_ylim([50, 80])
     
+    plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_streetinfo_profile.png")
     plt.show()
     
     print("#### Potting file done")

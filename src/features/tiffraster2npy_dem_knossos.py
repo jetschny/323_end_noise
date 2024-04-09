@@ -13,15 +13,16 @@ except:
 
 # import pandas as pd
 import geopandas as gpd
-from geocube.api.core import make_geocube
+# from geocube.api.core import make_geocube
 from shapely.geometry import Polygon
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
+# from PIL import Image
 import rasterio
 from rasterio.plot import show
 from rasterio.mask import mask
 from skimage.transform import resize
+from numpy import newaxis
 # from skimage.transform import rescale
 
 # from rasterio.features import rasterize
@@ -37,14 +38,20 @@ interp_switch=True
 
 print("#### Loading file")
 
-city_string_in="Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_out="VIE" #"PIL" #"CLF" #"RIG"
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
+city_string_in="Salzburg"
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
+city_string_out="SAL" 
 
-base_in_folder="/home/sjet/data/323_end_noise/"
-base_out_folder="/home/sjet/data/323_end_noise/"
+# base_in_folder="/home/sjet/data/323_end_noise/"
+# base_out_folder="/home/sjet/data/323_end_noise/"
+base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+
 in_file = '_eu_dem_v11.tif'
 in_file_target='_MRoadsLden.tif'
-out_file = "_feat_eu_dem_v11"
+out_grid_file = "_feat_eu_dem_v11"
 
 img = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file, 'r') 
 img_target = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file_target, 'r') 
@@ -76,7 +83,10 @@ else:
 
 grid1=np.squeeze(grid1)
 index0 = np.where(grid1 == img.nodata)
+# no data is set to very low random value to avoid edge artifacts
+# not working perfectly though...
 grid1[index0]=0.000123
+# grid1[index0]=0.0
 
 if interp_switch:
     grid1 = resize(grid1,img_target.shape)
@@ -124,15 +134,24 @@ print("#### Processing file done \n")
 
 if write_switch:
     print("#### Saving to npy file")
-    if clip_switch:
-        out_grid_file=out_file+"_clip.npy"
-    else:
-        out_grid_file=out_file+".npy"
+    # if clip_switch:
+    #     out_grid_file=out_file+"_clip.npy"
+    # else:
+    #     out_grid_file=out_file+".npy"
     
-    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid1_distance)
+    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".npy",grid1_distance)
     
     print("#### Saving to npy file done")
-    
+    print("#### Saving to tiff file")
+    out_meta = img_target.meta.copy()
+    # epsg_code = int(img.crs.data['init'][5:])
+    out_meta.update({"driver": "GTiff",
+                     "dtype" : 'float32',
+                     "nodata" : -999.25,
+                     "crs": img_target.crs})
+    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".tif", "w", **out_meta) as dest:
+        dest.write(grid1_distance[newaxis,:,:])
+    print("#### Saving to tiff file done")
     
 if plot_switch:
     print("#### Plotting file")
@@ -152,7 +171,7 @@ if plot_switch:
     plt.imshow(np.squeeze(grid1_distance),cmap="jet")
     plt.clim(0, 0.75*np.max(grid1_distance))
     plt.colorbar()
-    plt.savefig(base_out_folder+city_string_in+"/"+city_string_out+out_file+".png")
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_grid_file+".png")
     plt.show()
 
 print("#### Plotting file done \n")

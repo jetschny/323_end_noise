@@ -13,16 +13,16 @@ except:
 
 # import pandas as pd
 import geopandas as gpd
-from geocube.api.core import make_geocube
+# from geocube.api.core import make_geocube
 from shapely.geometry import Polygon
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
+# from PIL import Image
 import rasterio
 from rasterio.plot import show
 from rasterio.mask import mask
-from rasterio import warp
-from skimage.transform import resize
+# from rasterio import warp
+# from skimage.transform import resize
 
 # from rasterio.features import rasterize
 # from rasterio.transform import from_bounds
@@ -31,18 +31,22 @@ plt.close('all')
 
 
 plot_switch=True
-write_switch=False
+write_switch=True
 clip_switch=False
 interp_switch=False
 
 print("#### Loading file")
 
-city_string_in="Vienna" #"Innsbruck" #"Bordeaux" #"Grenoble" #"Salzburg" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_out="VIE" #"INN" #"BOR" #"GRE" #"SAL" #"PIL" #"CLF" #"RIG"
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg"
+city_string_in="Innsbruck"
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
+city_string_out="INN" 
 
-
-base_in_folder="/home/sjet/data/323_end_noise/"
-base_out_folder="/home/sjet/data/323_end_noise/"
+# base_in_folder="/home/sjet/data/323_end_noise/"
+# base_out_folder="/home/sjet/data/323_end_noise/"
+base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
 
 in_file = '_MRoadsLden.tif'
 out_file="_target_noise_Aggroad_Lden"
@@ -122,9 +126,12 @@ if write_switch:
     
 if plot_switch:
     print("#### Plotting file")
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
+    color_axis_crop_min=50;
+    color_axis_crop_max=80;
     
-    retted=show(img, ax=ax1, vmin=0, vmax=0.75*np.max(grid1))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    
+    retted=show(img, ax=ax1, vmin=color_axis_crop_min, vmax=color_axis_crop_max)
     # add colorbar using the now hidden image
     im = retted.get_images()[0]
     fig.colorbar(im, ax=ax1)
@@ -139,9 +146,9 @@ if plot_switch:
     # ax2.set_axis_off()
     # show(grid1, ax=ax2)
     plt.imshow(grid1,cmap="jet")
-    # plt.clim(0, 300)
+    plt.clim(color_axis_crop_min, color_axis_crop_max)
     plt.colorbar()
-    plt.savefig(base_in_folder+out_file+"_clip.png")
+    plt.savefig(base_out_folder_pic+city_string_out+out_file+"_clip.png")
     plt.show()
 
 print("#### Plotting file done \n")

@@ -39,8 +39,10 @@ plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 city_string_in  = "Riga"
 city_string_out = "RIG"
 
-base_in_folder="/home/sjet/repos/323_end_noise/data/processed/"
-base_out_folder="/home/sjet/repos/323_end_noise/reports/figures/"
+# base_in_folder="/home/sjet/repos/323_end_noise/data/processed/"
+# base_out_folder="/home/sjet/repos/323_end_noise/reports/figures/"
+base_in_folder:  str ="C:/Users/jetschny/Documents/repos/323_end_noise/data/processed/"
+base_out_folder: str ="C:/Users/jetschny/Documents/repos/323_end_noise/reports/figures/"
 
 # feature data
 # OSM street class, distance to clipped street class
@@ -69,7 +71,7 @@ grid4=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file4)
 grid5=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file5)
 grid6=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file6)
 
-grid_target=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_target)
+grid_target=np.load(base_in_folder+city_string_in+"\\"+city_string_out+in_grid_target)
 # grid_target= grid_target.astype(float)
 
 # x = np.linspace(1, grid1.shape[1], grid1.shape[1])
