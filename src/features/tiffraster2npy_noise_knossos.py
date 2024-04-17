@@ -12,6 +12,7 @@ except:
     pass
 
 # import pandas as pd
+import sys
 import geopandas as gpd
 # from geocube.api.core import make_geocube
 from shapely.geometry import Polygon
@@ -28,19 +29,38 @@ from rasterio.mask import mask
 # from rasterio.transform import from_bounds
 
 plt.close('all')
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1", "TRUE", "True")
 
+if len(sys.argv) >2:
+    print("Total number of arguments passed:", len(sys.argv))
+    print("\nArguments passed:", end = " ")
+    for i in range(0,len(sys.argv) ):
+        print(sys.argv[i],"\t", end = " # ")
+    plot_switch=str2bool(sys.argv[3])
+    write_switch=str2bool(sys.argv[4])
+else:
+    plot_switch=True
+    write_switch=True
 
-plot_switch=True
-write_switch=True
+# plot_switch=False
+# write_switch=False
 clip_switch=False
 interp_switch=False
 
-print("#### Loading file")
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
+# city_string_in="Bordeaux"
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+# city_string_out="BOR" 
 
-#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg"
-city_string_in="Innsbruck"
-#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
-city_string_out="INN" 
+city_string_in=sys.argv[1]
+city_string_out=sys.argv[2]
+
+
+print("\n######################## \n")
+print("Noise target creation \n")
+print("#### Loading file data from city ",city_string_in," (",city_string_out,")")
+print("#### Plotting of figures is ",plot_switch," and writing of output files is ",write_switch)
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
@@ -115,14 +135,21 @@ print("#### Processing file done \n")
 
 
 if write_switch:
-    print("#### Saving to npy file")
-    # if clip_switch:
-    #     out_grid_filename=out_file+"_clip.npy"
-    # else:
-    #     out_grid_filename=out_file+".npy"
-    # np.save(out_grid_filename,grid1)
+    print("#### Saving to output files")
     np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid1)
-    print("#### Saving to npy file done")
+
+    print("... Saving to npy file done")
+    
+    out_meta = img.meta.copy()
+    # epsg_code = int(img.crs.data['init'][5:])
+    out_meta.update({"driver": "GTiff",
+                     "dtype" : 'float32',
+                     "nodata" : -999.25,
+                     "crs": img.crs})
+    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
+        dest.write(grid1[np.newaxis,:,:])
+        
+    print("... Saving to tiff file done")
     
 if plot_switch:
     print("#### Plotting file")

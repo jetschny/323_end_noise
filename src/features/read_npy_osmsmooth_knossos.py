@@ -12,25 +12,44 @@ try:
 except:
     pass
 
-
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
 import rasterio
-from numpy import newaxis
+# from numpy import newaxis
 
 plt.close('all')
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1", "TRUE", "True")
 
-write_switch=True
-plot_switch=True
+if len(sys.argv) >2:
+    print("Total number of arguments passed:", len(sys.argv))
+    print("\nArguments passed:", end = " ")
+    for i in range(0,len(sys.argv) ):
+        print(sys.argv[i],"\t", end = " ")
+    plot_switch=str2bool(sys.argv[3])
+    write_switch=str2bool(sys.argv[4])
+else:
+    plot_switch=True
+    write_switch=True
 
+# plot_switch=False
+# write_switch=False
+clip_switch=True
+interp_switch=True
 
-print("#### Loading npy file")
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
+# city_string_in="Madrid"
+city_string_in=sys.argv[1]
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+# city_string_out="MAD" 
+city_string_out=sys.argv[2]
 
-#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_in="Salzburg"
-#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
-city_string_out="SAL" 
+print("\n######################## \n")
+print("Road information (lanes, max speed)  feature creation \n")
+print("#### Loading file data from city ",city_string_in," (",city_string_out,")")
+print("#### Plotting of figures is ",plot_switch," and writing of output files is ",write_switch)
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
@@ -41,7 +60,7 @@ base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
 in_grid_file1="_raw_osm_roads_maxspeed.npy"
 in_grid_file2="_raw_osm_roads_nlanes.npy"
 in_file_target='_MRoadsLden.tif'
-out_grid_file="_feat_osmmaxspeed_nolanes_smooth"
+out_file="_feat_osmmaxspeed_nolanes_smooth"
 
 grid1=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file1)
 grid2=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file1)
@@ -114,18 +133,21 @@ print("#### Potting file")
 # X, Y = np.meshgrid(x, y)
 
 if write_switch:
-    print("#### Saving to npy file")
-    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".npy",grid3)
-    print("#### Saving to npy file done")
+    print("#### Saving to output files")
+    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid3)
+
+    print("... Saving to npy file done")
+    
     out_meta = img_target.meta.copy()
     # epsg_code = int(img.crs.data['init'][5:])
     out_meta.update({"driver": "GTiff",
                      "dtype" : 'float32',
                      "nodata" : -999.25,
                      "crs": img_target.crs})
-    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".tif", "w", **out_meta) as dest:
-        dest.write(grid3[newaxis,:,:])
-    
+    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
+        dest.write(grid3[np.newaxis,:,:])
+        
+    print("... Saving to tiff file done")
     
 if plot_switch:
     fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 8))
@@ -164,53 +186,53 @@ if plot_switch:
     # im2.set_clim(0,2)
     
     # plt.colorbar(con2, ax=ax2)
-    plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_streetinfo.png")
+    plt.savefig(base_out_folder_pic+"/" + city_string_out+out_file+"_streetinfo.png")
     plt.show()
     
-    fig, (axs1)  = plt.subplots(1, 1, figsize=(20, 8))
+    # fig, (axs1)  = plt.subplots(1, 1, figsize=(20, 8))
       
-    axs2 = axs1.twinx()
-    # plot4=axs1.plot(grid4_plot[y_line_slice,:],"-m")
-    plot1=axs1.plot(grid1[y_line_slice,:],"-k")
-    plot2=axs1.plot(grid1_smooth[y_line_slice,:],"-g")
+    # axs2 = axs1.twinx()
+    # # plot4=axs1.plot(grid4_plot[y_line_slice,:],"-m")
+    # plot1=axs1.plot(grid1[y_line_slice,:],"-k")
+    # plot2=axs1.plot(grid1_smooth[y_line_slice,:],"-g")
     
-    plot3=axs2.plot(grid2[y_line_slice,:],"--b")
-    plot4=axs2.plot(grid2_smooth[y_line_slice,:],"-c")
-    # plot4=axs1.plot(grid3[y_line_slice,:],"-c")
+    # plot3=axs2.plot(grid2[y_line_slice,:],"--b")
+    # plot4=axs2.plot(grid2_smooth[y_line_slice,:],"-c")
+    # # plot4=axs1.plot(grid3[y_line_slice,:],"-c")
     
-    axs1.legend(['OSM Speet Limit', 'OSM Speet Limit smoothed'], loc="upper left")
-    axs2.legend(['OSM No Lanes', 'OSM No Lanes smoothed'], loc="upper right")
+    # axs1.legend(['OSM Speet Limit', 'OSM Speet Limit smoothed'], loc="upper left")
+    # axs2.legend(['OSM No Lanes', 'OSM No Lanes smoothed'], loc="upper right")
     
-    # plot5=axs2.plot(grid_target[y_line_slice,:],"-r")
-    # plot7=axs1.plot(grid7_plot[y_line_slice,:],"-y")
+    # # plot5=axs2.plot(grid_target[y_line_slice,:],"-r")
+    # # plot7=axs1.plot(grid7_plot[y_line_slice,:],"-y")
     
-    # plt.legend(['OSM Speet Limit', 'OSM Speet Limit proc'], loc="upper left")
+    # # plt.legend(['OSM Speet Limit', 'OSM Speet Limit proc'], loc="upper left")
     
-    axs1.set_ylabel("OSM Max Speed",fontsize=14)
-    axs1.set_ylim([0, 80])
-    axs2.set_ylabel("OSM Number of langes",fontsize=14)
-    axs2.set_ylim([0, 5])
+    # axs1.set_ylabel("OSM Max Speed",fontsize=14)
+    # axs1.set_ylim([0, 80])
+    # axs2.set_ylabel("OSM Number of langes",fontsize=14)
+    # axs2.set_ylim([0, 5])
     
-    plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_maxspeed_nolanes.png")
-    plt.show()
+    # plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_maxspeed_nolanes.png")
+    # plt.show()
     
-    fig, (axs1)  = plt.subplots(1, 1, figsize=(20, 8))
+    # fig, (axs1)  = plt.subplots(1, 1, figsize=(20, 8))
       
-    axs2 = axs1.twinx()
+    # axs2 = axs1.twinx()
     
-    plot1=axs1.plot(grid3[y_line_slice,:],"-g")
-    plot2=axs2.plot(grid_target[y_line_slice,:],"-k")
+    # plot1=axs1.plot(grid3[y_line_slice,:],"-g")
+    # plot2=axs2.plot(grid_target[y_line_slice,:],"-k")
     
-    axs1.legend(['OSM Street Info smoothed'], loc="upper left")
-    axs2.legend(['Target Noise'], loc="upper right")
+    # axs1.legend(['OSM Street Info smoothed'], loc="upper left")
+    # axs2.legend(['Target Noise'], loc="upper right")
     
-    axs1.set_ylabel("OSM Street Info smoothed",fontsize=14)
-    axs1.set_ylim([0, 1])
-    axs2.set_ylabel("Target Noise",fontsize=14)
-    axs2.set_ylim([50, 80])
+    # axs1.set_ylabel("OSM Street Info smoothed",fontsize=14)
+    # axs1.set_ylim([0, 1])
+    # axs2.set_ylabel("Target Noise",fontsize=14)
+    # axs2.set_ylim([50, 80])
     
-    plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_streetinfo_profile.png")
-    plt.show()
+    # plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_streetinfo_profile.png")
+    # plt.show()
     
     print("#### Potting file done")
 

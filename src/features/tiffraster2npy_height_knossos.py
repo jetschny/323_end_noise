@@ -11,6 +11,7 @@ try:
 except:
     pass
 
+import sys
 # import pandas as pd
 import geopandas as gpd
 # from geocube.api.core import make_geocube
@@ -21,25 +22,43 @@ import numpy as np
 import rasterio
 from rasterio.plot import show
 from rasterio.mask import mask
-from numpy import newaxis
+# from numpy import newaxis
 # from skimage.transform import resize
 
 # from rasterio.features import rasterize
 # from rasterio.transform import from_bounds
 
 plt.close('all')
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1", "TRUE", "True")
 
-plot_switch=True
-write_switch=True
+if len(sys.argv) >2:
+    print("Total number of arguments passed:", len(sys.argv))
+    print("\nArguments passed:", end = " ")
+    for i in range(0,len(sys.argv) ):
+        print(sys.argv[i],"\t", end = " ")
+    plot_switch=str2bool(sys.argv[3])
+    write_switch=str2bool(sys.argv[4])
+else:
+    plot_switch=True
+    write_switch=True
+
+# plot_switch=False
+# write_switch=False
 clip_switch=True
 interp_switch=True
 
-print("#### Loading file")
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
+# city_string_in="Madrid"
+city_string_in=sys.argv[1]
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+# city_string_out="MAD" 
+city_string_out=sys.argv[2]
 
-#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_in="Salzburg"
-#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
-city_string_out="SAL" 
+print("\n######################## \n")
+print("Building height feature creation \n")
+print("#### Loading file data from city ",city_string_in," (",city_string_out,")")
+print("#### Plotting of figures is ",plot_switch," and writing of output files is ",write_switch)
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
@@ -49,7 +68,7 @@ base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
 
 in_file  = '_ua2012_DHM_V010.tif'
 in_file_target='_MRoadsLden.tif'
-out_grid_file = "_feat_UA2012_bheight"
+out_file = "_feat_UA2012_bheight"
 
 
 img = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file, 'r') 
@@ -133,23 +152,21 @@ print("#### Processing file done \n")
 
 
 if write_switch:
-    print("#### Saving to npy file")
-    # if clip_switch:
-    #     out_grid_file=out_file+"_clip.npy"
-    # else:
-    #     out_grid_file=out_file+".npy"
-    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".npy",grid1_distance)
-    print("#### Saving to npy file done")
-    print("#### Saving to tiff file")
-    out_meta = img_target.meta.copy()
+    print("#### Saving to output files")
+    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid1_distance)
+
+    print("... Saving to npy file done")
+    
+    out_meta = img.meta.copy()
     # epsg_code = int(img.crs.data['init'][5:])
     out_meta.update({"driver": "GTiff",
                      "dtype" : 'float32',
                      "nodata" : -999.25,
-                     "crs": img_target.crs})
-    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".tif", "w", **out_meta) as dest:
-        dest.write(grid1_distance[newaxis,:,:])
-    print("#### Saving to tiff file done")
+                     "crs": img.crs})
+    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
+        dest.write(grid1_distance[np.newaxis,:,:])
+        
+    print("... Saving to tiff file done")
     
 if plot_switch:
     print("#### Plotting file")
@@ -173,7 +190,7 @@ if plot_switch:
     plt.imshow(grid1_distance,cmap=colMap, vmin = 0.2)
     plt.clim(0, 0.1*np.max(grid1_distance))
     plt.colorbar()
-    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_grid_file+".png")
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+".png")
     plt.show()
 
     print("#### Plotting file done \n")

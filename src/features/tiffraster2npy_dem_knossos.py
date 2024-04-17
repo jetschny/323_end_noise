@@ -11,6 +11,7 @@ try:
 except:
     pass
 
+import sys
 # import pandas as pd
 import geopandas as gpd
 # from geocube.api.core import make_geocube
@@ -22,26 +23,43 @@ import rasterio
 from rasterio.plot import show
 from rasterio.mask import mask
 from skimage.transform import resize
-from numpy import newaxis
+# from numpy import newaxis
 # from skimage.transform import rescale
 
 # from rasterio.features import rasterize
 # from rasterio.transform import from_bounds
 
 plt.close('all')
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1", "TRUE", "True")
 
+if len(sys.argv) >2:
+    print("Total number of arguments passed:", len(sys.argv))
+    print("\nArguments passed:", end = " ")
+    for i in range(0,len(sys.argv) ):
+        print(sys.argv[i],"\t", end = " ")
+    plot_switch=str2bool(sys.argv[3])
+    write_switch=str2bool(sys.argv[4])
+else:
+    plot_switch=True
+    write_switch=True
 
-plot_switch=True
-write_switch=True
+# plot_switch=False
+# write_switch=False
 clip_switch=True
 interp_switch=True
 
-print("#### Loading file")
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
+# city_string_in="Salzburg"
+city_string_in=sys.argv[1]
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+# city_string_out="SAL" 
+city_string_out=sys.argv[2]
 
-#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_in="Salzburg"
-#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
-city_string_out="SAL" 
+print("\n######################## \n")
+print("DEM topography feature creation \n")
+print("#### Loading file data from city ",city_string_in," (",city_string_out,")")
+print("#### Plotting of figures is ",plot_switch," and writing of output files is ",write_switch)
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
@@ -51,7 +69,7 @@ base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
 
 in_file = '_eu_dem_v11.tif'
 in_file_target='_MRoadsLden.tif'
-out_grid_file = "_feat_eu_dem_v11"
+out_file = "_feat_eu_dem_v11"
 
 img = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file, 'r') 
 img_target = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file_target, 'r') 
@@ -85,15 +103,19 @@ grid1=np.squeeze(grid1)
 index0 = np.where(grid1 == img.nodata)
 # no data is set to very low random value to avoid edge artifacts
 # not working perfectly though...
-grid1[index0]=0.000123
+# grid1[index0]=0.000123
+grid1[index0]=np.nan
 # grid1[index0]=0.0
 
 if interp_switch:
-    grid1 = resize(grid1,img_target.shape)
+    grid1 = resize(grid1,img_target.shape, mode='edge')
     # grid1 = rescale(grid1,2.5)
     # 45
 
-
+# index0 = np.where(grid1 == np.nan)
+# grid1[index0]=0.000123
+grid1=np.nan_to_num(grid1, copy=False, nan=-999.25)
+index0 = np.where(grid1 == -999.25)
 
 print("#### Cropping file done \n")
 
@@ -112,7 +134,13 @@ distance_matrix=np.zeros([radius,radius])
     
 
 def calc_distance(indexxy):
-    return grid1_pad[indexxy]-np.mean(grid1_pad[indexxy[0]-radius:indexxy[0]+radius,indexxy[1]-radius:indexxy[1]+radius])  
+    grid1_pad_window=grid1_pad[indexxy[0]-radius:indexxy[0]+radius,indexxy[1]-radius:indexxy[1]+radius]
+    index0_grid1_pad_window = np.where(grid1_pad_window > -999.25)
+    if len( index0_grid1_pad_window[0]) >0 :
+        grid1_pad_window_mean=np.mean(grid1_pad_window[index0_grid1_pad_window])
+    else:
+        grid1_pad_window_mean=-999.25
+    return grid1_pad[indexxy]-grid1_pad_window_mean
   
 def check_frame(indexxy):
     if (min(indexxy)>=radius) and (indexxy[0]<(dim_grid1_pad[0]-radius)) and (indexxy[1]<(dim_grid1_pad[1]-radius)):
@@ -125,7 +153,8 @@ for indexxy, item in np.ndenumerate(grid1_pad):
 
 grid1_distance=grid1_distance[radius:-radius, radius:-radius]
 # grid1_distance[index0]=-999.25
-index0 = np.where(grid1 == 0.000123)
+# index0 = np.where(grid1 == img.nodata)
+# index0 = np.where(grid1 == 0.000123)
 grid1_distance[index0]=-999.25
 grid1_distance=grid1_distance.astype(np.float32)
 
@@ -133,25 +162,21 @@ print("#### Processing file done \n")
 
 
 if write_switch:
-    print("#### Saving to npy file")
-    # if clip_switch:
-    #     out_grid_file=out_file+"_clip.npy"
-    # else:
-    #     out_grid_file=out_file+".npy"
+    print("#### Saving to output files")
+    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid1_distance)
+
+    print("... Saving to npy file done")
     
-    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".npy",grid1_distance)
-    
-    print("#### Saving to npy file done")
-    print("#### Saving to tiff file")
-    out_meta = img_target.meta.copy()
+    out_meta = img.meta.copy()
     # epsg_code = int(img.crs.data['init'][5:])
     out_meta.update({"driver": "GTiff",
                      "dtype" : 'float32',
                      "nodata" : -999.25,
-                     "crs": img_target.crs})
-    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".tif", "w", **out_meta) as dest:
-        dest.write(grid1_distance[newaxis,:,:])
-    print("#### Saving to tiff file done")
+                     "crs": img.crs})
+    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
+        dest.write(grid1_distance[np.newaxis,:,:])
+        
+    print("... Saving to tiff file done")
     
 if plot_switch:
     print("#### Plotting file")
@@ -169,9 +194,9 @@ if plot_switch:
     # ax2.set_axis_off()
     # show(img_clipped, ax=ax2)
     plt.imshow(np.squeeze(grid1_distance),cmap="jet")
-    plt.clim(0, 0.75*np.max(grid1_distance))
+    plt.clim(-0.75*np.max(grid1_distance), 0.75*np.max(grid1_distance))
     plt.colorbar()
-    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_grid_file+".png")
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+".png")
     plt.show()
 
 print("#### Plotting file done \n")

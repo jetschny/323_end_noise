@@ -12,21 +12,43 @@ try:
 except:
     pass
 
-
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
-from numpy import newaxis
+# from numpy import newaxis
 import rasterio
 
 plt.close('all')
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1", "TRUE", "True")
 
-write_switch=True
-plot_switch=True
+if len(sys.argv) >2:
+    print("Total number of arguments passed:", len(sys.argv))
+    print("\nArguments passed:", end = " ")
+    for i in range(0,len(sys.argv) ):
+        print(sys.argv[i],"\t", end = " ")
+    plot_switch=str2bool(sys.argv[3])
+    write_switch=str2bool(sys.argv[4])
+else:
+    plot_switch=True
+    write_switch=True
 
-#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_in="Salzburg"
-#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
-city_string_out="SAL" 
+# plot_switch=False
+# write_switch=False
+clip_switch=True
+interp_switch=True
+
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
+# city_string_in="Madrid"
+city_string_in=sys.argv[1]
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+# city_string_out="MAD" 
+city_string_out=sys.argv[2]
+
+print("\n######################## \n")
+print("Distance to road feature creation \n")
+print("#### Loading file data from city ",city_string_in," (",city_string_out,")")
+print("#### Plotting of figures is ",plot_switch," and writing of output files is ",write_switch)
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
@@ -38,7 +60,7 @@ print("#### Loading npy file")
 
 in_file1="_raw_osm_roads_streetclass.npy"
 in_file_target='_MRoadsLden.tif'
-out_grid_file="_feat_dist2road"
+out_file="_feat_dist2road"
 
 grid1=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_file1)
 img_target = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file_target, 'r') 
@@ -101,17 +123,21 @@ y = np.linspace(1, grid1.shape[0], grid1.shape[0])
 X, Y = np.meshgrid(x, y)
 
 if write_switch:
-    print("#### Saving to npy file")
-    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".npy",grid1_dist2road)
-    print("#### Saving to npy file done")
+    print("#### Saving to output files")
+    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid1_dist2road)
+
+    print("... Saving to npy file done")
+    
     out_meta = img_target.meta.copy()
     # epsg_code = int(img.crs.data['init'][5:])
     out_meta.update({"driver": "GTiff",
                      "dtype" : 'float32',
                      "nodata" : -999.25,
                      "crs": img_target.crs})
-    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_grid_file+".tif", "w", **out_meta) as dest:
-        dest.write(grid1_dist2road[newaxis,:,:])
+    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
+        dest.write(grid1_dist2road[np.newaxis,:,:])
+        
+    print("... Saving to tiff file done")
     
 if plot_switch:
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
@@ -144,7 +170,7 @@ if plot_switch:
     # plt.colorbar(con2, ax=ax2)
     
 
-    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_grid_file+".png")
+    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+".png")
     plt.show()
     print("#### Potting file done")
 

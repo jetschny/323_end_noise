@@ -13,6 +13,7 @@ except:
     pass
 
 # import requests
+import sys
 import matplotlib.pyplot as plt
 import numpy as np 
 import osmnx as ox
@@ -27,15 +28,37 @@ import json
 import rasterio
 
 plt.close('all')
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1", "TRUE", "True")
 
-write_switch=True
-plot_switch=True
+if len(sys.argv) >2:
+    print("Total number of arguments passed:", len(sys.argv))
+    print("\nArguments passed:", end = " ")
+    for i in range(0,len(sys.argv) ):
+        print(sys.argv[i],"\t", end = " ")
+    plot_switch=str2bool(sys.argv[3])
+    write_switch=str2bool(sys.argv[4])
+else:
+    plot_switch=True
+    write_switch=True
+
+# plot_switch=False
+# write_switch=False
+clip_switch=True
+interp_switch=True
 convcrs_switch=True
 
-#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_in="Salzburg"
-#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
-city_string_out="SAL" 
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
+# city_string_in="Madrid"
+city_string_in=sys.argv[1]
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+# city_string_out="MAD" 
+city_string_out=sys.argv[2]
+
+print("\n######################## \n")
+print("Downloading OSM data for road information feature creation \n")
+print("#### Loading file data from city ",city_string_in," (",city_string_out,")")
+print("#### Plotting of figures is ",plot_switch," and writing of output files is ",write_switch)
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
@@ -117,7 +140,12 @@ if city_string_out=="VIE":
     df_maxspeed=df_maxspeed.replace("AT:zone:30",30)
     df_maxspeed.loc[32879].maxspeed[0]=10
     df_maxspeed.loc[32879].maxspeed[1]=10
-    
+
+if city_string_out=="NIC":
+    df_maxspeed=df_maxspeed.replace("25 mph",40)
+
+if city_string_out=="MAD":
+        df_maxspeed=df_maxspeed.replace("50|30",40)
 
 # remove nested array and replace with mean of array
 df_maxspeed["maxspeed"] = df_maxspeed["maxspeed"].map(lambda x: np.mean(np.int_(x))) 
