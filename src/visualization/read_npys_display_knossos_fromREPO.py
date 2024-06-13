@@ -34,10 +34,10 @@ plt.rc('xtick', labelsize=default_font_size) #fontsize of the x tick labels
 plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
-#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga"
-city_string_in="Salzburg"
-#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL
-city_string_out="SAL" 
+#"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas"
+city_string_in="Madrid"
+#"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+city_string_out="MAD" 
 
 base_in_folder:  str ="Z:/NoiseML/2024/city_data_features/"
 # base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"

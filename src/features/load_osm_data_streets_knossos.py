@@ -29,7 +29,7 @@ import rasterio
 
 plt.close('all')
 def str2bool(v):
-  return v.lower() in ("yes", "true", "t", "1", "TRUE", "True")
+    return v.lower() in ("yes", "true", "t", "1", "TRUE", "True")
 
 if len(sys.argv) >2:
     print("Total number of arguments passed:", len(sys.argv))
@@ -49,12 +49,12 @@ interp_switch=True
 convcrs_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
-# city_string_in="Madrid"
-city_string_in=sys.argv[1]
+# city_string_in="Budapest"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_out="MAD" 
+# city_string_out="BUD" 
+city_string_in=sys.argv[1]
 city_string_out=sys.argv[2]
-
+ 
 print("\n######################## \n")
 print("Downloading OSM data for road information feature creation \n")
 print("#### Loading file data from city ",city_string_in," (",city_string_out,")")
@@ -71,7 +71,7 @@ in_file_target='_MRoadsLden.tif'
 out_grid_file="_raw_osm_roads"
 
 
-img_target = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file_target, 'r') 
+img_target = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file_target, 'r')
 
 print("#### Loading file")
 
@@ -88,6 +88,8 @@ coords_transformed = warp.transform({'init': 'epsg:3035'},{'init': 'epsg:4326'},
 
 #download OSM street data based on transformed corner points
 G = ox.graph_from_bbox(coords_transformed[1][0],coords_transformed[1][1], coords_transformed[0][0], coords_transformed[0][1], network_type='drive')
+                        
+# G = ox.graph_from_bbox([coords_transformed[1][0],coords_transformed[1][1], coords_transformed[0][0], coords_transformed[0][1]])
 G_projected = ox.project_graph(G)
 
 print("#### Loading file done\n")
@@ -145,7 +147,10 @@ if city_string_out=="NIC":
     df_maxspeed=df_maxspeed.replace("25 mph",40)
 
 if city_string_out=="MAD":
-        df_maxspeed=df_maxspeed.replace("50|30",40)
+    df_maxspeed=df_maxspeed.replace("50|30",40)
+        
+if city_string_out=="BOR":
+    df_maxspeed=df_maxspeed.replace("signals",10)
 
 # remove nested array and replace with mean of array
 df_maxspeed["maxspeed"] = df_maxspeed["maxspeed"].map(lambda x: np.mean(np.int_(x))) 
