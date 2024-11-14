@@ -31,8 +31,8 @@ plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
 
-city_string_in="Salzburg"
-city_string_out="SAL"
+city_string_in="Clermont_Ferrand"
+city_string_out="CLF"
 
 base_in_folder:  str ="P:/NoiseML/2024/city_data_features/"
 base_out_folder: str ="P:/NoiseML/2024/city_data_features/"
@@ -97,32 +97,37 @@ if plot_switch:
     plt.savefig(base_out_folder_pic+city_string_out+out_file1+".png")
     print("#### Saving image as ", base_out_folder_pic+city_string_out+out_file1+".png")
     
-    fig, axs = plt.subplots(2, 3, figsize=(12, 8))
-    sns.histplot(data=df, x="Dist2Road", ax=axs[0,0], stat="percent")
-    sns.histplot(data=df, x="DivTopo", ax=axs[0,1], stat="percent")
-    sns.histplot(data=df, x="MeanTreeDens", ax=axs[0,2], stat="percent")
-    sns.histplot(data=df, x="StreetInfo", ax=axs[1,0], binwidth=0.01, stat="percent")
-    sns.histplot(data=df, x="Absorption", ax=axs[1,1], binwidth=1, stat="percent")
-    sns.histplot(data=df, x="BuildingHeight", ax=axs[1,2], binwidth=0.2, stat="percent")
-    axs[0,0].set_xlim([0, 2])
+    fig, axs = plt.subplots(2, 3, figsize=(16, 10))
+    sns.histplot(df.Dist2Road[df.Dist2Road != -999.25], ax=axs[0,0], binwidth=0.05, stat="percent")
+    sns.histplot(df.DivTopo[df.DivTopo != -999.25], ax=axs[0,1], binwidth=0.2, stat="percent")
+    sns.histplot(df.MeanTreeDens[df.MeanTreeDens != -999.25], ax=axs[0,2], binwidth=1, stat="percent")
+    sns.histplot(df.StreetInfo[df.StreetInfo != -999.25], ax=axs[1,0], binwidth=0.01,stat="percent")
+    sns.histplot(df.Absorption[df.Absorption != -999.25], ax=axs[1,1], binwidth=1, stat="percent")
+    sns.histplot(df.BuildingHeight[df.BuildingHeight != -999.25], ax=axs[1,2], binwidth=0.1, stat="percent")
+    axs[0,0].set_xlim([-0.1, 3])
     axs[0,0].set_ylim([0, 10])
+    axs[0,0].set_yticks(np.arange(0, 10, 1)) 
 
     axs[0,1].set_xlim([-10, 10])
-    axs[0,1].set_ylim([0, 5])
+    axs[0,1].set_ylim([0, 10])
+    axs[0,1].set_yticks(np.arange(0, 10, 1)) 
 
-    axs[0,2].set_xlim([0, 100])
+    axs[0,2].set_xlim([-1, 50])
     axs[0,2].set_ylim([0, 10])
+    axs[0,2].set_yticks(np.arange(0, 10, 1)) 
     
-    axs[1,0].set_xlim([0, 1])
-    axs[1,0].set_ylim([0, 20])
+    axs[1,0].set_xlim([-0.02, 1])
+    axs[1,0].set_ylim([0, 10])
+    axs[1,0].set_yticks(np.arange(0, 10, 1)) 
 
     axs[1,1].set_xlim([-1, 11])
-    axs[1,1].set_ylim([0, 60])
+    axs[1,1].set_ylim([0, 65])
+    axs[1,1].set_xticks(np.arange(0, 11, 1)) 
+    # axs[1,1].set_yticks(np.arange(0, 65, 5)) 
 
-    axs[1,2].set_xlim([0, 10])
+    axs[1,2].set_xlim([-0.2, 10])
     axs[1,2].set_ylim([0, 10])
-
-
+    axs[1,2].set_yticks(np.arange(0, 10, 1)) 
 
     plt.show()
     plt.savefig(base_out_folder_pic+city_string_out+out_file2+".png")
