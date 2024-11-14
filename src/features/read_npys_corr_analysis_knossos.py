@@ -31,11 +31,12 @@ plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
 
-city_string_in="Riga"
-city_string_out="RIG"
+city_string_in="Salzburg"
+city_string_out="SAL"
 
-base_in_folder="/home/sjet/data/323_end_noise/"
-base_out_folder="/home/sjet/data/323_end_noise/"
+base_in_folder:  str ="P:/NoiseML/2024/city_data_features/"
+base_out_folder: str ="P:/NoiseML/2024/city_data_features/"
+base_out_folder_pic: str ="P:/NoiseML/2024/city_data_pics/"
 
 # feature data
 # OSM street class, distance to clipped street class
@@ -52,7 +53,8 @@ in_grid_file5="_feat_absoprtion.npy"
 in_grid_file6="_feat_UA2012_bheight.npy"
 
 #output figure file 
-out_file = "_correlation_analysis"
+out_file1 = "_analysis_correlation"
+out_file2 = "_analysis_distribution"
 
 # target noise data
 in_grid_target="_target_noise_Aggroad_Lden.npy"
@@ -92,8 +94,40 @@ if plot_switch:
     fig, axs = plt.subplots(1, 1, figsize=(12, 8))
     sns.heatmap(df.corr(), annot=True, fmt=".2f")
     plt.show()
-    plt.savefig(base_out_folder+city_string_in+"/"+city_string_out+out_file+".png")
-    print("#### Plotting file done \n")
+    plt.savefig(base_out_folder_pic+city_string_out+out_file1+".png")
+    print("#### Saving image as ", base_out_folder_pic+city_string_out+out_file1+".png")
+    
+    fig, axs = plt.subplots(2, 3, figsize=(12, 8))
+    sns.histplot(data=df, x="Dist2Road", ax=axs[0,0], stat="percent")
+    sns.histplot(data=df, x="DivTopo", ax=axs[0,1], stat="percent")
+    sns.histplot(data=df, x="MeanTreeDens", ax=axs[0,2], stat="percent")
+    sns.histplot(data=df, x="StreetInfo", ax=axs[1,0], binwidth=0.01, stat="percent")
+    sns.histplot(data=df, x="Absorption", ax=axs[1,1], binwidth=1, stat="percent")
+    sns.histplot(data=df, x="BuildingHeight", ax=axs[1,2], binwidth=0.2, stat="percent")
+    axs[0,0].set_xlim([0, 2])
+    axs[0,0].set_ylim([0, 10])
+
+    axs[0,1].set_xlim([-10, 10])
+    axs[0,1].set_ylim([0, 5])
+
+    axs[0,2].set_xlim([0, 100])
+    axs[0,2].set_ylim([0, 10])
+    
+    axs[1,0].set_xlim([0, 1])
+    axs[1,0].set_ylim([0, 20])
+
+    axs[1,1].set_xlim([-1, 11])
+    axs[1,1].set_ylim([0, 60])
+
+    axs[1,2].set_xlim([0, 10])
+    axs[1,2].set_ylim([0, 10])
+
+
+
+    plt.show()
+    plt.savefig(base_out_folder_pic+city_string_out+out_file2+".png")
+    print("#### Saving image as ", base_out_folder_pic+city_string_out+out_file2+".png")
    
+    print("#### Plotting file done \n")
 
 
