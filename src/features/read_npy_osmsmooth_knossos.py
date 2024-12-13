@@ -40,10 +40,11 @@ clip_switch=True
 interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
-# city_string_in="Madrid"
-city_string_in=sys.argv[1]
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+# city_string_in="Madrid"
 # city_string_out="MAD" 
+
+city_string_in=sys.argv[1]
 city_string_out=sys.argv[2]
 
 print("\n######################## \n")

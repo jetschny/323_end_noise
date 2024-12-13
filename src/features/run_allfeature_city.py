@@ -7,8 +7,8 @@ Created on Mon Apr 15 22:12:23 2024
 
 import os
 import subprocess
-city_name="Budapest"
-city_initials="BUD"
+city_name="Ljubljana"
+city_initials="LJU"
 
 # os.system("python file1.py", shell=True)
 
@@ -27,22 +27,28 @@ city_initials="BUD"
 # target data
 # os.system("python tiffraster2npy_noise_knossos.py Bordeaux BOR True True")
 
-# list_scripts=["tiffraster2npy_noise_knossos.py",
-#               "tiffraster2npy_absorption_knossos.py",
-#               "tiffraster2npy_dem_knossos.py",
-#               "tiffraster2npy_height_knossos.py",
-#               "tiffraster2npy_tcd_knossos.py",
-#               "load_osm_data_streets_knossos.py",
-#               "read_npy_distance2roads_knossos.py",
-#               "read_npy_osmsmooth_knossos.py"]
-
 list_scripts=["tiffraster2npy_noise_knossos.py",
+              "tiffraster2npy_absorption_knossos.py",
+              "tiffraster2npy_dem_knossos.py",
+              "tiffraster2npy_height_knossos.py",
+              "tiffraster2npy_tcd_knossos.py",
               "load_osm_data_streets_knossos.py",
               "read_npy_distance2roads_knossos.py",
               "read_npy_osmsmooth_knossos.py"]
 
 # list_scripts=["tiffraster2npy_noise_knossos.py",
-#               "tiffraster2npy_absorption_knossos.py"]
+#               "tiffraster2npy_absorption_knossos.py",
+#               "tiffraster2npy_dem_knossos.py",
+#               "tiffraster2npy_height_knossos.py",
+#               "tiffraster2npy_tcd_knossos.py"]
+
+
+# list_scripts=["tiffraster2npy_noise_knossos.py",
+#                "load_osm_data_streets_knossos.py",
+#                "read_npy_distance2roads_knossos.py",
+#                "read_npy_osmsmooth_knossos.py"]
+
+# list_scripts=[ "tiffraster2npy_tcd_knossos.py"]
 
 for ii in list_scripts:
     results=""

@@ -49,10 +49,11 @@ clip_switch=True
 interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
-# city_string_in="Madrid"
-city_string_in=sys.argv[1]
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_out="MAD" 
+# city_string_in="Budapest"
+# city_string_out="BUD" 
+
+city_string_in=sys.argv[1]
 city_string_out=sys.argv[2]
 
 print("\n######################## \n")
@@ -101,10 +102,13 @@ else:
     
 grid1=np.squeeze(grid1)
 
-if interp_switch:
+if interp_switch :
     # grid1 = resize(grid1,img_target.shape)
     # grid1 = grid1[0:img_target.shape[0],0:img_target.shape[1]]
-    grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
+    if ((city_string_out=="BOR") or (city_string_out=="BOR")):
+        grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
+    if ((city_string_out=="ATH") or (city_string_out=="THE")):
+        grid1 = grid1[0:img_target.shape[0],0:img_target.shape[1]]
     # grid1 = rescale(grid1,2.5)
     # 45
 
@@ -136,8 +140,9 @@ for indexxy, item in np.ndenumerate(grid1_pad):
     grid1_distance[indexxy]=check_frame(indexxy)
 
 grid1_distance=grid1_distance[radius:-radius, radius:-radius]
-grid1_distance[index0]=-999.25
 grid1_distance=grid1_distance.astype(np.float32)
+grid1_distance[index0]=-999.25
+# grid1_distance=grid1_distance.astype(np.float32)
 
 
 print("#### Processing file done \n")
@@ -149,7 +154,7 @@ if write_switch:
 
     print("... Saving to npy file done")
     
-    out_meta = img.meta.copy()
+    out_meta = img_target.meta.copy()
     # epsg_code = int(img.crs.data['init'][5:])
     out_meta.update({"driver": "GTiff",
                      "dtype" : 'float32',
@@ -157,6 +162,7 @@ if write_switch:
                      "crs": img.crs})
     with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
         dest.write(grid1_distance[np.newaxis,:,:])
+      
         
     print("... Saving to tiff file done")
     

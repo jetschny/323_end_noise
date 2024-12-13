@@ -35,9 +35,9 @@ plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas"
-city_string_in="Madrid"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-city_string_out="MAD" 
+city_string_in="Thessaloniki"
+city_string_out="THE" 
 
 base_in_folder:  str ="Z:/NoiseML/2024/city_data_features/"
 # base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
@@ -170,7 +170,7 @@ if plot_switch:
     im4.set_clim(0.0,0.5)
     im6.set_clim(0,10)
     # im7.set_clim(0,10)
-    im8.set_clim(30,80)
+    # im8.set_clim(30,80)
     
     axs[0,0].set_title('Distance to Road')
     axs[0,1].set_title('Divergence from Topo')
@@ -218,8 +218,8 @@ if plot_switch:
     
     # levels = np.arange(0, 3.5, 0.5)
     
-    zoom_window_x=[200,400]
-    zoom_window_y=[400,600]
+    zoom_window_x=[1500,1700]
+    zoom_window_y=[1500,1700]
     # con1=ax1.contourf(grid1,[20, 50, 70], cmap='RdGy')
     # con2=ax2.contourf(grid2,[5000, 15000, 20000], cmap='RdGy')
     im1=axs1.imshow(grid4[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.02)

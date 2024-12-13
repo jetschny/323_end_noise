@@ -31,11 +31,11 @@ plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
 
-city_string_in="Riga"
-city_string_out="RIG"
+city_string_in="Salzburg"
+city_string_out="SAL"
 
-base_in_folder="/home/sjet/data/323_end_noise/"
-base_out_folder="/home/sjet/data/323_end_noise/"
+base_in_folder="Z:/NoiseML/2024/city_data_features/"
+base_out_folder="Z:/NoiseML/2024/city_data_pics/"
 
 # feature data
 # OSM street class, distance to clipped street class
@@ -76,6 +76,18 @@ colMap.set_under(color='white')
 # all non-existing / missing data at values of grid_target==0 will be excluded
 indexxy = np.where(grid_target >0)
 
+indexxy_null = np.where(grid1 == -999.25)
+grid1[indexxy_null]=np.NaN
+indexxy_null = np.where(grid2 == -999.25)
+grid2[indexxy_null]=np.NaN
+indexxy_null = np.where(grid3 == -999.25)
+grid3[indexxy_null]=np.NaN
+indexxy_null = np.where(grid4 == -999.25)
+grid4[indexxy_null]=np.NaN
+indexxy_null = np.where(grid5 == -999.25)
+grid5[indexxy_null]=np.NaN
+indexxy_null = np.where(grid6 == -999.25)
+grid6[indexxy_null]=np.NaN
 
 df = pd.DataFrame(np.array((grid_target[indexxy].flatten(),
                             grid1[indexxy].flatten(), 
@@ -87,12 +99,14 @@ df = pd.DataFrame(np.array((grid_target[indexxy].flatten(),
                   columns=["Noise","Dist2Road","DivTopo","MeanTreeDens",
                            "StreetInfo","Absorption","BuildingHeight"])
 
+df_notnull = df.query("Dist2Road.notnull() & DivTopo.notnull() & MeanTreeDens.notnull() & StreetInfo.notnull() & Absorption.notnull() & BuildingHeight.notnull()")
+
 if plot_switch:
     print("#### Plotting file")
     fig, axs = plt.subplots(1, 1, figsize=(12, 8))
-    sns.heatmap(df.corr(), annot=True, fmt=".2f")
+    sns.heatmap(df_notnull.corr(), annot=True, fmt=".2f")
     plt.show()
-    plt.savefig(base_out_folder+city_string_in+"/"+city_string_out+out_file+".png")
+    plt.savefig(base_out_folder+city_string_out+out_file+".png")
     print("#### Plotting file done \n")
    
 

@@ -49,9 +49,10 @@ interp_switch=True
 convcrs_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
-# city_string_in="Budapest"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_out="BUD" 
+# city_string_in="Bordeaux"
+# city_string_out="BOR" 
+
 city_string_in=sys.argv[1]
 city_string_out=sys.argv[2]
  
@@ -87,7 +88,7 @@ corner_point2=np.array((img_target_bounds[2] , img_target_bounds[3] ))+1000
 coords_transformed = warp.transform({'init': 'epsg:3035'},{'init': 'epsg:4326'},[corner_point1[0], corner_point2[0]], [corner_point1[1], corner_point2[1]])
 
 #download OSM street data based on transformed corner points
-G = ox.graph_from_bbox(coords_transformed[1][0],coords_transformed[1][1], coords_transformed[0][0], coords_transformed[0][1], network_type='drive')
+G = ox.graph_from_bbox(bbox=[coords_transformed[1][0],coords_transformed[1][1], coords_transformed[0][0], coords_transformed[0][1]], network_type='drive')
                         
 # G = ox.graph_from_bbox([coords_transformed[1][0],coords_transformed[1][1], coords_transformed[0][0], coords_transformed[0][1]])
 G_projected = ox.project_graph(G)
@@ -150,7 +151,17 @@ if city_string_out=="MAD":
     df_maxspeed=df_maxspeed.replace("50|30",40)
         
 if city_string_out=="BOR":
-    df_maxspeed=df_maxspeed.replace("signals",10)
+    df_maxspeed=df_maxspeed.replace('signals', '10')
+    # df_maxspeed["maxspeed"] = df_maxspeed["maxspeed"].str.replace('signals', '110')
+    # df_maxspeed["maxspeed"] = df_maxspeed["maxspeed"].map(lambda x: x.replace({'signals','110'},'110')) 
+    
+    def replace_signals(maxspeed):
+        if isinstance(maxspeed, list) and 'signals' in maxspeed:
+            return [110 if x == 'signals' else x for x in maxspeed]
+        return maxspeed
+    
+    df_maxspeed["maxspeed"] = df_maxspeed["maxspeed"].apply(replace_signals) 
+
 
 # remove nested array and replace with mean of array
 df_maxspeed["maxspeed"] = df_maxspeed["maxspeed"].map(lambda x: np.mean(np.int_(x))) 
@@ -174,7 +185,7 @@ if write_switch:
     grid1= np.nan_to_num(grid1, nan=-999.25)
     np.save(base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_maxspeed.npy",grid1)
         
-    print("#### Saving to npy file done")
+    print("#### Saving to npy file done : ",base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_maxspeed.npy")
 
 if plot_switch:
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
@@ -236,7 +247,7 @@ if write_switch:
     
     np.save(base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_streetclass.npy",grid1)
     
-    print("#### Saving to npy file done")
+    print("#### Saving to npy file done : ",base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_streetclass.npy")
     print("#### Saving to class file")
     np.savetxt(base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_streetclass_def.csv", road_classes, '%s', ',')
     print("#### Saving to class file done")
@@ -277,7 +288,7 @@ if write_switch:
     grid1= np.nan_to_num(grid1, nan=-999.25)
     
     np.save(base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_nlanes.npy",grid1)
-    print("#### Saving to npy file done")
+    print("#### Saving to npy file done : ",base_out_folder+city_string_in+"/" + city_string_out+out_grid_file+"_nlanes.npy")
     
 if plot_switch:
      fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))

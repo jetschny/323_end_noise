@@ -49,10 +49,11 @@ clip_switch=True
 interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
-# city_string_in="Madrid"
-city_string_in=sys.argv[1]
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_out="MAD" 
+# city_string_in="Bordeaux"
+# city_string_out="BOR" 
+
+city_string_in=sys.argv[1]
 city_string_out=sys.argv[2]
 
 print("\n######################## \n")
@@ -110,12 +111,12 @@ if interp_switch:
         grid1_0 = np.zeros(img_target.shape)-999.25
         grid1_0[0:grid1.shape[0],0:(grid1.shape[1]-1)]=grid1[0:grid1.shape[0],0:(grid1.shape[1]-1)]
         grid1=grid1_0
-    if city_string_out=="SAL" :
+    if city_string_out=="SAL":
         grid1 = grid1[:,1:1+img_target.shape[1]]
     else :
-        grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
+        # grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
     # grid1 = resize(grid1, img_target.shape)
-    45
+        45
 
 index0 = np.where(grid1 == img.nodata)
 grid1[index0]=0
@@ -142,7 +143,7 @@ if write_switch:
 
     print("... Saving to npy file done")
     
-    out_meta = img.meta.copy()
+    out_meta = img_target.meta.copy()
     # epsg_code = int(img.crs.data['init'][5:])
     out_meta.update({"driver": "GTiff",
                      "dtype" : 'float32',

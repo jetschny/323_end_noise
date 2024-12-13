@@ -50,10 +50,11 @@ clip_switch=True
 interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
-# city_string_in="Salzburg"
-city_string_in=sys.argv[1]
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_out="SAL" 
+# city_string_in="Budapest"
+# city_string_out="BUD" 
+
+city_string_in=sys.argv[1]
 city_string_out=sys.argv[2]
 
 print("\n######################## \n")
@@ -100,6 +101,9 @@ else:
     # img_clipped=np.array(img)
 
 grid1=np.squeeze(grid1)
+grid1=grid1.astype(np.float32)
+# grid1=np.nan_to_num(grid1, nan=img.nodata)
+
 index0 = np.where(grid1 == img.nodata)
 # no data is set to very low random value to avoid edge artifacts
 # not working perfectly though...
@@ -155,8 +159,9 @@ grid1_distance=grid1_distance[radius:-radius, radius:-radius]
 # grid1_distance[index0]=-999.25
 # index0 = np.where(grid1 == img.nodata)
 # index0 = np.where(grid1 == 0.000123)
-grid1_distance[index0]=-999.25
 grid1_distance=grid1_distance.astype(np.float32)
+grid1_distance[index0]=-999.25
+
 
 print("#### Processing file done \n")
 
@@ -167,7 +172,7 @@ if write_switch:
 
     print("... Saving to npy file done")
     
-    out_meta = img.meta.copy()
+    out_meta = img_target.meta.copy()
     # epsg_code = int(img.crs.data['init'][5:])
     out_meta.update({"driver": "GTiff",
                      "dtype" : 'float32',

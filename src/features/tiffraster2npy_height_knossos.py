@@ -49,10 +49,11 @@ clip_switch=True
 interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
-# city_string_in="Madrid"
-city_string_in=sys.argv[1]
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
+# city_string_in="Madrid"
 # city_string_out="MAD" 
+
+city_string_in=sys.argv[1]
 city_string_out=sys.argv[2]
 
 print("\n######################## \n")
@@ -103,10 +104,11 @@ else:
 
 grid1=np.squeeze(grid1)
 
-if interp_switch:
-    # grid2 = grid1[img_target.shape]
+if interp_switch :
+    # grid1 = resize(grid1,img_target.shape)
     # grid1 = grid1[0:img_target.shape[0],0:img_target.shape[1]]
-    grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
+    if ((city_string_out=="BOR") or (city_string_out=="BOR")):
+        grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
     # grid1 = rescale(grid1,2.5)
     # 45
 
@@ -157,7 +159,7 @@ if write_switch:
 
     print("... Saving to npy file done")
     
-    out_meta = img.meta.copy()
+    out_meta = img_target.meta.copy()
     # epsg_code = int(img.crs.data['init'][5:])
     out_meta.update({"driver": "GTiff",
                      "dtype" : 'float32',
