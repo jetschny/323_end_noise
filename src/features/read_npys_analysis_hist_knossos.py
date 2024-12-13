@@ -31,11 +31,12 @@ plt.rc('ytick', labelsize=default_font_size) #fontsize of the y tick labels
 plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
 
-city_string_in="Salzburg"
-city_string_out="SAL"
+city_string_in="Clermont_Ferrand"
+city_string_out="CLF"
 
-base_in_folder="Z:/NoiseML/2024/city_data_features/"
-base_out_folder="Z:/NoiseML/2024/city_data_pics/"
+base_in_folder:  str ="P:/NoiseML/2024/city_data_features/"
+base_out_folder: str ="P:/NoiseML/2024/city_data_features/"
+base_out_folder_pic: str ="P:/NoiseML/2024/city_data_pics/"
 
 # feature data
 # OSM street class, distance to clipped street class
@@ -52,7 +53,8 @@ in_grid_file5="_feat_absoprtion.npy"
 in_grid_file6="_feat_UA2012_bheight.npy"
 
 #output figure file 
-out_file = "_correlation_analysis"
+out_file1 = "_analysis_correlation"
+out_file2 = "_analysis_distribution"
 
 # target noise data
 in_grid_target="_target_noise_Aggroad_Lden.npy"
@@ -76,18 +78,6 @@ colMap.set_under(color='white')
 # all non-existing / missing data at values of grid_target==0 will be excluded
 indexxy = np.where(grid_target >0)
 
-indexxy_null = np.where(grid1 == -999.25)
-grid1[indexxy_null]=np.NaN
-indexxy_null = np.where(grid2 == -999.25)
-grid2[indexxy_null]=np.NaN
-indexxy_null = np.where(grid3 == -999.25)
-grid3[indexxy_null]=np.NaN
-indexxy_null = np.where(grid4 == -999.25)
-grid4[indexxy_null]=np.NaN
-indexxy_null = np.where(grid5 == -999.25)
-grid5[indexxy_null]=np.NaN
-indexxy_null = np.where(grid6 == -999.25)
-grid6[indexxy_null]=np.NaN
 
 df = pd.DataFrame(np.array((grid_target[indexxy].flatten(),
                             grid1[indexxy].flatten(), 
@@ -99,15 +89,50 @@ df = pd.DataFrame(np.array((grid_target[indexxy].flatten(),
                   columns=["Noise","Dist2Road","DivTopo","MeanTreeDens",
                            "StreetInfo","Absorption","BuildingHeight"])
 
-df_notnull = df.query("Dist2Road.notnull() & DivTopo.notnull() & MeanTreeDens.notnull() & StreetInfo.notnull() & Absorption.notnull() & BuildingHeight.notnull()")
-
 if plot_switch:
     print("#### Plotting file")
     fig, axs = plt.subplots(1, 1, figsize=(12, 8))
-    sns.heatmap(df_notnull.corr(), annot=True, fmt=".2f")
+    sns.heatmap(df.corr(), annot=True, fmt=".2f")
     plt.show()
-    plt.savefig(base_out_folder+city_string_out+out_file+".png")
-    print("#### Plotting file done \n")
+    plt.savefig(base_out_folder_pic+city_string_out+out_file1+".png")
+    print("#### Saving image as ", base_out_folder_pic+city_string_out+out_file1+".png")
+    
+    fig, axs = plt.subplots(2, 3, figsize=(16, 10))
+    sns.histplot(df.Dist2Road[df.Dist2Road != -999.25], ax=axs[0,0], binwidth=0.05, stat="percent")
+    sns.histplot(df.DivTopo[df.DivTopo != -999.25], ax=axs[0,1], binwidth=0.2, stat="percent")
+    sns.histplot(df.MeanTreeDens[df.MeanTreeDens != -999.25], ax=axs[0,2], binwidth=1, stat="percent")
+    sns.histplot(df.StreetInfo[df.StreetInfo != -999.25], ax=axs[1,0], binwidth=0.01,stat="percent")
+    sns.histplot(df.Absorption[df.Absorption != -999.25], ax=axs[1,1], binwidth=1, stat="percent")
+    sns.histplot(df.BuildingHeight[df.BuildingHeight != -999.25], ax=axs[1,2], binwidth=0.1, stat="percent")
+    axs[0,0].set_xlim([-0.1, 3])
+    axs[0,0].set_ylim([0, 10])
+    axs[0,0].set_yticks(np.arange(0, 10, 1)) 
+
+    axs[0,1].set_xlim([-10, 10])
+    axs[0,1].set_ylim([0, 10])
+    axs[0,1].set_yticks(np.arange(0, 10, 1)) 
+
+    axs[0,2].set_xlim([-1, 50])
+    axs[0,2].set_ylim([0, 10])
+    axs[0,2].set_yticks(np.arange(0, 10, 1)) 
+    
+    axs[1,0].set_xlim([-0.02, 1])
+    axs[1,0].set_ylim([0, 10])
+    axs[1,0].set_yticks(np.arange(0, 10, 1)) 
+
+    axs[1,1].set_xlim([-1, 11])
+    axs[1,1].set_ylim([0, 65])
+    axs[1,1].set_xticks(np.arange(0, 11, 1)) 
+    # axs[1,1].set_yticks(np.arange(0, 65, 5)) 
+
+    axs[1,2].set_xlim([-0.2, 10])
+    axs[1,2].set_ylim([0, 10])
+    axs[1,2].set_yticks(np.arange(0, 10, 1)) 
+
+    plt.show()
+    plt.savefig(base_out_folder_pic+city_string_out+out_file2+".png")
+    print("#### Saving image as ", base_out_folder_pic+city_string_out+out_file2+".png")
    
+    print("#### Plotting file done \n")
 
 

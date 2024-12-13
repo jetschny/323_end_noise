@@ -53,9 +53,9 @@ print("#### Plotting of figures is ",plot_switch," and writing of output files i
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
-base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
-base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
-base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+base_in_folder:  str ="P:/NoiseML/2024/city_data_raw/"
+base_out_folder: str ="P:/NoiseML/2024/city_data_features/"
+base_out_folder_pic: str ="P:/NoiseML/2024/city_data_pics/"
 
 print("#### Loading npy file")
 
