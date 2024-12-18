@@ -104,12 +104,13 @@ df = pd.DataFrame(np.array((grid_target[indexxy].flatten(),
 df_notnull = df.query("Dist2Road.notnull() & DivTopo.notnull() & MeanTreeDens.notnull() & StreetInfo.notnull() & Absorption.notnull() & BuildingHeight.notnull()")
 
 if plot_switch:
-    print("#### Plotting file")
+    print("#### Plotting figure")
     fig, axs = plt.subplots(1, 1, figsize=(12, 8))
     sns.heatmap(df_notnull.corr(), annot=True, fmt=".2f")
     plt.show()
-    plt.savefig(base_out_folder+city_string_out+out_file+".png")
-    print("#### Plotting file done \n")
+    # plt.savefig(base_out_folder+city_string_out+out_file1+".png")
+    plt.savefig(base_out_folder_pic+city_string_out+out_file1+".png")
+    print("#### Saving figure to file ",base_out_folder_pic+city_string_out+out_file1+".png")
    
 
 
