@@ -195,6 +195,7 @@ if plot_switch:
     
     matrix2[0,0]=matrix[0,0]+matrix[0,1]
     matrix2[9,9]=matrix[9,9]+matrix[9,8]
+  
     # Build the plot
     plt.figure(figsize=(16,7))
     sns.set(font_scale=1.4)

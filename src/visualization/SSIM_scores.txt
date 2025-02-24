@@ -1,0 +1,24 @@
+absorption: 1.0000
+dist2road: 1.0000
+dist2tree: 1.0000
+eu_dem_v11: 1.0000
+osm_maxspeed: 1.0000
+building_height: 1.0000
+Average SSIM: 1.0000
+------
+absorption: 0.1544
+dist2road: 0.1861
+dist2tree: 0.1546
+eu_dem_v11: 0.2549
+osm_maxspeed: 0.1545
+building_height: 0.1133
+Average SSIM: 0.1696
+------
+absorption: 1.0000
+dist2road: 1.0000
+dist2tree: 1.0000
+eu_dem_v11: 1.0000
+osm_maxspeed: 1.0000
+building_height: 1.0000
+Average SSIM: 1.0000
+------

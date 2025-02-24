@@ -162,6 +162,19 @@ def load_np_data(city):
         grid_target[indexxy]=noise_classes_new[counter]
         counter=counter+1
     
+    indexxy_null = np.where(grid1 == -999.25)
+    grid1[indexxy_null]=np.NZERO
+    indexxy_null = np.where(grid2 == -999.25)
+    grid2[indexxy_null]=np.NZERO
+    indexxy_null = np.where(grid3 == -999.25)
+    grid3[indexxy_null]=np.NZERO
+    indexxy_null = np.where(grid4 == -999.25)
+    grid4[indexxy_null]=np.NZERO
+    indexxy_null = np.where(grid5 == -999.25)
+    grid5[indexxy_null]=np.NZERO
+    indexxy_null = np.where(grid6 == -999.25)
+    grid6[indexxy_null]=np.NZERO
+    
     x = np.stack([grid1,grid2,grid3,grid4,grid5,grid6])
     
     # Standard Scaling of features:
@@ -173,6 +186,7 @@ def load_np_data(city):
         
     return x
 
+
 features = [
     "absorption",
     "dist2road",
@@ -181,21 +195,34 @@ features = [
     "osm_maxspeed",
     "building_height"
 ]
+# city_data_dict = {
+#     "Pilsen": load_np_data('pilsen'),  
+#     "Clf": load_np_data('clf'),        
+#     "Riga": load_np_data('riga'),      
+#     "Vienna": load_np_data('vienna'),
+#     "Grenoble": load_np_data('grenoble'),
+#     "Innsbruck": load_np_data('innsbruck'),
+#     "Salzburg": load_np_data('salzburg'),
+#     "Nicosia": load_np_data('nicosia'),
+#     "Budapest": load_np_data('budapest'),
+#     #"Bordeaux":load_np_data('bordeaux'),
+#     "Kaunas": load_np_data('kaunas'),
+#     "Limassol": load_np_data('limassol'),
+#     "Madrid": load_np_data('madrid')
+# }
+
+# city_data_dict = {
+#     "Clf": load_np_data('clf'),        
+#     "Vienna": load_np_data('vienna'),
+#     "Innsbruck": load_np_data('innsbruck'),
+#     "Salzburg": load_np_data('salzburg'),
+# }
+
 city_data_dict = {
-    "Pilsen": load_np_data('pilsen'),  
     "Clf": load_np_data('clf'),        
-    "Riga": load_np_data('riga'),      
     "Vienna": load_np_data('vienna'),
-    "Grenoble": load_np_data('grenoble'),
-    "Innsbruck": load_np_data('innsbruck'),
-    "Salzburg": load_np_data('salzburg'),
-    "Nicosia": load_np_data('nicosia'),
-    "Budapest": load_np_data('budapest'),
-    #"Bordeaux":load_np_data('bordeaux'),
-    "Kaunas": load_np_data('kaunas'),
-    "Limassol": load_np_data('limassol'),
-    "Madrid": load_np_data('madrid')
 }
+
 
 def resize_city_data(source_data, target_shape):
     """Resize source city data to match the target shape."""

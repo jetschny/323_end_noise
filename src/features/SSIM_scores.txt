@@ -1,0 +1,464 @@
+SSIM Scores between Clf and Vienna:
+absorption: 0.3702
+dist2road: 0.3702
+dist2tree: 0.3718
+eu_dem_v11: 0.3700
+osm_maxspeed: 0.3714
+building_height: 0.3693
+Average SSIM: 0.3705
+------
+SSIM Scores between Clf and Innsbruck:
+absorption: 0.1953
+dist2road: 0.1956
+dist2tree: 0.1950
+eu_dem_v11: 0.1961
+osm_maxspeed: 0.1963
+building_height: 0.1964
+Average SSIM: 0.1958
+------
+SSIM Scores between Clf and Salzburg:
+absorption: 0.3948
+dist2road: 0.4035
+dist2tree: 0.3815
+eu_dem_v11: 0.3774
+osm_maxspeed: 0.4361
+building_height: 0.3953
+Average SSIM: 0.3981
+------
+SSIM Scores between Vienna and Innsbruck:
+absorption: 0.3460
+dist2road: 0.3469
+dist2tree: 0.3472
+eu_dem_v11: 0.3477
+osm_maxspeed: 0.3482
+building_height: 0.3485
+Average SSIM: 0.3474
+------
+SSIM Scores between Vienna and Salzburg:
+absorption: 0.4440
+dist2road: 0.4503
+dist2tree: 0.4215
+eu_dem_v11: 0.4199
+osm_maxspeed: 0.4696
+building_height: 0.4397
+Average SSIM: 0.4408
+------
+SSIM Scores between Innsbruck and Salzburg:
+absorption: 0.1646
+dist2road: 0.1741
+dist2tree: 0.1500
+eu_dem_v11: 0.1515
+osm_maxspeed: 0.1912
+building_height: 0.1649
+Average SSIM: 0.1660
+------
+SSIM Scores between Clf and Vienna:
+absorption: 0.3702
+dist2road: 0.3702
+dist2tree: 0.3718
+eu_dem_v11: 0.3700
+osm_maxspeed: 0.3714
+building_height: 0.3693
+Average SSIM: 0.3705
+------
+SSIM Scores between Clf and Vienna2:
+absorption: 0.3702
+dist2road: 0.3702
+dist2tree: 0.3718
+eu_dem_v11: 0.3700
+osm_maxspeed: 0.3714
+building_height: 0.3693
+Average SSIM: 0.3705
+------
+SSIM Scores between Clf and Innsbruck:
+absorption: 0.1953
+dist2road: 0.1956
+dist2tree: 0.1950
+eu_dem_v11: 0.1961
+osm_maxspeed: 0.1963
+building_height: 0.1964
+Average SSIM: 0.1958
+------
+SSIM Scores between Clf and Salzburg:
+absorption: 0.3948
+dist2road: 0.4035
+dist2tree: 0.3815
+eu_dem_v11: 0.3774
+osm_maxspeed: 0.4361
+building_height: 0.3953
+Average SSIM: 0.3981
+------
+SSIM Scores between Clf and Salzburg2:
+absorption: 0.3948
+dist2road: 0.4035
+dist2tree: 0.3815
+eu_dem_v11: 0.3774
+osm_maxspeed: 0.4361
+building_height: 0.3953
+Average SSIM: 0.3981
+------
+SSIM Scores between Vienna and Vienna2:
+absorption: 1.0000
+dist2road: 1.0000
+dist2tree: 1.0000
+eu_dem_v11: 1.0000
+osm_maxspeed: 1.0000
+building_height: 1.0000
+Average SSIM: 1.0000
+------
+SSIM Scores between Vienna and Innsbruck:
+absorption: 0.3460
+dist2road: 0.3469
+dist2tree: 0.3472
+eu_dem_v11: 0.3477
+osm_maxspeed: 0.3482
+building_height: 0.3485
+Average SSIM: 0.3474
+------
+SSIM Scores between Vienna and Salzburg:
+absorption: 0.4440
+dist2road: 0.4503
+dist2tree: 0.4215
+eu_dem_v11: 0.4199
+osm_maxspeed: 0.4696
+building_height: 0.4397
+Average SSIM: 0.4408
+------
+SSIM Scores between Vienna and Salzburg2:
+absorption: 0.4440
+dist2road: 0.4503
+dist2tree: 0.4215
+eu_dem_v11: 0.4199
+osm_maxspeed: 0.4696
+building_height: 0.4397
+Average SSIM: 0.4408
+------
+SSIM Scores between Vienna2 and Innsbruck:
+absorption: 0.3460
+dist2road: 0.3469
+dist2tree: 0.3472
+eu_dem_v11: 0.3477
+osm_maxspeed: 0.3482
+building_height: 0.3485
+Average SSIM: 0.3474
+------
+SSIM Scores between Vienna2 and Salzburg:
+absorption: 0.4440
+dist2road: 0.4503
+dist2tree: 0.4215
+eu_dem_v11: 0.4199
+osm_maxspeed: 0.4696
+building_height: 0.4397
+Average SSIM: 0.4408
+------
+SSIM Scores between Vienna2 and Salzburg2:
+absorption: 0.4440
+dist2road: 0.4503
+dist2tree: 0.4215
+eu_dem_v11: 0.4199
+osm_maxspeed: 0.4696
+building_height: 0.4397
+Average SSIM: 0.4408
+------
+SSIM Scores between Innsbruck and Salzburg:
+absorption: 0.1646
+dist2road: 0.1741
+dist2tree: 0.1500
+eu_dem_v11: 0.1515
+osm_maxspeed: 0.1912
+building_height: 0.1649
+Average SSIM: 0.1660
+------
+SSIM Scores between Innsbruck and Salzburg2:
+absorption: 0.1646
+dist2road: 0.1741
+dist2tree: 0.1500
+eu_dem_v11: 0.1515
+osm_maxspeed: 0.1912
+building_height: 0.1649
+Average SSIM: 0.1660
+------
+SSIM Scores between Salzburg and Salzburg2:
+absorption: 1.0000
+dist2road: 1.0000
+dist2tree: 1.0000
+eu_dem_v11: 1.0000
+osm_maxspeed: 1.0000
+building_height: 1.0000
+Average SSIM: 1.0000
+------
+SSIM Scores between Clf and Vienna:
+absorption: nan
+dist2road: nan
+dist2tree: nan
+eu_dem_v11: nan
+osm_maxspeed: nan
+building_height: nan
+Average SSIM: nan
+------
+SSIM Scores between Clf and Vienna:
+absorption: 0.4017
+dist2road: 0.3953
+dist2tree: 0.3906
+eu_dem_v11: 0.3863
+osm_maxspeed: 0.3879
+building_height: 0.3865
+Average SSIM: 0.3914
+------
+SSIM Scores between Clf and Vienna:
+absorption: 0.3702
+dist2road: 0.3702
+dist2tree: 0.3718
+eu_dem_v11: 0.3700
+osm_maxspeed: 0.3714
+building_height: 0.3693
+Average SSIM: 0.3705
+------
+SSIM Scores between Clf and Vienna:
+absorption: 0.4017
+dist2road: 0.3953
+dist2tree: 0.3906
+eu_dem_v11: 0.3863
+osm_maxspeed: 0.3879
+building_height: 0.3865
+Average SSIM: 0.3914
+------
+absorption: 0.1546
+dist2road: 0.1133
+dist2tree: 0.1545
+eu_dem_v11: 0.1861
+osm_maxspeed: 0.1547
+building_height: 0.2550
+Average SSIM: 0.1697
+------
+absorption: 0.1546
+dist2road: 0.1133
+dist2tree: 0.1545
+eu_dem_v11: 0.1861
+osm_maxspeed: 0.1547
+building_height: 0.2550
+Average SSIM: 0.1697
+absorption: 0.3145
+dist2road: -0.2454
+dist2tree: -0.0732
+eu_dem_v11: 0.1445
+osm_maxspeed: -0.1480
+building_height: 0.0196
+Average SSIM: 0.0020
+absorption: 0.3145
+dist2road: -0.2454
+dist2tree: -0.0732
+eu_dem_v11: 0.1445
+osm_maxspeed: -0.1480
+building_height: 0.0196
+Average SSIM: 0.0020
+absorption: 0.3145
+dist2road: -0.2454
+dist2tree: -0.0732
+eu_dem_v11: 0.1445
+osm_maxspeed: -0.1480
+building_height: 0.0196
+Average SSIM: 0.0020
+absorption: 0.3145
+dist2road: -0.2454
+dist2tree: -0.0732
+eu_dem_v11: 0.1445
+osm_maxspeed: -0.1480
+building_height: 0.0196
+Average SSIM: 0.0020
+absorption: 0.5401
+dist2road: 0.3351
+dist2tree: 0.2466
+eu_dem_v11: 0.4294
+osm_maxspeed: 0.2955
+building_height: 0.4696
+Average SSIM: 0.3861
+absorption: 1.0000
+dist2road: 1.0000
+dist2tree: 1.0000
+eu_dem_v11: 1.0000
+osm_streetinfo: 1.0000
+building_height: 1.0000
+Average SSIM: 1.0000
+absorption: 0.3145
+dist2road: -0.2454
+dist2tree: -0.0732
+eu_dem_v11: 0.1445
+osm_streetinfo: -0.1480
+building_height: 0.0196
+Average SSIM: 0.0020
+absorption: 0.5401
+dist2road: 0.3351
+dist2tree: 0.2466
+eu_dem_v11: 0.4294
+osm_streetinfo: 0.2955
+building_height: 0.4696
+Average SSIM: 0.3861
+absorption: 0.4114
+dist2road: 0.5299
+dist2tree: 0.3486
+eu_dem_v11: 0.3358
+osm_streetinfo: 0.4715
+building_height: 0.4549
+Average SSIM: 0.4254
+absorption: 0.6120
+dist2road: 0.4922
+dist2tree: 0.3487
+eu_dem_v11: 0.2838
+osm_streetinfo: 0.4427
+building_height: 0.3710
+Average SSIM: 0.4251
+absorption: 0.4419
+dist2road: 0.1389
+dist2tree: 0.1501
+eu_dem_v11: -0.1031
+osm_streetinfo: 0.1536
+building_height: 0.0619
+Average SSIM: 0.1405
+absorption: 0.4419
+dist2road: 0.1389
+dist2tree: 0.1501
+eu_dem_v11: -0.1031
+osm_streetinfo: 0.1536
+building_height: 0.0619
+Average SSIM: 0.1405
+absorption: 0.4419
+dist2road: 0.1389
+dist2tree: 0.1501
+eu_dem_v11: -0.1031
+osm_streetinfo: 0.1536
+building_height: 0.0619
+Average SSIM: 0.1405
+absorption: 0.4419
+dist2road: 0.1389
+dist2tree: 0.1501
+eu_dem_v11: -0.1031
+osm_streetinfo: 0.1536
+building_height: 0.0619
+Average SSIM: 0.1405
+absorption: nan
+dist2road: nan
+dist2tree: nan
+eu_dem_v11: nan
+osm_streetinfo: nan
+building_height: nan
+Average SSIM: nan
+absorption: nan
+dist2road: nan
+dist2tree: nan
+eu_dem_v11: nan
+osm_streetinfo: nan
+building_height: nan
+Average SSIM: nan
+absorption: -0.1792
+dist2road: 0.3677
+dist2tree: 0.2115
+eu_dem_v11: 0.2279
+osm_streetinfo: 0.1320
+building_height: 0.3383
+Average SSIM: 0.1830
+absorption: 0.6868
+dist2road: 0.4904
+dist2tree: 0.2893
+eu_dem_v11: 0.3927
+osm_streetinfo: 0.3580
+building_height: 0.4091
+Average SSIM: 0.4377
+absorption: -0.1792
+dist2road: 0.3677
+dist2tree: 0.2115
+eu_dem_v11: 0.2279
+osm_streetinfo: 0.1320
+building_height: 0.3383
+Average SSIM: 0.1830
+absorption: -0.1792
+dist2road: 0.3677
+dist2tree: 0.2115
+eu_dem_v11: 0.2279
+osm_streetinfo: 0.1320
+building_height: 0.3383
+Average SSIM: 0.1830
+absorption: 0.1696
+dist2road: 0.3677
+dist2tree: 0.2115
+eu_dem_v11: 0.2279
+osm_streetinfo: 0.1320
+building_height: 0.3383
+Average SSIM: 0.2412
+absorption: 0.1696
+dist2road: 0.3677
+dist2tree: 0.2115
+eu_dem_v11: 0.2279
+osm_streetinfo: 0.1320
+building_height: 0.3383
+Average SSIM: 0.2412
+absorption: 0.1696
+dist2road: 0.3677
+dist2tree: 0.2115
+eu_dem_v11: 0.2279
+osm_streetinfo: 0.1320
+building_height: 0.3383
+Average SSIM: 0.2412
+absorption: 0.3008
+dist2road: 0.4904
+dist2tree: 0.2893
+eu_dem_v11: 0.3927
+osm_streetinfo: 0.3580
+building_height: 0.4091
+Average SSIM: 0.3734
+absorption: 0.3870
+dist2road: 0.3769
+dist2tree: 0.4346
+eu_dem_v11: 0.4429
+osm_streetinfo: 0.5191
+building_height: 0.5281
+Average SSIM: 0.4481
+absorption: 0.1733
+dist2road: 0.4543
+dist2tree: 0.2662
+eu_dem_v11: 0.3068
+osm_streetinfo: 0.2090
+building_height: 0.4877
+Average SSIM: 0.3162
+absorption: 0.3870
+dist2road: 0.3769
+dist2tree: 0.4346
+eu_dem_v11: 0.4429
+osm_streetinfo: 0.5191
+building_height: 0.5281
+Average SSIM: 0.4481
+absorption: 0.3409
+dist2road: 0.5684
+dist2tree: 0.3170
+eu_dem_v11: 0.4446
+osm_streetinfo: 0.4035
+building_height: 0.5508
+Average SSIM: 0.4375
+absorption: 0.3521
+dist2road: 0.5807
+dist2tree: 0.3143
+eu_dem_v11: 0.4564
+osm_streetinfo: 0.4292
+building_height: 0.5215
+Average SSIM: 0.4423
+absorption: 0.3521
+dist2road: 0.5807
+dist2tree: 0.3143
+eu_dem_v11: 0.4564
+osm_streetinfo: 0.4292
+building_height: 0.5215
+Average SSIM: 0.4423
+SSIM Scores between Salzburg and Innsbruck:
+absorption: 0.3521
+dist2road: 0.5807
+dist2tree: 0.3143
+eu_dem_v11: 0.4564
+osm_streetinfo: 0.4292
+building_height: 0.5215
+Average SSIM: 0.4423
+------
+------
+------
+------
+------
+------
