@@ -27,7 +27,9 @@ import matplotlib.pyplot as plt
 import xgboost as xgb
 import pandas as pd
 # from sklearn.model_selection import train_test_split
-from sklearn.metrics import root_mean_squared_error, r2_score, accuracy_score, confusion_matrix
+from sklearn.metrics import root_mean_squared_error, r2_score, accuracy_score, confusion_matrix, classification_report
+from sklearn.metrics import confusion_matrix,ConfusionMatrixDisplay
+
 
 plt.close('all')
 plot_switch=True
@@ -48,14 +50,14 @@ city1_string_out="VIE"
 # city2_string_in="Vienna"
 # city2_string_out="VIE" 
 
-# city2_string_in="Salzburg"
-# city2_string_out="SAL" 
+city2_string_in="Salzburg"
+city2_string_out="SAL" 
 
 # city2_string_in="Innsbruck"
 # city2_string_out="INN" 
 
-city2_string_in="Clermont_Ferrand"
-city2_string_out="CLF" 
+# city2_string_in="Clermont_Ferrand"
+# city2_string_out="CLF" 
 
 
 base_in_folder:  str ="Z:/NoiseML/2024/city_data_features/"
@@ -91,7 +93,7 @@ in_grid_file6="_feat_UA2012_bheight.npy"
 in_grid_target="_target_noise_Aggroad_Lden.npy"
 
 # output prediction noise data
-out_grid_file1="predict_xgboost.npy"
+out_grid_file1="predict_xgboost_nodrop_feat2.npy"
 
 grid_c1_1=np.load(base_in_folder+city1_string_in+"/"+city1_string_out+in_grid_file1)
 grid_c1_2=np.load(base_in_folder+city1_string_in+"/"+city1_string_out+in_grid_file2)
@@ -245,14 +247,14 @@ df1_notnull=df1
 df2_notnull=df2
 
 # Split data into features and target
-X_c1 = df1_notnull.drop(["Noise"], axis = 1)
-# X_c1 = df1_notnull[['Dist2Road','StreetInfo', "ArrayRowIndex", "ArrayColIndex"]]
+# X_c1 = df1_notnull.drop(["Noise"], axis = 1)
+X_c1 = df1_notnull[['Dist2Road','StreetInfo', "ArrayRowIndex", "ArrayColIndex"]]
 # X_c1 = df1_notnull[["ArrayRowIndex", "ArrayColIndex"]]
 y_c1 = df1_notnull['Noise']
 
 # Split data into features and target
-X_c2 = df2_notnull.drop(["Noise"], axis = 1)
-# X_c2 = df2_notnull[['Dist2Road','StreetInfo', "ArrayRowIndex", "ArrayColIndex"]]
+# X_c2 = df2_notnull.drop(["Noise"], axis = 1)
+X_c2 = df2_notnull[['Dist2Road','StreetInfo', "ArrayRowIndex", "ArrayColIndex"]]
 # X_c2 = df2_notnull[["ArrayRowIndex", "ArrayColIndex"]]
 y_c2 = df2_notnull['Noise']
 
@@ -320,31 +322,63 @@ r2_train = r2_score(y_c1_train, y_c1_train_pred)
 r2_test = r2_score(y_c1_test, y_c1_test_pred)
 r2_c2 = r2_score(y_c2, y_c2_pred)
 
-# Print R² values for training and testing
-print(f'R² (Training): {r2_train}')
-print(f'R² (Testing): {r2_test}')
-print(f'R² ({city2_string_in}): {r2_c2}')
+# # Print R² values for training and testing
+# print(f'R² (Training): {r2_train}')
+# print(f'R² (Testing): {r2_test}')
+# print(f'R² ({city2_string_in}): {r2_c2}')
 
-# Calculate RMSE for both training and testing
-rmse_train = root_mean_squared_error(y_c1_train, y_c1_train_pred)
-rmse_test = root_mean_squared_error(y_c1_test, y_c1_test_pred)
-rmse_c2 = root_mean_squared_error(y_c2, y_c2_pred)
+# # Calculate RMSE for both training and testing
+# rmse_train = root_mean_squared_error(y_c1_train, y_c1_train_pred)
+# rmse_test = root_mean_squared_error(y_c1_test, y_c1_test_pred)
+# rmse_c2 = root_mean_squared_error(y_c2, y_c2_pred)
 
-print(f'RMSE (Training): {rmse_train}')
-print(f'RMSE (Testing): {rmse_test}')
-print(f'RMSE ({city2_string_in}): {rmse_c2}')
+# print(f'RMSE (Training): {rmse_train}')
+# print(f'RMSE (Testing): {rmse_test}')
+# print(f'RMSE ({city2_string_in}): {rmse_c2}')
+
+# ll_train=log_loss(y_c1_test, y_c1_test_pred)
+# ll_tin=log_loss(y_c1_test, y_c1_test_pred)
+
+
 
 # Evaluate model accuracy
 accuracy_test = accuracy_score(y_c1_test, y_c1_test_pred)
 accuracy_train = accuracy_score(y_c1_train, y_c1_train_pred)
 accuracy_c2 = accuracy_score(y_c2, y_c2_pred)
-print(f'Accuracy (Training): {accuracy_train}')
-print(f'Accuracy (Test): {accuracy_test}')
-print(f'Accuracy ({city2_string_in}): {accuracy_c2}')
+print(f'Accuracy (Training): {np.uint(accuracy_train*100)}')
+print(f'Accuracy (Test): {np.uint(accuracy_test*100)}')
+print(f'Accuracy ({city2_string_in}): {np.uint(accuracy_c2*100)}')
+
+# print('CLassification report (Training)')
+# print(classification_report(y_c1_train, y_c1_train_pred))
+# print('CLassification report (Test)')
+# print(classification_report(y_c1_test, y_c1_test_pred))
+# print(f'CLassification report ({city2_string_in})')
+# print(classification_report(y_c2, y_c2_pred))
+
+# print(f'F1 score (Training): {f1_train}')
+# print(f'F1 score (Test): {f1_test}')
+# print(f'F1 score ({city2_string_in}): {f1_c2}')
+
 
 print("\n##### XGBoost prediction done... \n")
 
 
+if write_switch:
+    print("#### Saving to npy file")
+    grid_c1_target_export=np.zeros(grid_c1_target.shape)-999.25
+    
+    grid_c1_target_export[indexxy_c1_train]=y_c1_train_pred
+    grid_c1_target_export[indexxy_c1_test] =y_c1_test_pred
+    np.save(f"{base_out_folder}{city1_string_in}/{city1_string_out}model_{city1_string_out}{out_grid_file1}",grid_c1_target_export)
+    
+    
+    grid_c2_target_export=np.zeros(grid_c2_target.shape)-999.25
+    grid_c2_target_export[indexxy_c2]=y_c2_pred
+    
+    np.save(f"{base_out_folder}{city2_string_in}/{city1_string_out}model_{city2_string_out}{out_grid_file1}",grid_c2_target_export)
+    
+    print("#### Saving to npy file done")
 
 if plot_switch:
    
@@ -407,19 +441,56 @@ if plot_switch:
     plt.ylabel('True label')
     plt.title(f"Confusion Matrix for XGBoost Model trained on {city1_string_in} and infered to {city2_string_in}")
     plt.show()
+   
+    grid_c1_target_print=np.empty(grid_c1_target.shape)
+    grid_c1_target_print[:]=np.nan
+    grid_c1_target_print[indexxy_c1_train]=y_c1_train
     
-if write_switch:
-    print("#### Saving to npy file")
-    grid_c1_target_export=np.zeros(grid_c1_target.shape)-999.25
+    fig1, (axs1, axs2, axs3)  = plt.subplots(1, 3, figsize=(12, 8))
+
+    # im1=axs1.imshow(np.squeeze(x_c1[0,:,:]), cmap=colMap, vmin = 0.2)
+    # im2=axs2.imshow(np.squeeze(x_c2[0,:,:]), cmap=colMap, vmin = 0.2)
+
+    im1=axs1.imshow(grid_c1_target)
+    im2=axs2.imshow(grid_c1_target_print)
+    im3=axs3.imshow(grid_c1_target-grid_c1_target_print)
+
+    plt.colorbar(im1, ax=axs1)
+    plt.colorbar(im2, ax=axs2)
+    plt.colorbar(im3, ax=axs3)
     
-    grid_c1_target_export[indexxy_c1_train]=y_c1_train_pred
-    grid_c1_target_export[indexxy_c1_test] =y_c1_test_pred
-    np.save(f"{base_out_folder}{city1_string_in}/{city1_string_out}model_{city1_string_out}{out_grid_file1}",grid_c1_target_export)
+    axs1.set_xlim(1700,2200)
+    axs2.set_xlim(1700,2200)
+    axs3.set_xlim(1700,2200)
+    # axs[0,1].set_xlim(x_window)
+    # axs[0,2].set_xlim(x_window)
+    # axs[0,3].set_xlim(x_window)
+    # axs[1,0].set_xlim(x_window)
+    # axs[1,1].set_xlim(x_window)
+    # axs[1,2].set_xlim(x_window)
+    # axs[1,3].set_xlim(x_window)
     
+    axs1.set_ylim(1000,1700)
+    axs2.set_ylim(1000,1700)
+    axs3.set_ylim(1000,1700)
+    # axs[0,0].set_ylim(y_window)
+    # axs[0,1].set_ylim(y_window)
+    # axs[0,2].set_ylim(y_window)
+    # axs[0,3].set_ylim(y_window)
+    # axs[1,0].set_ylim(y_window)
+    # axs[1,1].set_ylim(y_window)
+    # axs[1,2].set_ylim(y_window)
+    # axs[1,3].set_ylim(y_window)
     
-    grid_c2_target_export=np.zeros(grid_c2_target.shape)-999.25
-    grid_c2_target_export[indexxy_c2]=y_c2_pred
+    # cm_train = confusion_matrix(y_c1_train, y_c1_train_pred)
+    # cm_test = confusion_matrix(y_c1_test, y_c1_test_pred)
+    # f,ax = plt.subplots(1,2, figsize = (15,6))
+    # disp_train = ConfusionMatrixDisplay(confusion_matrix=cm_train, display_labels=[noise_classes_old])
+    # disp_test = ConfusionMatrixDisplay(confusion_matrix=cm_test, display_labels=[noise_classes_old])
+    # disp_train.plot(ax = ax[0], cmap='Blues')
+    # disp_test.plot(ax = ax[1], cmap='Blues')
+    # ax[0].set_title('Train')
+    # ax[1].set_title('Test')
+    # plt.suptitle('Train & Test Confusion Matrix')
+    # plt.show()
     
-    np.save(f"{base_out_folder}{city2_string_in}/{city1_string_out}model_{city2_string_out}{out_grid_file1}",grid_c2_target_export)
-    
-    print("#### Saving to npy file done")

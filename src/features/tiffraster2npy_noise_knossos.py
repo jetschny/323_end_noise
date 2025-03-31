@@ -44,17 +44,20 @@ else:
     write_switch=True
 
 # plot_switch=False
-# write_switch=False
+write_switch=True
 clip_switch=False
 interp_switch=False
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_in="Budapest"
-# city_string_out="BUD" 
+city_string_in="Budapest"
+city_string_out="BUD" 
 
-city_string_in=sys.argv[1]
-city_string_out=sys.argv[2]
+# city_string_in="Vienna"
+# city_string_out="VIE" 
+
+# city_string_in=sys.argv[1]
+# city_string_out=sys.argv[2]
 
 
 print("\n######################## \n")
@@ -130,6 +133,14 @@ print("#### Processing file")
 grid1=grid1.astype(np.float32)
 index0 = np.where(grid1 == img.nodata)
 grid1[index0]=-999.25
+
+# reclassifying noise (if different from 5 dB bands)
+grid1[(grid1 >= 0) & (grid1 <= 57)] = 55
+grid1[(grid1 >= 57) & (grid1 <= 62)] = 60
+grid1[(grid1 >= 62) & (grid1 <= 67)] = 65
+grid1[(grid1 >= 67) & (grid1 <= 72)] = 70
+grid1[(grid1 >= 72)] = 75
+
 
 print("#### Processing file done \n")
 

@@ -40,20 +40,32 @@ base_in_folder1:  str ="Z:/NoiseML/2024/city_data_features/"
 base_in_folder2: str ="Z:/NoiseML/2024/city_data_MLpredictions/"
 base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
 
-city1_string_in="Vienna"
-city1_string_out="VIE" 
+# city1_string_in="Clermont_Ferrand"
+# city1_string_out="CLF" 
 
-city1_string_in="Salzburg"
-city1_string_out="SAL" 
+# city1_string_in="Salzburg"
+# city1_string_out="SAL" 
 
-in_grid_file1="VIEmodel_SALpredict_xgboost.npy"
-in_grid_target="SAL_target_noise_Aggroad_Lden.npy"
+# city1_string_in="Vienna"
+# city1_string_out="VIE" 
 
-out_pic_file="SAL_target_noise_Aggroad_Lden_xgboost6"
+# city1_string_in="Salzburg"
+# city1_string_out="SAL" 
 
-grid1=np.load(base_in_folder2+city1_string_in+"/"+in_grid_file1)
+city1_string_in="Bordeaux"
+city1_string_out="BOR" 
 
-grid_target=np.load(base_in_folder1+city1_string_in+"/"+in_grid_target)
+# in_grid_file1="VIEmodel_CLFpredict_xgboost_nodrop_feat2"
+in_grid_file1="VIEmodel_VIEpredict_xgboost_nodrop_feat6"
+# in_grid_target="SAL_target_noise_Aggroad_Lden.npy"
+in_grid_target="VIE_target_noise_Aggroad_Lden"
+
+# out_pic_file="VIE_target_noise_Aggroad_Lden_xgboost_drop_feat6_extr"
+out_pic_file=in_grid_file1
+
+grid1=np.load(base_in_folder2+city1_string_in+"/"+in_grid_file1+".npy")
+
+grid_target=np.load(base_in_folder1+city1_string_in+"/"+in_grid_target+".npy")
 grid_target= grid_target.astype(float)
 
 
@@ -82,14 +94,16 @@ noise_classes_old=noise_classes_old[:-1]
 noise_classes_new=np.array(range(0, len(noise_classes_old), 1))
 
 counter=0
-for a in noise_classes_old:
-    indexxy = np.where(grid_target ==a)
-    grid_target[indexxy]=noise_classes_new[counter]
+for a in noise_classes_new:
+    indexxy = np.where(grid1 ==a)
+    grid1[indexxy]=noise_classes_old[counter]
     counter=counter+1
     
 # Get the colormap and set the under and bad colors
 colMap = plt.cm.get_cmap("gist_rainbow").copy()
 colMap.set_under(color='white')
+
+print("Average noise class error in dB : ",np.nanmean(np.abs(grid_target-grid1)*5))
 
 if plot_switch:
     # x_windows=[(400, 600),( 600, 800),( 600, 800),( 600, 800),( 900, 1100)]
@@ -100,6 +114,9 @@ if plot_switch:
     
     x_windows=[(1200,1600)]
     y_windows=[(1100,1500)]
+    
+    # x_windows=[(400,800)]
+    # y_windows=[(400,800)]
     
     for ii in range(1):
         
@@ -120,9 +137,9 @@ if plot_switch:
         axs[1].set_aspect('equal', 'box')
         axs[2].set_aspect('equal', 'box')
      
-        im1.set_clim(0,6)
-        im2.set_clim(0,6)
-        im3.set_clim(-2,2)
+        im1.set_clim(55,75)
+        im2.set_clim(55,75)
+        im3.set_clim(-5,5)
         
         # x_window=
         # y_window=[1200, 1400]
@@ -141,6 +158,7 @@ if plot_switch:
         # plt.colorbar(con2, ax=ax2)
         plt.show()
         plt.savefig(base_out_folder_pic+out_pic_file+str(ii)+".png")
+        print("Saving image to file ",base_out_folder_pic+out_pic_file+str(ii)+".png")
     
     fig, ax1 = plt.subplots(1,1, figsize=(12, 8))
         

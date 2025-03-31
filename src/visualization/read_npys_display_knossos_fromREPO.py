@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 plt.close('all')
 plot_switch=True
 
-default_font_size=11
+default_font_size=12
 plt.rc('font', size=default_font_size) #controls default text size
 plt.rc('axes', titlesize=default_font_size) #fontsize of the title
 plt.rc('axes', labelsize=default_font_size) #fontsize of the x and y labels
@@ -36,12 +36,15 @@ plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-city_string_in="Thessaloniki"
-city_string_out="THE" 
+city_string_in="Vienna"
+city_string_out="VIE" 
 
-base_in_folder:  str ="Z:/NoiseML/2024/city_data_features/"
+# city_string_in="Bordeaux"
+# city_string_out="BOR" 
+
+base_in_folder ="Z:/NoiseML/2024/city_data_features/"
 # base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
-base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+base_out_folder_pic ="Z:/NoiseML/2024/city_data_pics/"
 
 
 # feature data
@@ -57,6 +60,8 @@ in_grid_file4="_feat_osmmaxspeed_nolanes_smooth.npy"
 in_grid_file5="_feat_absoprtion.npy"
 # Urban atlas building height 0-x00 m
 in_grid_file6="_feat_UA2012_bheight.npy"
+# local climateb zones
+in_grid_file7="_feat_localclimatezones.npy"
 
 #output figure file 
 out_file = "_features_"
@@ -70,6 +75,7 @@ grid3=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file3)
 grid4=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file4)
 grid5=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file5)
 grid6=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file6)
+grid7=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file7)
 
 grid_target=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_target)
 # grid_target= grid_target.astype(float)
@@ -90,6 +96,8 @@ if np.isnan(grid5).any():
     print("NAN detetcted in grid5")
 if np.isnan(grid6).any():
     print("NAN detetcted in grid6")
+if np.isnan(grid7).any():
+    print("NAN detetcted in grid7")
 if np.isnan(grid_target).any():
     print("NAN detetcted in grid_target")
     
@@ -105,6 +113,8 @@ if np.isinf(grid5).any():
     print("INF detetcted in grid5")
 if np.isinf(grid6).any():
     print("INF detetcted in grid6") 
+if np.isinf(grid7).any():
+    print("INF detetcted in grid7") 
 if np.isinf(grid_target).any():
     print("INF detetcted in grid_target") 
 
@@ -136,13 +146,13 @@ if plot_switch:
     # con1=ax1.contourf(grid1,[20, 50, 70], cmap='RdGy')
     # con2=ax2.contourf(grid2,[5000, 15000, 20000], cmap='RdGy')
     im1=axs[0,0].imshow(grid1, cmap=colMap, vmin = 0.2)
-    im2=axs[0,1].imshow(grid2, cmap="seismic")
+    im2=axs[0,1].imshow(grid2, cmap="seismic", vmin=-10)
     im3=axs[0,2].imshow(grid3, cmap=colMap, vmin = 0.2)
     im4=axs[0,3].imshow(grid4, cmap=colMap, vmin = 0.2)
     
     im5=axs[1,0].imshow(grid5, cmap=colMap, vmin = 0.2)
     im6=axs[1,1].imshow(grid6, cmap=colMap, vmin = 0.2)
-    # im7=axs[1,2].imshow(grid6, cmap=colMap, vmin = 0.2)
+    im7=axs[1,2].imshow(grid7, cmap=colMap, vmin = 0.2)
     im8=axs[1,3].imshow(grid_target, cmap=colMap, vmin = 0.2)
     
       # plt.axis('off')
@@ -153,7 +163,7 @@ if plot_switch:
     plt.colorbar(im4, ax=axs[0,3])
     plt.colorbar(im5, ax=axs[1,0])
     plt.colorbar(im6, ax=axs[1,1])
-    # plt.colorbar(im7, ax=axs[1,2])
+    plt.colorbar(im7, ax=axs[1,2])
     plt.colorbar(im8, ax=axs[1,3])
     
     axs[0,0].set_aspect('equal', 'box')
@@ -169,7 +179,7 @@ if plot_switch:
     # im3.set_clim(0.1,15)
     im4.set_clim(0.0,0.5)
     im6.set_clim(0,10)
-    # im7.set_clim(0,10)
+    im7.set_clim(0,10)
     # im8.set_clim(30,80)
     
     axs[0,0].set_title('Distance to Road')
@@ -178,12 +188,12 @@ if plot_switch:
     axs[0,3].set_title('OSM Street Information')
     axs[1,0].set_title('Absoprtion')
     axs[1,1].set_title('Building Height Density')
-    axs[1,2].set_title('Space for addtional feature')
+    axs[1,2].set_title('Local Climate Zone')
     axs[1,3].set_title('Target Noise')
     
     
-    # x_window=[400, 600]
-    # y_window=[1200, 1400]
+    # x_window=[1700, 2200]
+    # y_window=[1000, 1700]
     # x_window=[00, 2512]
     # y_window=[00, 2283]
     
@@ -214,97 +224,98 @@ if plot_switch:
     ###########################################
     #############plot 3 grids, panel of some, zoom
     
-    fig, (axs1, axs2, axs3)  = plt.subplots(1, 3, figsize=(12, 8))
+    # fig, (axs1, axs2, axs3)  = plt.subplots(1, 3, figsize=(12, 8))
     
-    # levels = np.arange(0, 3.5, 0.5)
+    # # levels = np.arange(0, 3.5, 0.5)
     
-    zoom_window_x=[1500,1700]
-    zoom_window_y=[1500,1700]
-    # con1=ax1.contourf(grid1,[20, 50, 70], cmap='RdGy')
-    # con2=ax2.contourf(grid2,[5000, 15000, 20000], cmap='RdGy')
-    im1=axs1.imshow(grid4[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.02)
+    # zoom_window_x=[1700,2200]
+    # zoom_window_y=[1000,1700]
+    # # con1=ax1.contourf(grid1,[20, 50, 70], cmap='RdGy')
+    # # con2=ax2.contourf(grid2,[5000, 15000, 20000], cmap='RdGy')
+    # im1=axs1.imshow(grid4[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.02)
     
-    im2=axs2.imshow(grid_target[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.02)
-    grid_target_crop=grid_target#[14:1300,0:1487]
-    grid4_crop=grid4#[0:1286,13:1500]
-    grid_qc=np.where(grid4_crop>0, 2,0)+np.where(grid_target_crop>60, 1,0)
-    im3=axs3.imshow(grid_qc[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.2)
-      # plt.axis('off')
-    # plt.contourf(grid1)
-    plt.colorbar(im1, ax=axs1)
+    # im2=axs2.imshow(grid_target[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.02)
+    # grid_target_crop=grid_target#[14:1300,0:1487]
+    # grid4_crop=grid4#[0:1286,13:1500]
+    # grid_qc=np.where(grid4_crop>0, 2,0)+np.where(grid_target_crop>60, 1,0)
+    # im3=axs3.imshow(grid_qc[zoom_window_x[0]:zoom_window_x[1],zoom_window_y[0]:zoom_window_y[1]], cmap=colMap, vmin = 0.2)
+    #   # plt.axis('off')
+    # # plt.contourf(grid1)
+    # plt.colorbar(im1, ax=axs1)
    
-    plt.colorbar(im2, ax=axs2)
+    # plt.colorbar(im2, ax=axs2)
     
-    axs1.set_aspect('equal', 'box')
-    axs2.set_aspect('equal', 'box')
-    axs3.set_aspect('equal', 'box')
-    # im1.set_clim(0.1,8)
-    # im2.set_clim(-10,10)
-    # im3.set_clim(0.1,15)
-    # im7.set_clim(5,400)
+    # axs1.set_aspect('equal', 'box')
+    # axs2.set_aspect('equal', 'box')
+    # axs3.set_aspect('equal', 'box')
+    # # im1.set_clim(0.1,8)
+    # # im2.set_clim(-10,10)
+    # # im3.set_clim(0.1,15)
+    # # im7.set_clim(5,400)
     
-    axs1.set_title('Distance to Road')
+    # axs1.set_title('Distance to Road')
   
-    axs2.set_title('Modeled Noise')
+    # axs2.set_title('Modeled Noise')
     
-    # plt.colorbar(con2, ax=ax2)
+    # # plt.colorbar(con2, ax=ax2)
     
     
-    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"dist2road_noise.png")
-    plt.show()
+    # plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"dist2road_noise.png")
+    # plt.show()
     
     ###########################################
     #############plot one grid
     
-    fig, (axs1)  = plt.subplots(1, 1, figsize=(12, 8))
+    # fig, (axs1)  = plt.subplots(1, 1, figsize=(12, 8))
     
-    im1=axs1.imshow(grid_target, cmap=colMap, vmin = 0.2)
+    # im1=axs1.imshow(grid_target, cmap=colMap, interpolation='none', aspect="auto")
     
-    x_dim=np.size(grid_target,axis=0)
-    y_dim=np.size(grid_target,axis=1)
-    y_line_slice=int(y_dim/2)
-    plot1=axs1.plot([0,y_dim],[y_line_slice, y_line_slice],'-r')
+    # x_dim=np.size(grid_target,axis=0)
+    # y_dim=np.size(grid_target,axis=1)
+    # y_line_slice=int(y_dim/2)
+    # # plot1=axs1.plot([0,y_dim],[y_line_slice, y_line_slice],'-r')
    
-    plt.colorbar(im1, ax=axs1)
+    # im1.set_clim(55,75)
+    # plt.colorbar(im1, ax=axs1, extend='both')
  
-    axs1.set_aspect('equal', 'box')
-    axs1.set_title('Modeled Noise')
+    # # axs1.set_aspect('equal', 'box')
+    # axs1.set_title('Modelled Noise')
     
-    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"map_profile.png")
-    plt.show()
+    # plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"map_overview.png")
+    # plt.show()
     
     
-    fig, (axs1)  = plt.subplots(1, 1, figsize=(12, 8))
+    # fig, (axs1)  = plt.subplots(1, 1, figsize=(12, 8))
     
-    indexxy = np.where(grid_target >0)
-    grid1_plot=np.zeros(grid_target.shape)
-    grid2_plot=np.zeros(grid_target.shape)
-    grid3_plot=np.zeros(grid_target.shape)
-    grid4_plot=np.zeros(grid_target.shape)
-    grid5_plot=np.zeros(grid_target.shape)
-    grid6_plot=np.zeros(grid_target.shape)
-    grid1_plot[indexxy]=grid1[indexxy]
-    grid2_plot[indexxy]=grid2[indexxy]
-    grid3_plot[indexxy]=grid3[indexxy]
-    grid4_plot[indexxy]=grid4[indexxy]
-    grid5_plot[indexxy]=grid5[indexxy]
-    grid6_plot[indexxy]=grid6[indexxy]
+    # indexxy = np.where(grid_target >0)
+    # grid1_plot=np.zeros(grid_target.shape)
+    # grid2_plot=np.zeros(grid_target.shape)
+    # grid3_plot=np.zeros(grid_target.shape)
+    # grid4_plot=np.zeros(grid_target.shape)
+    # grid5_plot=np.zeros(grid_target.shape)
+    # grid6_plot=np.zeros(grid_target.shape)
+    # grid1_plot[indexxy]=grid1[indexxy]
+    # grid2_plot[indexxy]=grid2[indexxy]
+    # grid3_plot[indexxy]=grid3[indexxy]
+    # grid4_plot[indexxy]=grid4[indexxy]
+    # grid5_plot[indexxy]=grid5[indexxy]
+    # grid6_plot[indexxy]=grid6[indexxy]
     
-    plot_target=axs1.plot(grid_target[y_line_slice,:]/np.max(grid_target[y_line_slice,:]),"-r")
-    plot1=axs1.plot(grid1_plot[y_line_slice,:]/np.max(grid1_plot[y_line_slice,:]),"-b")
-    plot2=axs1.plot(grid2_plot[y_line_slice,:]/np.max(grid2_plot[y_line_slice,:]),"-g")
-    plot3=axs1.plot(grid3_plot[y_line_slice,:]/np.max(grid3_plot[y_line_slice,:]),"-y")
-    plot4=axs1.plot(grid4_plot[y_line_slice,:]/np.max(grid4_plot[y_line_slice,:]),"-m")
-    plot5=axs1.plot(grid5_plot[y_line_slice,:]/np.max(grid5_plot[y_line_slice,:]),"-k")
-    plot6=axs1.plot(grid6_plot[y_line_slice,:]/np.max(grid6_plot[y_line_slice,:]),"-c")
-    plt.legend(["Target Noise","Distance to Road", 'Divergence from Topo', 'Mean Tree Density',
-                'OSM Street Information','Absoprtion','Building Height Density'])
+    # plot_target=axs1.plot(grid_target[y_line_slice,:]/np.max(grid_target[y_line_slice,:]),"-r")
+    # plot1=axs1.plot(grid1_plot[y_line_slice,:]/np.max(grid1_plot[y_line_slice,:]),"-b")
+    # plot2=axs1.plot(grid2_plot[y_line_slice,:]/np.max(grid2_plot[y_line_slice,:]),"-g")
+    # plot3=axs1.plot(grid3_plot[y_line_slice,:]/np.max(grid3_plot[y_line_slice,:]),"-y")
+    # plot4=axs1.plot(grid4_plot[y_line_slice,:]/np.max(grid4_plot[y_line_slice,:]),"-m")
+    # plot5=axs1.plot(grid5_plot[y_line_slice,:]/np.max(grid5_plot[y_line_slice,:]),"-k")
+    # plot6=axs1.plot(grid6_plot[y_line_slice,:]/np.max(grid6_plot[y_line_slice,:]),"-c")
+    # plt.legend(["Target Noise","Distance to Road", 'Divergence from Topo', 'Mean Tree Density',
+    #             'OSM Street Information','Absoprtion','Building Height Density'])
 
-    # axs[1,2].set_title('OSM Street FocalStats')
-    # axs[1,3].set_title('Modeled Noise')
+    # # axs[1,2].set_title('OSM Street FocalStats')
+    # # axs[1,3].set_title('Modeled Noise')
     
-    plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"profile.png")
-    plt.show()
+    # plt.savefig(base_out_folder_pic+"/"+city_string_out+out_file+"profile.png")
+    # plt.show()
     print("#### Plotting file done \n")
 
 

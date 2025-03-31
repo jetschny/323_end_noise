@@ -43,14 +43,15 @@ base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
 city1_string_in="Vienna"
 city1_string_out="VIE" 
 
-in_grid_file1="VIEmodel_VIEpredict_xgboost.npy"
-in_grid_target="VIE_target_noise_Aggroad_Lden"
+in_grid_file1="VIEmodel_VIEpredict_xgboost_drop_feat6_extr.npy"
+in_grid_target="VIE_target_noise_Aggroad_Lden.npy"
 
-out_pic_file="VIE_target_noise_Aggroad_Lden_xgboost6"
 
-grid1=np.load(base_in_folder1+city1_string_in+"/"+in_grid_file1)
+out_pic_file="VIE_target_noise_Aggroad_Lden_xgboost6_drop_feat6_extr"
 
-grid_target=np.load(base_in_folder+in_grid_target)
+grid1=np.load(base_in_folder2+city1_string_in+"/"+in_grid_file1)
+
+grid_target=np.load(base_in_folder1+city1_string_in+"/"+in_grid_target)
 grid_target= grid_target.astype(float)
 
 
@@ -115,5 +116,5 @@ if plot_switch:
         
         # plt.colorbar(con2, ax=ax2)
         plt.show()
-        plt.savefig(base_out_folder+out_pic_file+str(ii)+".png")
+        plt.savefig(base_out_folder_pic+out_pic_file+str(ii)+".png")
     

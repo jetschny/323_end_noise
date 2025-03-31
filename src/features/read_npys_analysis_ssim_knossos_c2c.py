@@ -143,8 +143,8 @@ xc1_xstart=0
 # xc1_xend=np.uint(xc1_size[0]/2)-1
 xc1_xend=np.uint(xc1_size[0])
 xc1_ystart=0
-xc1_yend=np.uint(xc1_size[1])
-# xc1_yend=np.uint(xc1_size[1]/2)
+# xc1_yend=np.uint(xc1_size[1])
+xc1_yend=np.uint(xc1_size[1]/2)
 
 x_c1 = np.stack([grid_c1_1[xc1_xstart:xc1_xend,xc1_ystart:xc1_yend],
                  grid_c1_2[xc1_xstart:xc1_xend,xc1_ystart:xc1_yend],
@@ -153,11 +153,11 @@ x_c1 = np.stack([grid_c1_1[xc1_xstart:xc1_xend,xc1_ystart:xc1_yend],
                  grid_c1_5[xc1_xstart:xc1_xend,xc1_ystart:xc1_yend],
                  grid_c1_6[xc1_xstart:xc1_xend,xc1_ystart:xc1_yend]])
 
-# xc1_xstart=np.uint(xc1_size[0]/2)+1
+# xc2_xstart=np.uint(xc1_size[0]/2)+1
 xc2_xstart=0
 xc2_xend=np.uint(xc2_size[0])
-xc2_ystart=0
-# xc1_ystart=np.uint(xc1_size[1]/2)
+# xc2_ystart=0
+xc2_ystart=np.uint(xc1_size[1]/2)
 xc2_yend=np.uint(xc2_size[1])
 
 x_c2 = np.stack([grid_c2_1[xc2_xstart:xc2_xend,xc2_ystart:xc2_yend],
@@ -264,7 +264,7 @@ def calculate_ssim_between_cities(city1_data, city2_data):
     return ssim_scores, min_shape
 
 ssim_scores, min_shape = calculate_ssim_between_cities(np.nan_to_num(x_c1,nan=0), np.nan_to_num(x_c2, nan=0))
-print(["SSIM Scores between ",city1_string_in," and ",city2_string_in])
+print(f"SSIM Scores between {city1_string_in} and {city2_string_in}")
 file = open(f"{base_in_folder}{city1_string_out}-{city2_string_out}_SSIM_scores.txt", "a")
 file.writelines(f"SSIM Scores between {city1_string_in} and {city2_string_in}:")
 file.writelines("\n")
@@ -308,23 +308,23 @@ colMap.set_under(color='white')
 
 
 
-#################################################
-#  scaled data  
-fig2, (axs1, axs2)  = plt.subplots(1, 2, figsize=(12, 8))
+# #################################################
+# #  scaled data  
+# fig2, (axs1, axs2)  = plt.subplots(1, 2, figsize=(12, 8))
 
-# im1=axs1.imshow(np.squeeze(x_c1[0,:,:]), cmap=colMap, vmin = 0.2)
-# im2=axs2.imshow(np.squeeze(x_c2[0,:,:]), cmap=colMap, vmin = 0.2)
+# # im1=axs1.imshow(np.squeeze(x_c1[0,:,:]), cmap=colMap, vmin = 0.2)
+# # im2=axs2.imshow(np.squeeze(x_c2[0,:,:]), cmap=colMap, vmin = 0.2)
 
-im1=axs1.imshow(np.squeeze(x_c1[0,:min_shape[0], :min_shape[1]]))
-im2=axs2.imshow(np.squeeze(x_c2[0,:min_shape[0], :min_shape[1]]))
+# im1=axs1.imshow(np.squeeze(x_c1[0,:min_shape[0], :min_shape[1]]))
+# im2=axs2.imshow(np.squeeze(x_c2[0,:min_shape[0], :min_shape[1]]))
 
-# x_dim=np.size(grid_c1_target,axis=0)
-# y_dim=np.size(grid_c1_target,axis=1)
-# y_line_slice=int(y_dim/2)
-# plot1=axs1.plot([0,y_dim],[y_line_slice, y_line_slice],'-r')
+# # x_dim=np.size(grid_c1_target,axis=0)
+# # y_dim=np.size(grid_c1_target,axis=1)
+# # y_line_slice=int(y_dim/2)
+# # plot1=axs1.plot([0,y_dim],[y_line_slice, y_line_slice],'-r')
 
-plt.colorbar(im1, ax=axs1)
-plt.colorbar(im2, ax=axs2)
-# im1.set_clim(-1,1)
-# im2.set_clim(-1,1)
-plt.show
+# plt.colorbar(im1, ax=axs1)
+# plt.colorbar(im2, ax=axs2)
+# # im1.set_clim(-1,1)
+# # im2.set_clim(-1,1)
+# plt.show
