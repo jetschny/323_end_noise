@@ -14,7 +14,7 @@ except:
 import sys
 # import pandas as pd
 import geopandas as gpd
-from geocube.api.core import make_geocube
+# from geocube.api.core import make_geocube
 from shapely.geometry import Polygon
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,6 +27,9 @@ from rasterio.mask import mask
 # from skimage.transform import resize
 # from numpy import newaxis
 # from rasterio.transform import from_bounds
+import builtins
+globals()["__builtins__"] = builtins
+
 
 plt.close('all')
 def str2bool(v):
@@ -50,11 +53,13 @@ interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_in="Budapest"
-# city_string_out="BUD" 
+# city_string_in="Maribor"
+# city_string_out="MAR" 
+city_string_in="Ljubljana"
+city_string_out="LJU" 
 
-city_string_in=sys.argv[1]
-city_string_out=sys.argv[2]
+# city_string_in=sys.argv[1]
+# city_string_out=sys.argv[2]
 
 print("\n######################## \n")
 print("TCD tree cover density feature creation \n")
@@ -63,13 +68,13 @@ print("#### Plotting of figures is ",plot_switch," and writing of output files i
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
-base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
-base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
-base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+base_in_folder          ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder         ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic     ="Z:/NoiseML/2024/city_data_pics/"
 
-in_file  = '_TCD_2018_010m.tif'
-in_file_target='_MRoadsLden.tif'
-out_file = "_feat_dist2tree"
+in_file                 = '_TCD_2018_010m.tif'
+in_file_target          ='_MRoadsLden.tif'
+out_file                = "_feat_dist2tree"
 
 img = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file, 'r') 
 img_target = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file_target, 'r') 
@@ -105,17 +110,25 @@ grid1=np.squeeze(grid1)
 if interp_switch :
     # grid1 = resize(grid1,img_target.shape)
     # grid1 = grid1[0:img_target.shape[0],0:img_target.shape[1]]
-    if ((city_string_out=="BOR") or (city_string_out=="BOR")):
+   
+        
+    # if ((city_string_out=="ATH") or (city_string_out=="THE")):
+        # grid1 = grid1[0:img_target.shape[0],0:img_target.shape[1]]
+   
+    # feature grid is bigger by 1 GP each
+    if (city_string_out=="OSL") or (city_string_out=="BOR") or (city_string_out=="MAR") or (city_string_out=="LJU"):
         grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
-    if ((city_string_out=="ATH") or (city_string_out=="THE")):
-        grid1 = grid1[0:img_target.shape[0],0:img_target.shape[1]]
-    # grid1 = rescale(grid1,2.5)
-    # 45
 
 index0 = np.where(grid1 == img.nodata)
 grid1[index0]=0
 
 print("#### Cropping file done \n")
+
+if  np.squeeze(grid1).shape != img_target.shape:
+    print("#####################################################")
+    print("#### Warning : target and feature array size mismtach")
+    print("##################################################### \n´")
+    
 
 print("#### Processing file")
 

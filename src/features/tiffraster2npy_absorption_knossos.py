@@ -22,11 +22,15 @@ import numpy as np
 import rasterio
 from rasterio.plot import show
 from rasterio.mask import mask
+import os
 # from numpy import newaxis
 # from skimage.transform import resize
 
 # from rasterio.features import rasterize
 # from rasterio.transform import from_bounds
+
+import builtins
+globals()["__builtins__"] = builtins
 
 plt.close('all')
 def str2bool(v):
@@ -50,11 +54,11 @@ interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_in="Bordeaux"
-# city_string_out="BOR" 
+city_string_in="Pilsen"
+city_string_out="PIL" 
 
-city_string_in=sys.argv[1]
-city_string_out=sys.argv[2]
+# city_string_in=sys.argv[1]
+# city_string_out=sys.argv[2]
 
 print("\n######################## \n")
 print("Surface absorption feature creation \n")
@@ -63,13 +67,13 @@ print("#### Plotting of figures is ",plot_switch," and writing of output files i
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
-base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
-base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
-base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+base_in_folder          ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder         ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic     ="Z:/NoiseML/2024/city_data_pics/"
 
-in_file  = '_Absorption.tif'
-in_file_target='_MRoadsLden.tif'
-out_file = "_feat_absoprtion"
+in_file                 = '_Absorption.tif'
+in_file_target          ='_MRoadsLden.tif'
+out_file                = "_feat_absoprtion"
 
 
 img = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file, 'r') 
@@ -85,10 +89,7 @@ print("#### Cropping file")
 # code12220.explore("area", legend=False)
 
 if clip_switch:
-    # Create a custom polygon
-    
-    # corner_point1=np.array((3.656 , 2.06 ))*1e6
-    # corner_point2=np.array((3.669 , 2.074 ))*1e6
+    # Create a custom polygon from bbox extend of target data
     img_target_bounds=img_target.bounds
     corner_point1=np.array((img_target_bounds[0] , img_target_bounds[1] ))
     corner_point2=np.array((img_target_bounds[2] , img_target_bounds[3] ))
@@ -138,6 +139,28 @@ print("#### Processing file done \n")
 
 
 if write_switch:
+    # print("#### Saving to output files")
+    # np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid1_distance)
+
+    # print("... Saving to npy file done")
+    
+    # out_meta = img_target.meta.copy()
+    # # epsg_code = int(img.crs.data['init'][5:])
+    # out_meta.update({"driver": "GTiff",
+    #                  "dtype" : 'float32',
+    #                  "nodata" : -999.25,
+    #                  "crs": img.crs,
+    #                  "count": 1})
+   
+    # output_tif_path = os.path.join(base_out_folder, city_string_in, city_string_out + out_file + ".tif")
+
+    # with rasterio.open(output_tif_path, "w", **out_meta) as dest:
+    #     dest.write(grid1_distance[np.newaxis, :, :])
+    
+    # # with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
+    # #     dest.write(grid1_distance[np.newaxis,:,:])
+        
+    # print("... Saving to tiff file done")
     print("#### Saving to output files")
     np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid1_distance)
 
@@ -149,11 +172,15 @@ if write_switch:
                      "dtype" : 'float32',
                      "nodata" : -999.25,
                      "crs": img.crs})
-    with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
-        dest.write(grid1_distance[np.newaxis,:,:])
+    # with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
+        # dest.write(grid1_distance[np.newaxis,:,:])
         
-    print("... Saving to tiff file done")
-        
+    output_tif_path = os.path.join(base_out_folder, city_string_in, city_string_out + out_file + ".tif")
+
+    with rasterio.open(output_tif_path, "w", **out_meta) as dest:
+        dest.write(grid1_distance[np.newaxis, :, :])
+    
+    print("... Saving to tiff file done")      
     
 if plot_switch:
     print("#### Plotting file")

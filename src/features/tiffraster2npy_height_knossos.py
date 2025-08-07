@@ -24,6 +24,8 @@ from rasterio.plot import show
 from rasterio.mask import mask
 # from numpy import newaxis
 # from skimage.transform import resize
+import builtins
+globals()["__builtins__"] = builtins
 
 # from rasterio.features import rasterize
 # from rasterio.transform import from_bounds
@@ -50,11 +52,14 @@ interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_in="Madrid"
-# city_string_out="MAD" 
+# city_string_in="Oslo"
+# city_string_out="OSL" 
+city_string_in="Ljubljana"
+city_string_out="LJU" 
 
-city_string_in=sys.argv[1]
-city_string_out=sys.argv[2]
+
+# city_string_in=sys.argv[1]
+# city_string_out=sys.argv[2]
 
 print("\n######################## \n")
 print("Building height feature creation \n")
@@ -63,13 +68,13 @@ print("#### Plotting of figures is ",plot_switch," and writing of output files i
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
-base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
-base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
-base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+base_in_folder          ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder         ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic     ="Z:/NoiseML/2024/city_data_pics/"
 
-in_file  = '_ua2012_DHM_V010.tif'
-in_file_target='_MRoadsLden.tif'
-out_file = "_feat_UA2012_bheight"
+in_file                 = '_ua2012_DHM_V010.tif'
+in_file_target          ='_MRoadsLden.tif'
+out_file                = "_feat_UA2012_bheight"
 
 
 img = rasterio.open(base_in_folder+city_string_in +"/" + city_string_in+in_file, 'r') 
@@ -105,19 +110,29 @@ else:
 grid1=np.squeeze(grid1)
 
 if interp_switch :
-    # grid1 = resize(grid1,img_target.shape)
-    # grid1 = grid1[0:img_target.shape[0],0:img_target.shape[1]]
-    if ((city_string_out=="BOR") or (city_string_out=="BOR")):
+    # target grid is bigger by 1 GP each or more
+    if (city_string_out=="LJU") or (city_string_out=="MAR"):
+        grid1_0 = np.zeros(img_target.shape)-999.25
+        grid1_0[0:grid1.shape[0],0:(grid1.shape[1]-1)]=grid1[0:grid1.shape[0],0:(grid1.shape[1]-1)]
+        grid1=grid1_0
+        
+    # feature grid is bigger by 1 GP each
+    if ((city_string_out=="BOR") or (city_string_out=="OSL")):
         grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
-    # grid1 = rescale(grid1,2.5)
-    # 45
-
+ 
 index0 = np.where(grid1 == img.nodata)
 grid1[index0]=0
 
 
 print("#### Cropping file done \n")
 
+
+if  np.squeeze(grid1).shape != img_target.shape:
+    print("#####################################################")
+    print("#### Warning : target and feature array size mismtach")
+    print("##################################################### \n´")
+    
+    
 print("#### Processing file")
 
 

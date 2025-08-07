@@ -36,11 +36,11 @@ plt.rc('legend', fontsize=default_font_size) #fontsize of the legend
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-city_string_in="Vienna"
-city_string_out="VIE" 
+# city_string_in="Vienna"
+# city_string_out="VIE" 
 
-# city_string_in="Bordeaux"
-# city_string_out="BOR" 
+city_string_in="Oslo"
+city_string_out="OSL" 
 
 base_in_folder ="Z:/NoiseML/2024/city_data_features/"
 # base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
@@ -62,6 +62,8 @@ in_grid_file5="_feat_absoprtion.npy"
 in_grid_file6="_feat_UA2012_bheight.npy"
 # local climateb zones
 in_grid_file7="_feat_localclimatezones.npy"
+# traffic data
+in_grid_file8="_feat_traffic_smooth.npy"
 
 #output figure file 
 out_file = "_features_"
@@ -76,6 +78,7 @@ grid4=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file4)
 grid5=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file5)
 grid6=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file6)
 grid7=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file7)
+grid8=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file8)
 
 grid_target=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_target)
 # grid_target= grid_target.astype(float)
@@ -98,6 +101,8 @@ if np.isnan(grid6).any():
     print("NAN detetcted in grid6")
 if np.isnan(grid7).any():
     print("NAN detetcted in grid7")
+if np.isnan(grid8).any():
+    print("NAN detetcted in grid8")
 if np.isnan(grid_target).any():
     print("NAN detetcted in grid_target")
     
@@ -115,6 +120,8 @@ if np.isinf(grid6).any():
     print("INF detetcted in grid6") 
 if np.isinf(grid7).any():
     print("INF detetcted in grid7") 
+if np.isinf(grid8).any():
+    print("INF detetcted in grid8") 
 if np.isinf(grid_target).any():
     print("INF detetcted in grid_target") 
 
@@ -153,7 +160,8 @@ if plot_switch:
     im5=axs[1,0].imshow(grid5, cmap=colMap, vmin = 0.2)
     im6=axs[1,1].imshow(grid6, cmap=colMap, vmin = 0.2)
     im7=axs[1,2].imshow(grid7, cmap=colMap, vmin = 0.2)
-    im8=axs[1,3].imshow(grid_target, cmap=colMap, vmin = 0.2)
+    im8=axs[1,3].imshow(grid8, cmap=colMap, vmin = 0.2)
+    # im8=axs[1,3].imshow(grid_target, cmap=colMap, vmin = 0.2)
     
       # plt.axis('off')
     # plt.contourf(grid1)
@@ -180,7 +188,7 @@ if plot_switch:
     im4.set_clim(0.0,0.5)
     im6.set_clim(0,10)
     im7.set_clim(0,10)
-    # im8.set_clim(30,80)
+    # im8.set_clim(0,100)
     
     axs[0,0].set_title('Distance to Road')
     axs[0,1].set_title('Divergence from Topo')
@@ -189,7 +197,7 @@ if plot_switch:
     axs[1,0].set_title('Absoprtion')
     axs[1,1].set_title('Building Height Density')
     axs[1,2].set_title('Local Climate Zone')
-    axs[1,3].set_title('Target Noise')
+    axs[1,3].set_title('Traffic data')
     
     
     # x_window=[1700, 2200]

@@ -51,10 +51,10 @@ convcrs_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-city_string_in="Oslo"
-city_string_out="OSL" 
-# city_string_in="Innsbruck"
-# city_string_out="INN" 
+# city_string_in="Oslo"
+# city_string_out="OSL" 
+city_string_in="Innsbruck"
+city_string_out="INN" 
 
 # city_string_in=sys.argv[1]
 # city_string_out=sys.argv[2]
@@ -82,20 +82,20 @@ print("#### Loading file")
 #define corner points for crop window
 # corner_point1=np.round(np.array((3.6560 , 2.0600 ))*1e6)-1000
 # corner_point2=np.round(np.array((3.6690 , 2.0740 ))*1e6)+1000
-# img_target_bounds=img_target.bounds
-# corner_point1=np.array((img_target_bounds[0] , img_target_bounds[1] ))-1000
-# corner_point2=np.array((img_target_bounds[2] , img_target_bounds[3] ))+1000
+img_target_bounds=img_target.bounds
+corner_point1=np.array((img_target_bounds[0] , img_target_bounds[1] ))-1000
+corner_point2=np.array((img_target_bounds[2] , img_target_bounds[3] ))+1000
 
 
 #transform corner points from source (3035) to destination (4326) reference system
 # coords_transformed2 = warp.transform({'init': 'epsg:3035'},{'init': 'epsg:4326'},[corner_point1[0], corner_point2[0]], [corner_point1[1], corner_point2[1]])
 
 # Transform bounds corner-by-corner
-# box_3035 = box(*img_target_bounds)
-# bounds_3035 = img_target.bounds  # (minx, miny, maxx, maxy)
-# transformer = Transformer.from_crs("EPSG:3035", "EPSG:4326", always_xy=True)
-# west_lon, north_lat = transformer.transform(corner_point1[0], corner_point1[1])
-# east_lon, south_lat = transformer.transform(corner_point2[0], corner_point1[1])
+box_3035 = box(*img_target_bounds)
+bounds_3035 = img_target.bounds  # (minx, miny, maxx, maxy)
+transformer = Transformer.from_crs("EPSG:3035", "EPSG:4326", always_xy=True)
+west_lon, north_lat = transformer.transform(corner_point1[0], corner_point1[1])
+east_lon, south_lat = transformer.transform(corner_point2[0], corner_point1[1])
 # west_lon, north_lat = transformer.transform(west_3035, north_3035)
 # east_lon, south_lat = transformer.transform(east_3035, south_3035)
 
@@ -112,10 +112,7 @@ print("#### Loading file")
 
 #download OSM street data based on transformed corner points
 # G = ox.graph_from_bbox(bbox=[coords_transformed[1][0],coords_transformed[1][1], coords_transformed[0][0], coords_transformed[0][1]], network_type='drive')
-G = ox.graph.graph_from_place("Oslo, Norway", network_type="drive")
-# G = ox.graph.graph_from_place("Innsbruck, Austria", network_type="drive")
-
-# G = ox.graph_from_bbox(bbox=[north_lat, south_lat, east_lon, west_lon], network_type="drive")
+G = ox.graph_from_bbox(bbox=[north_lat, south_lat, east_lon, west_lon], network_type="drive")
                         
 # G = ox.graph_from_bbox([coords_transformed[1][0],coords_transformed[1][1], coords_transformed[0][0], coords_transformed[0][1]])
 # Extract bounds
@@ -123,7 +120,7 @@ G = ox.graph.graph_from_place("Oslo, Norway", network_type="drive")
 
 # Use the bounds in graph_from_bbox
 # G = ox.graph_from_bbox(north=maxy, south=miny, east=maxx, west=minx, network_type='drive')
-G_projected = ox.project_graph(G)
+# G_projected = ox.project_graph(G)
 
 print("#### Loading file done\n")
 
@@ -131,19 +128,17 @@ print("#### Loading file done\n")
 # ox.plot_graph(G_projected)
 
 # Retrieve nodes and edges
-nodes, edges = ox.graph_to_gdfs(G_projected)
-# nodes, edges = ox.graph_to_gdfs(G)
+# nodes, edges = ox.graph_to_gdfs(G_projected)
+nodes, edges = ox.graph_to_gdfs(G)
 
 print("#### Converting CRS ")
 if convcrs_switch:
     edges_conv = edges.to_crs("EPSG:3035")
-    # edges_conv = edges
-    
+
 print("#### Converting CRS done\n")
 
 # corner_point1=np.round(np.array((3.6560 , 2.0600 ))*1e6)
 # corner_point2=np.round(np.array((3.6690 , 2.0740 ))*1e6)
-img_target_bounds=img_target.bounds
 corner_point1=np.array((img_target_bounds[0] , img_target_bounds[1] ))
 corner_point2=np.array((img_target_bounds[2] , img_target_bounds[3] ))
 
@@ -152,17 +147,6 @@ polygon = Polygon([(corner_point1[0], corner_point1[1] ), (corner_point2[0], cor
     
 poly_gdf = gpd.GeoDataFrame([1], geometry=[polygon], crs=edges_conv.crs)
 
-if plot_switch:
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
-    edges_conv.plot( ax=ax1, legend=True)
-    poly_gdf.plot( ax=ax2, legend=True)
-    # out_grid_maxspeed.maxspeed.plot(ax=ax2)
-    
-    ax1.set_aspect('equal', 'box')
-    ax2.set_aspect('equal', 'box')
-    # plt.savefig(base_out_folder_pic+"/" + city_string_out+out_grid_file+"_raw.png")
-    plt.show()
-    
 edges_clipped = edges_conv.clip(polygon)
 # gdf_clipped=gdf_clipped[["Rang", "geometry"]]
 

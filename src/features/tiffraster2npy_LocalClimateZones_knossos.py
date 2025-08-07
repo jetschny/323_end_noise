@@ -54,8 +54,14 @@ interp_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-city_string_in="Clermont_Ferrand"
-city_string_out="CLF" 
+# city_string_in="Clermont_Ferrand"
+# city_string_out="CLF" 
+# city_string_in="Ljubljana"
+# city_string_out="LJU" 
+# city_string_in="Thessaloniki"
+# city_string_out="THE" 
+city_string_in="Vienna"
+city_string_out="VIE" 
 
 # city_string_in=sys.argv[1]
 # city_string_out=sys.argv[2]
@@ -89,10 +95,7 @@ print("#### Cropping file")
 # code12220.explore("area", legend=False)
 
 if clip_switch:
-    # Create a custom polygon
-    
-    # corner_point1=np.array((3.656 , 2.06 ))*1e6
-    # corner_point2=np.array((3.669 , 2.074 ))*1e6
+    # Create a custom polygon from bbox extend of target data
     img_target_bounds=img_target.bounds
     corner_point1=np.array((img_target_bounds[0] , img_target_bounds[1] ))
     corner_point2=np.array((img_target_bounds[2] , img_target_bounds[3] ))
@@ -110,13 +113,20 @@ grid1=np.squeeze(grid1)
 
 if interp_switch:
     # grid1 = grid1[img_target.shape]s
-    
-    if city_string_out=="PIL":
+    # target grid is bigger by 1 GP each or more
+    if (city_string_out=="PIL") or (city_string_out=="MAD"):
         grid1_0 = np.zeros(img_target.shape)-999.25
         grid1_0[0:grid1.shape[0],0:(grid1.shape[1]-1)]=grid1[0:grid1.shape[0],0:(grid1.shape[1]-1)]
         grid1=grid1_0
-    if city_string_out=="SAL":
+    # feature grid is bigger by 1 GP in Y-dim
+    if (city_string_out=="SAL"):
         grid1 = grid1[:,1:1+img_target.shape[1]]
+    # feature grid is bigger by 1 GP in X-dim
+    if (city_string_out=="KAU") or (city_string_out=="LIM") or (city_string_out=="RIG"):
+        grid1 = grid1[1:1+img_target.shape[0],:]
+    # feature grid is bigger by 1 GP each
+    if (city_string_out=="OSL") or (city_string_out=="CLF") or (city_string_out=="NIC") or (city_string_out=="VIE"):
+        grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
     else :
         # grid1 = grid1[1:1+img_target.shape[0],1:1+img_target.shape[1]]
     # grid1 = resize(grid1, img_target.shape)

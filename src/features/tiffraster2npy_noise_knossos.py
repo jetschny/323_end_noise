@@ -50,14 +50,14 @@ interp_switch=False
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-city_string_in="Budapest"
-city_string_out="BUD" 
+# city_string_in="Budapest"
+# city_string_out="BUD" 
 
 # city_string_in="Vienna"
 # city_string_out="VIE" 
 
-# city_string_in=sys.argv[1]
-# city_string_out=sys.argv[2]
+city_string_in=sys.argv[1]
+city_string_out=sys.argv[2]
 
 
 print("\n######################## \n")
