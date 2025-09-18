@@ -27,6 +27,9 @@ from rasterio.mask import mask
 
 # from rasterio.features import rasterize
 # from rasterio.transform import from_bounds
+import builtins
+globals()["__builtins__"] = builtins
+
 
 plt.close('all')
 def str2bool(v):
@@ -50,14 +53,14 @@ interp_switch=False
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-# city_string_in="Budapest"
-# city_string_out="BUD" 
+city_string_in="Budapest"
+city_string_out="BUD" 
 
 # city_string_in="Vienna"
 # city_string_out="VIE" 
 
-city_string_in=sys.argv[1]
-city_string_out=sys.argv[2]
+# city_string_in=sys.argv[1]
+# city_string_out=sys.argv[2]
 
 
 print("\n######################## \n")
@@ -67,9 +70,9 @@ print("#### Plotting of figures is ",plot_switch," and writing of output files i
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
-base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
-base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
-base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+base_in_folder          ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder         ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic     ="Z:/NoiseML/2024/city_data_pics/"
 
 in_file = '_MRoadsLden.tif'
 out_file="_target_noise_Aggroad_Lden"

@@ -18,6 +18,8 @@ import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
 import rasterio
 # from numpy import newaxis
+import builtins
+globals()["__builtins__"] = builtins
 
 plt.close('all')
 def str2bool(v):
@@ -54,14 +56,14 @@ print("#### Plotting of figures is ",plot_switch," and writing of output files i
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
-base_in_folder:  str ="Z:/NoiseML/2024/city_data_raw/"
-base_out_folder: str ="Z:/NoiseML/2024/city_data_features/"
-base_out_folder_pic: str ="Z:/NoiseML/2024/city_data_pics/"
+base_in_folder          ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder         ="Z:/NoiseML/2024/city_data_features/"
+base_out_folder_pic     ="Z:/NoiseML/2024/city_data_pics/"
 
-in_grid_file1="_raw_osm_roads_maxspeed.npy"
-in_grid_file2="_raw_osm_roads_nlanes.npy"
-in_file_target='_MRoadsLden.tif'
-out_file="_feat_osmmaxspeed_nolanes_smooth"
+in_grid_file1   ="_raw_osm_roads_maxspeed.npy"
+in_grid_file2   ="_raw_osm_roads_nlanes.npy"
+in_file_target  ='_MRoadsLden.tif'
+out_file        ="_feat_osmmaxspeed_nolanes"
 
 grid1=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file1)
 grid2=np.load(base_in_folder+city_string_in+"/"+city_string_out+in_grid_file1)
@@ -116,7 +118,8 @@ grid2_smooth = gaussian_filter(grid2, sigma=2)
 
 # grid1_distance=grid1_distance[radius:-radius, radius:-radius]
 # grid1_distance=grid1_distance*(np.median(grid1[np.where(grid1 >0)])/np.median(grid1_distance[np.where(grid1_distance >0)]))
-grid3=(grid1_smooth/np.max(grid1_smooth)+grid2_smooth/np.max(grid2_smooth))/2
+grid3=(grid1/np.max(grid1)+grid2/np.max(grid2))/2
+grid3_smooth=(grid1_smooth/np.max(grid1_smooth)+grid2_smooth/np.max(grid2_smooth))/2
 
 # cropping to initial range of input data
 # re-inserting no data value
@@ -124,6 +127,11 @@ grid3=(grid1_smooth/np.max(grid1_smooth)+grid2_smooth/np.max(grid2_smooth))/2
 index0 = np.where(grid3 <= 0)
 grid3[index0]=-999.25
 grid3=grid3.astype(np.float32)
+
+index0 = np.where(grid3_smooth <= 0)
+grid3_smooth[index0]=-999.25
+grid3_smooth=grid3_smooth.astype(np.float32)
+
 
 print("#### Processing file done")
 
@@ -135,6 +143,7 @@ print("#### Potting file")
 
 if write_switch:
     print("#### Saving to output files")
+    np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+"_smooth.npy",grid3_smooth)
     np.save(base_out_folder+city_string_in+"/"+city_string_out+out_file+".npy",grid3)
 
     print("... Saving to npy file done")
@@ -145,39 +154,54 @@ if write_switch:
                      "dtype" : 'float32',
                      "nodata" : -999.25,
                      "crs": img_target.crs})
+
+    # with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+"_smooth.tif", "w", **out_meta) as dest:
+    #     dest.write(grid3_smooth[np.newaxis,:,:])
+      
+    # print("... Saving to tiff file", base_out_folder,city_string_in,"/",city_string_out,out_file,"_smooth.tif done")
+    
     with rasterio.open(base_out_folder+city_string_in+"/"+city_string_out+out_file+".tif", "w", **out_meta) as dest:
         dest.write(grid3[np.newaxis,:,:])
         
-    print("... Saving to tiff file done")
+    print("... Saving to tiff file", base_out_folder,city_string_in,"/",city_string_out,out_file,".tif done")
     
 if plot_switch:
-    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 8))
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(16, 8))
     
     im1=ax1.imshow(grid1)
     im2=ax2.imshow(grid1_smooth)
-    im3=ax3.imshow(grid_target)
+    im3=ax3.imshow(grid3)
+    im4=ax4.imshow(grid_target)
     im1.set_clim(0, np.max(grid1)*2/3)
-    im2.set_clim(0, np.max(grid1)*2/3)
-    im3.set_clim(40, np.max(grid_target)*3/3)
+    im2.set_clim(0, np.max(grid1_smooth)*2/3)
+    im3.set_clim(0, np.max(grid3)*2/3)
+    im4.set_clim(40, np.max(grid_target)*3/3)
     
     y_line_slice=1500
-    x_dim=np.size(grid_target,axis=0)
-    y_dim=np.size(grid_target,axis=1)
+    x_dim=np.size(grid_target,axis=1)
+    y_dim=np.size(grid_target,axis=0)
     # y_line_slice=1500
     y_line_slice=int(y_dim/2)
     
     plot1=ax1.plot([0,x_dim],[y_line_slice, y_line_slice],'-r')
     plot2=ax2.plot([0,x_dim],[y_line_slice, y_line_slice],'-r')
     plot3=ax3.plot([0,x_dim],[y_line_slice, y_line_slice],'-r')
+    plot4=ax4.plot([0,x_dim],[y_line_slice, y_line_slice],'-r')
     
     plt.colorbar(im1, ax=ax1)
     plt.colorbar(im2, ax=ax2)
     plt.colorbar(im3, ax=ax3)
+    plt.colorbar(im3, ax=ax4)
         
     ax1.set_aspect('equal', 'box')
     ax2.set_aspect('equal', 'box')
     ax3.set_aspect('equal', 'box')
+    ax4.set_aspect('equal', 'box')
     
+    ax1.set_title("Max_speed feature")
+    ax2.set_title("Max_speed feature smoothed")
+    ax3.set_title("Street information")
+    ax4.set_title("Noise target")
     # ax1.set_xlim(600,800)
     # ax2.set_xlim(600,800)
     

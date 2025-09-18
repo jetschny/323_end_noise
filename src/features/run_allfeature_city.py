@@ -7,30 +7,10 @@ Created on Mon Apr 15 22:12:23 2024
 
 import os
 import subprocess
-# city_name="Ljubljana"
-# city_initials="LJU"
-city_name="Oslo"
-city_initials="OSL"
-# city_name="Innsbruck"
-# city_initials="INN"
+list_city_names=["Athens", "Bordeaux", "Budapest", "Clermont_Ferrand", "Debrecen", "Grenoble", "Innsbruck", "Kaunas",
+                 "Limassol", "Ljubljana", "Madrid", "Maribor", "Nicosia", "Oslo", "Pilsen", "Riga", "Salzburg", "Thessaloniki", "Vienna"]
 
-
-# os.system("python file1.py", shell=True)
-
-# os.system("python tiffraster2npy_dem_knossos.py Clermont_Ferrand CLF True True")
-# os.system("python tiffraster2npy_dem_knossos.py Grenoble GRE True True")
-# os.system("python tiffraster2npy_dem_knossos.py Innsbruck INN True True")
-# os.system("python tiffraster2npy_dem_knossos.py Kaunas KAU True True")
-# os.system("python tiffraster2npy_dem_knossos.py Limassol LIM True True")
-# os.system("python tiffraster2npy_dem_knossos.py Madrid MAD True True")
-# os.system("python tiffraster2npy_dem_knossos.py Nicosia NIC True True")
-# os.system("python tiffraster2npy_dem_knossos.py Pilsen PIL True True")
-# os.system("python tiffraster2npy_dem_knossos.py Riga RIG True True")
-# os.system("python tiffraster2npy_dem_knossos.py Salzburg SAL True True")
-# os.system("python tiffraster2npy_dem_knossos.py Vienna VIE True True")
-
-# target data
-# os.system("python tiffraster2npy_noise_knossos.py Bordeaux BOR True True")
+list_city_names=["Athens"]
 
 # list_scripts=["tiffraster2npy_noise_knossos.py",
 #               "tiffraster2npy_absorption_knossos.py",
@@ -49,24 +29,19 @@ city_initials="OSL"
 #               "tiffraster2npy_tcd_knossos.py"]
 
 
-list_scripts=["load_osm_data_streets_knossos.py",
-               "read_npy_distance2roads_knossos.py",
-               "read_npy_osmsmooth_knossos.py"]
+# list_scripts=["load_osm_data_streets_knossos.py",
+               # "read_npy_distance2roads_knossos.py",
+               # "read_npy_osmsmooth_knossos.py"]
 
-# list_scripts=[ "tiffraster2npy_dem_knossos.py"]
+# list_scripts=[ "read_npy_osmsmooth_knossos.py"]
+list_scripts=[ "../visualization/npy2tiffraster_dnnpredict_knossos.py"]
 
-for ii in list_scripts:
-    results=""
-    result=subprocess.run(["python",ii,city_name,city_initials,"True","True"],stdout=subprocess.PIPE, text=True, encoding="cp437")
-    print(result.stdout)
+for ii in list_city_names:
+    city_name=ii
+    city_initials=ii[:3].upper()
+    for jj in list_scripts:
+        results=""
+    
+        result=subprocess.run(["python",jj,city_name,city_initials,"False","True"],stdout=subprocess.PIPE, text=True, encoding="cp437")
+        print(result.stdout)
 
-# # raster feature data
-# os.system("python tiffraster2npy_absorption_knossos.py Bordeaux BOR True True")
-# os.system("python tiffraster2npy_dem_knossos.py Bordeaux BOR True True")
-# os.system("python tiffraster2npy_height_knossos.py Bordeaux BOR True True")
-# os.system("python tiffraster2npy_tcd_knossos.py Bordeaux BOR True True")
-
-# # vector OSM data
-# os.system("python load_osm_data_streets_knossos.py Bordeaux BOR True True")
-# os.system("python read_npy_distance2roads_knossos.py Bordeaux BOR True True")
-# os.system("python read_npy_osmsmooth_knossos.py Bordeaux BOR True True")

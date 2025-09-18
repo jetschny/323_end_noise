@@ -17,7 +17,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np 
 import osmnx as ox
-from rasterio import warp
+# from rasterio import warp
 # import pandas as pd
 # from statistics import mean
 from geocube.api.core import make_geocube
@@ -27,6 +27,9 @@ from pyproj import Transformer
 import geopandas as gpd
 import json
 import rasterio
+import builtins
+globals()["__builtins__"] = builtins
+
 
 plt.close('all')
 def str2bool(v):
@@ -51,8 +54,8 @@ convcrs_switch=True
 
 #"Vienna" #"Pilsen" #"Clermont_Ferrand" #"Riga" "Bordeaux" "Grenoble" "Innsbruck" "Salzburg" "Kaunas" "Limassol"
 #"VIE" #"PIL" #"CLF" #"RIG" "BOR" "GRE" "INN" "SAL" "KAU" "LIM" 
-city_string_in="Oslo"
-city_string_out="OSL" 
+city_string_in="Vienna"
+city_string_out="VIE" 
 # city_string_in="Innsbruck"
 # city_string_out="INN" 
 
@@ -66,8 +69,8 @@ print("#### Plotting of figures is ",plot_switch," and writing of output files i
 
 # base_in_folder="/home/sjet/data/323_end_noise/"
 # base_out_folder="/home/sjet/data/323_end_noise/"
-base_in_folder ="Z:/NoiseML/2024/city_data_raw/"
-base_out_folder ="Z:/NoiseML/2024/city_data_raw/"
+base_in_folder      ="Z:/NoiseML/2024/city_data_raw/"
+base_out_folder     ="Z:/NoiseML/2024/city_data_raw/"
 base_out_folder_pic ="Z:/NoiseML/2024/city_data_pics/"
 
 in_file_target='_MRoadsLden.tif'
@@ -81,14 +84,13 @@ print("#### Loading file")
 
 #define corner points for crop window
 # corner_point1=np.round(np.array((3.6560 , 2.0600 ))*1e6)-1000
-# corner_point2=np.round(np.array((3.6690 , 2.0740 ))*1e6)+1000
-# img_target_bounds=img_target.bounds
-# corner_point1=np.array((img_target_bounds[0] , img_target_bounds[1] ))-1000
-# corner_point2=np.array((img_target_bounds[2] , img_target_bounds[3] ))+1000
+img_target_bounds=img_target.bounds
+corner_point1=np.array((img_target_bounds[0] , img_target_bounds[1] ))-1000
+corner_point2=np.array((img_target_bounds[2] , img_target_bounds[3] ))+1000
 
 
 #transform corner points from source (3035) to destination (4326) reference system
-# coords_transformed2 = warp.transform({'init': 'epsg:3035'},{'init': 'epsg:4326'},[corner_point1[0], corner_point2[0]], [corner_point1[1], corner_point2[1]])
+# coords_transformed = warp.transform({'init': 'epsg:3035'},{'init': 'epsg:4326'},[corner_point1[0], corner_point2[0]], [corner_point1[1], corner_point2[1]])
 
 # Transform bounds corner-by-corner
 # box_3035 = box(*img_target_bounds)
@@ -108,11 +110,13 @@ print("#### Loading file")
 
 # transformer = Transformer.from_crs(3035, 4326, always_xy=True)
 # coords_transformed = transformer.transform([corner_point1[0], corner_point2[0]], [corner_point1[1], corner_point2[1]])
-
-
 #download OSM street data based on transformed corner points
+
+
 # G = ox.graph_from_bbox(bbox=[coords_transformed[1][0],coords_transformed[1][1], coords_transformed[0][0], coords_transformed[0][1]], network_type='drive')
-G = ox.graph.graph_from_place("Oslo, Norway", network_type="drive")
+# G = ox.graph.graph_from_place("Oslo, Norway", network_type="drive")
+
+G = ox.graph.graph_from_place("Vienna, Austria", network_type="drive")
 # G = ox.graph.graph_from_place("Innsbruck, Austria", network_type="drive")
 
 # G = ox.graph_from_bbox(bbox=[north_lat, south_lat, east_lon, west_lon], network_type="drive")
@@ -187,8 +191,8 @@ if city_string_out=="VIE":
     df_maxspeed=df_maxspeed.replace("walk",10)
     df_maxspeed=df_maxspeed.replace("AT:walk",10)
     df_maxspeed=df_maxspeed.replace("AT:zone:30",30)
-    df_maxspeed.loc[32879].maxspeed[0]=10
-    df_maxspeed.loc[32879].maxspeed[1]=10
+    # df_maxspeed.loc[32879].maxspeed[0]=10
+    # df_maxspeed.loc[32879].maxspeed[1]=10
 
 if city_string_out=="NIC":
     df_maxspeed=df_maxspeed.replace("25 mph",40)
